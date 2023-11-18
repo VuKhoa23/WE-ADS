@@ -6,7 +6,7 @@
 - cd WeAds-FrontEnd
 - create .env file
 - npm run dev
-- Search for localhost on browser
+- Search for localhost:PORT on browser
 
 # BACK END
 
