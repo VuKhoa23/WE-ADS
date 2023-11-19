@@ -87,8 +87,18 @@
         $('#ads-modal').modal('show');
       })
       // make a marker for each feature and add to the map
-      new mapboxgl.Marker(el).setLngLat(result.features[0].center).addTo(map);
+      const marker = new mapboxgl.Marker(el).setLngLat(result.features[0].center)
+        .setPopup(new mapboxgl.Popup().
+          setHTML('<h1>hello</h1>'))
+        .addTo(map);
+
+      const markerDiv = marker.getElement();
+
+      markerDiv.addEventListener('mouseenter', () => marker.togglePopup());
+      markerDiv.addEventListener('mouseleave', () => marker.togglePopup());
     })
+
+
   </script>
 </body>
 
