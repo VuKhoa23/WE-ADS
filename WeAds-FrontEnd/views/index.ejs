@@ -4,9 +4,17 @@
 <head>
   <meta charset="utf-8">
   <title>WeAds</title>
+  <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.min.js"></script>
+  <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.css" type="text/css">
+
   <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
   <link href="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css" rel="stylesheet">
   <script src="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js"></script>
+
+  <link rel="stylesheet" href="/css/style.css" />
+  <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
   <style>
     body {
       margin: 0;
@@ -23,39 +31,24 @@
 </head>
 
 <body>
-  <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.min.js"></script>
-  <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.css" type="text/css">
-
-  <style>
-    .geocoder {
-      position: absolute;
-      z-index: 1;
-      width: 50%;
-      left: 50%;
-      margin-left: -25%;
-      top: 10px;
-    }
-
-    .mapboxgl-ctrl-geocoder {
-      min-width: 100%;
-    }
-
-    #map {
-      margin-top: 75px;
-    }
-  </style>
 
   <div id="map"></div>
 
   <div id="geocoder" class="geocoder"></div>
+  <%- include('./modal.ejs') %>
 
   <script>
+    const places = [{
+      name: "Cau Thu Thiem",
+    }, {
+      name: "Landmark 81"
+    }]
     mapboxgl.accessToken = "<%= API_KEY %>";
     const map = new mapboxgl.Map({
       container: 'map',
       // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
       style: 'mapbox://styles/mapbox/streets-v12',
-      center: [-79.4512, 43.6568],
+      center: [106.7222035, 10.794952],
       zoom: 13
     });
 
@@ -65,10 +58,25 @@
       mapboxgl: mapboxgl,
       countries: "vn",
     });
-
     document.getElementById('geocoder').appendChild(geocoder.onAdd(map));
-  </script>
 
+    places.forEach(async (place) => {
+      queryName = encodeURIComponent(place.name.trim())
+      const response = await fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${queryName}.json?country=vn&access_token=${mapboxgl.accessToken}`)
+      const result = await response.json();
+
+      console.log(result.features[0].center)
+
+      const el = document.createElement('div');
+      el.className = 'marker';
+      el.addEventListener('click', () => {
+        $(".modal-body > p").text(place.name)
+        $('#ads-modal').modal('show');
+      })
+      // make a marker for each feature and add to the map
+      new mapboxgl.Marker(el).setLngLat(result.features[0].center).addTo(map);
+    })
+  </script>
 </body>
 
 </html>
