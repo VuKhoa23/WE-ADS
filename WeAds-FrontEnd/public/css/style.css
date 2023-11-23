@@ -12,10 +12,23 @@
 }
 
 .marker {
-  background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/Map_pin_icon_green.svg/1504px-Map_pin_icon_green.svg.png");
-  background-size: cover;
-  width: 50px;
-  height: 50px;
+  background-color: green;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 50%;
   cursor: pointer;
+}
+
+#notification-container {
+  width: 25vw;
+  max-height: 95vh;
+  height: 95vh;
+  position: absolute;
+  right: 2vw;
+  top: 2.5vh;
+  border: 1px solid black;
+  border-radius: 5%;
 }
