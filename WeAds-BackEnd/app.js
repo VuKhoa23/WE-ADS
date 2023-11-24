@@ -9,6 +9,9 @@ const userRoutes = require("./routes/userRoutes");
 
 const reportApi = require("./api/reportApi");
 
+const reportRoutes = require("./routes/reportRoutes");
+app.use('/report', reportRoutes);//test api report
+
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());

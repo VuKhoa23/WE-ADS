@@ -3,11 +3,12 @@ const Report = require('../model/reportSchema');
 //create new report
 module.exports.createReport = async (req, res, next) => {
   const { name, reportType, email, phone, content} = req.body;
-  // let name = 'Nguyễn Thuân Phát'
+  // let name = 'Nguyễn Thuận Phát'
   // let reportType = 'Tố giác sai phạm'
   // let email = 'user@gmail.com'
   // let phone = '0978123456'
-  // let content = 'haha'
+  // let content = 'Hình ảnh quảng sai quy định'
+  console.log("Creating");
   try {
     const report = await Report.create({ name, reportType, email, phone, content});
     res.status(200).json({success: true});
