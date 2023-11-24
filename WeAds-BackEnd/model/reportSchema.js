@@ -7,7 +7,7 @@ const reportSchema = mongoose.Schema({
     },
     reportType: {
       type: String,
-      required: true
+      required: [true, 'Unkouwn reason to report']
     },
     email: {
       type: String,
