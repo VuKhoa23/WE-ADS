@@ -2,15 +2,15 @@ const Report = require('../model/reportSchema');
 
 //create new report
 module.exports.createReport = async (req, res, next) => {
-  const { name, reportType, email, phone, content} = req.body;
+  const { name, reportType, email, phone, content, address} = req.body;
 
   try {
-    const report = await Report.create({ name, reportType, email, phone, content});
+    const report = await Report.create({ name, reportType, email, phone, content, address });
     res.status(200).json({success: true});
   }
   catch (err) {
     console.error(err.message);
-    res.status(500).json({success: false, message: err.message});
+    res.status(400).json({success: false, message: err.message});
   }
 };
 
@@ -18,7 +18,7 @@ module.exports.getAllReports = async (req, res, next) => {
   try {
     const reports = await Report.find({});
 
-    //get create time from objectId and add it to the results
+    //get create time from document and add it to the results
     const results = reports.map(report => {
       const timeStamp = new Date(report.createdAt);
       return {
@@ -30,5 +30,6 @@ module.exports.getAllReports = async (req, res, next) => {
   }
   catch (err) {
     console.error(err.message);
+    res.status(500).json({success: false, message: err.message});
   }
 };

@@ -5,6 +5,10 @@ const reportSchema = mongoose.Schema({
       type: String,
       required: [true, 'Plank reporter name']
     },
+    address: {
+      type: String,
+      required: [true, 'Missing address information']
+    },
     reportType: {
       type: String,
       required: [true, 'Unkouwn reason to report']
