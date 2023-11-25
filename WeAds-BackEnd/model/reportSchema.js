@@ -25,6 +25,13 @@ const reportSchema = mongoose.Schema({
       type: String,
       required: [true, 'Plank report content']
     },
+    state: {
+      type: Boolean,
+      required: true
+    },
+    information: {
+      type: String
+    },
   },
   {timestamps: true}
 )
