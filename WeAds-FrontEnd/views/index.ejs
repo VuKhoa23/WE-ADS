@@ -151,8 +151,32 @@
       });
     });
 
+    function populateDataToModal(place) {
+      let indicator = document.getElementById("carousel-indicators-id");
+      indicator.innerHTML = "";
+      indicator.innerHTML += '<button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>'
+      for (i = 0; i < place.images.length - 1; i++) {
+        indicator.innerHTML += `<button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="${i + 1}" aria-label="Slide ${i + 2}"></button>`
+      }
+      let inner = document.getElementById("carousel-inner-id");
+      inner.innerHTML = "";
+      inner.innerHTML += `
+      <div class="carousel-item active">
+        <img src="${place.images[0].url}" alt="..." class="m-auto d-block w-75">
+      </div>
+      `
+      for (i = 0; i < place.images.length - 1; i++) {
+        inner.innerHTML += `
+      <div class="carousel-item">
+        <img src="${place.images[i + 1].url}" alt="..." class="m-auto d-block w-75">
+      </div>
+      `
+      }
+    }
+
     function showModal(index) {
       $(".modal-body > p").text(places[index].name);
+      populateDataToModal(places[index])
       $("#ads-modal").modal("show");
     }
   </script>

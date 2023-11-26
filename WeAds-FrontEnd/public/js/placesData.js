@@ -8,10 +8,10 @@ const places = [
     planned: true,
     images: [
       {
-        url: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fbrandcom.vn%2Floi-ich-cua-hinh-thuc-quang-cao-tren-truyen-hinh%2F&psig=AOvVaw270bxL8FVUlIG7BWry2fkP&ust=1700968960354000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCMjnkaiZ3oIDFQAAAAAdAAAAABAE",
+        url: "https://brandcom.vn/wp-content/uploads/2020/09/quang-cao-truyen-hinh-1-1080x675.jpg",
       },
       {
-        url: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fbrandcom.vn%2Floi-ich-cua-hinh-thuc-quang-cao-tren-truyen-hinh%2F&psig=AOvVaw270bxL8FVUlIG7BWry2fkP&ust=1700968960354000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCMjnkaiZ3oIDFQAAAAAdAAAAABAE",
+        url: "https://d32q3bqti6sa3p.cloudfront.net/uploads/tang-phieu-quang-cao-google-ho-tro-doanh-nghiep-banner-xs-1645434534.jpg",
       },
     ],
   },
@@ -24,10 +24,10 @@ const places = [
     planned: false,
     images: [
       {
-        url: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fbrandcom.vn%2Floi-ich-cua-hinh-thuc-quang-cao-tren-truyen-hinh%2F&psig=AOvVaw270bxL8FVUlIG7BWry2fkP&ust=1700968960354000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCMjnkaiZ3oIDFQAAAAAdAAAAABAE",
+        url: "https://d32q3bqti6sa3p.cloudfront.net/uploads/tang-phieu-quang-cao-google-ho-tro-doanh-nghiep-banner-xs-1645434534.jpg",
       },
       {
-        url: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fbrandcom.vn%2Floi-ich-cua-hinh-thuc-quang-cao-tren-truyen-hinh%2F&psig=AOvVaw270bxL8FVUlIG7BWry2fkP&ust=1700968960354000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCMjnkaiZ3oIDFQAAAAAdAAAAABAE",
+        url: "https://brandcom.vn/wp-content/uploads/2020/09/quang-cao-truyen-hinh-1-1080x675.jpg",
       },
     ],
   },
@@ -40,10 +40,10 @@ const places = [
     planned: false,
     images: [
       {
-        url: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fbrandcom.vn%2Floi-ich-cua-hinh-thuc-quang-cao-tren-truyen-hinh%2F&psig=AOvVaw270bxL8FVUlIG7BWry2fkP&ust=1700968960354000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCMjnkaiZ3oIDFQAAAAAdAAAAABAE",
+        url: "https://brandcom.vn/wp-content/uploads/2020/09/quang-cao-truyen-hinh-1-1080x675.jpg",
       },
       {
-        url: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fbrandcom.vn%2Floi-ich-cua-hinh-thuc-quang-cao-tren-truyen-hinh%2F&psig=AOvVaw270bxL8FVUlIG7BWry2fkP&ust=1700968960354000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCMjnkaiZ3oIDFQAAAAAdAAAAABAE",
+        url: "https://d32q3bqti6sa3p.cloudfront.net/uploads/tang-phieu-quang-cao-google-ho-tro-doanh-nghiep-banner-xs-1645434534.jpg",
       },
     ],
   },
