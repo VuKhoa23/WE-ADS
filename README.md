@@ -10,4 +10,6 @@
 
 # BACK END
 
-## NOT IMPLEMENTED YET
+- cd WeAds-BackEnd
+- npm start
+- Search for localhost:PORT on browser
