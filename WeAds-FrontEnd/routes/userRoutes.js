@@ -7,4 +7,10 @@ router.get("/home", function (req, res, next) {
   });
 });
 
+router.get("/test", function (req, res, next) {
+  res.render("test", {
+    API_KEY: process.env.MAP_KEY,
+  });
+});
+
 module.exports = router;

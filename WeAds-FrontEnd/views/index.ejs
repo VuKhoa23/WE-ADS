@@ -1,4 +1,3 @@
-sc
 <!DOCTYPE html>
 <html>
 
@@ -16,6 +15,8 @@ sc
   <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+  <script src="https://kit.fontawesome.com/8f0e5e6d04.js" crossorigin="anonymous"></script>
   <style>
     body {
       margin: 0;
@@ -24,7 +25,7 @@ sc
 
     #map {
       position: absolute;
-      top: 0;
+      top: 10vh;
       bottom: 0;
       width: 70%;
     }
@@ -32,7 +33,18 @@ sc
 </head>
 
 <body>
-
+  <div class="form-check m-2">
+    <input class="form-check-input" type="checkbox" value="" id="plannedCbx" checked>
+    <label class="form-check-label" for="plannedCbx">
+      Đã quy hoạch
+    </label>
+  </div>
+  <div class="form-check m-2">
+    <input class="form-check-input" type="checkbox" value="" id="un-plannedCbx" checked>
+    <label class="form-check-label" for="un-plannedCbx">
+      Chưa quy hoạch
+    </label>
+  </div>
   <div id="map">
     <div id="geocoder" class="geocoder"></div>
   </div>
@@ -42,15 +54,11 @@ sc
   <div id="notification-container" class="overflow-y-scroll "></div>
 
   <script src="/js/htmlComponent.js"></script>
+  <script src="/js/index.js"></script>
+  <!-- const places -->
+  <script src="/js/placesData.js"></script>
+  <!-- ------------ -->
   <script>
-    const places = [
-      {
-        name: "Cau Thu Thiem",
-      },
-      {
-        name: "Landmark 81",
-      },
-    ];
     mapboxgl.accessToken = "<%= API_KEY %>";
     const map = new mapboxgl.Map({
       container: "map",
@@ -82,24 +90,38 @@ sc
     document.getElementById("geocoder").appendChild(geocoder.onAdd(map));
 
     // add markers to map
-    places.forEach(async (place) => {
+    places.forEach(async (place, index) => {
       queryName = encodeURIComponent(place.name.trim());
       const response = await fetch(
-        `https://api.mapbox.com/geocoding/v5/mapbox.places/${queryName}.json?country=vn&access_token=${mapboxgl.accessToken}`
+        `https://api.mapbox.com/geocoding/v5/mapbox.places/${place.lng},${place.lat}.json?country=vn&access_token=${mapboxgl.accessToken}`
       );
       const result = await response.json();
 
+      const name = result.features[0].text;
+      let address = result.features[0].place_name;
+      address = address.replace(name + ", ", "")
+
       const el = document.createElement("div");
-      el.className = "marker";
-      el.addEventListener("click", () => {
-        $(".modal-body > p").text(place.name);
-        $("#ads-modal").modal("show");
-      });
+      if (place.planned === true) {
+        el.className = "planned-marker";
+      }
+      else {
+        el.className = "un-planned-marker";
+      }
+
+      el.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const div = document.createElement("div")
+        div.innerHTML = infoAlert(name, address, index)
+        notiContainer.prepend(div);
+      }, false);
       el.textContent = "QC"
       // make a marker for each feature and add to the map
+
+
       const marker = new mapboxgl.Marker(el)
         .setLngLat(result.features[0].center)
-        .setPopup(new mapboxgl.Popup().setHTML(popUp(result.features[0].place_name)))
+        .setPopup(new mapboxgl.Popup().setHTML(popUp(address)))
         .addTo(map);
 
       const markerDiv = marker.getElement();
@@ -122,10 +144,44 @@ sc
         const name = result.features[0].text;
         let address = result.features[0].place_name;
         address = address.replace(name + ", ", "")
-        notiContainer.innerHTML += infoAlert(name, address);
+
+        const div = document.createElement("div")
+        div.innerHTML = warnAlert(name)
+        notiContainer.prepend(div);
       });
     });
+
+    function populateDataToModal(place) {
+      let indicator = document.getElementById("carousel-indicators-id");
+      indicator.innerHTML = "";
+      indicator.innerHTML += '<button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>'
+      for (i = 0; i < place.images.length - 1; i++) {
+        indicator.innerHTML += `<button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="${i + 1}" aria-label="Slide ${i + 2}"></button>`
+      }
+      let inner = document.getElementById("carousel-inner-id");
+      inner.innerHTML = "";
+      inner.innerHTML += `
+      <div class="carousel-item active">
+        <img src="${place.images[0].url}" alt="..." class="m-auto d-block w-75">
+      </div>
+      `
+      for (i = 0; i < place.images.length - 1; i++) {
+        inner.innerHTML += `
+      <div class="carousel-item">
+        <img src="${place.images[i + 1].url}" alt="..." class="m-auto d-block w-75">
+      </div>
+      `
+      }
+    }
+
+    function showModal(index) {
+      $(".modal-body > p").text(places[index].name);
+      populateDataToModal(places[index])
+      $("#ads-modal").modal("show");
+    }
   </script>
+
+
 </body>
 
 </html>

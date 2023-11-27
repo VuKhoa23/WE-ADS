@@ -11,8 +11,19 @@
   min-width: 100%;
 }
 
-.marker {
+.planned-marker {
   background-color: green;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.un-planned-marker {
+  background-color: rgb(128, 0, 0);
   width: 30px;
   height: 30px;
   display: flex;
