@@ -19,9 +19,11 @@
 
   <style>
     #editor {
-      height: 30rem;
+      height: 90vh;
       width: 70%;
+      margin-top: 10px;
       margin: auto;
+
     }
 
     .ql-toolbar {
@@ -37,35 +39,23 @@
 
   </div>
 
-  <button class="btn btn-success " onclick="clicked()">Click here</button>
+  <button class="btn btn-success " onclick="clicked()">Mark as resolved</button>
   <script>
     $(document).ready(function () {
       var quill = new Quill('#editor', {
         modules: {
-          toolbar: [
-            [{ header: [1, 2, false] }],
-            ['bold', 'italic', 'underline'],
-            ['image', 'code-block']
-          ]
+          toolbar: false
         },
         placeholder: 'Compose an epic...',
-        theme: 'snow'  // or 'bubble'
+        theme: 'snow',  // or 'bubble'
+        readOnly: true
       });
+
+      var p = document.querySelector("#editor");
+      p.innerHTML = `<%- content %>`
     })
 
-    async function clicked() {
-      var p = document.querySelector("#editor");
-      $(".ql-editor").attr("contenteditable", false);
-      await fetch("http://127.0.0.1:3000/api/weads-admin/report", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json; charset=utf-8"
-        },
-        body: JSON.stringify({
-          content: p.innerHTML
-        })
-      })
-    }
+
   </script>
 </body>
 
