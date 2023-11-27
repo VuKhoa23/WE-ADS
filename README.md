@@ -11,5 +11,6 @@
 # BACK END
 
 - cd WeAds-BackEnd
+- create .env file specify PORT, MAP_KEY, MONGO_DATABASE
 - npm start
 - Search for localhost:PORT on browser
