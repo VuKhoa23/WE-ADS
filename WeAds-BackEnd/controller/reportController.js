@@ -1,5 +1,5 @@
 const Report = require('../model/reportSchema');
-var ObjectId = (require('mongoose').Types.ObjectId);
+const ObjectId = require('mongoose').Types.ObjectId;
 
 //create new report
 module.exports.createReport = async (req, res, next) => {
@@ -49,7 +49,7 @@ module.exports.updateState = async (req, res, next) => {
     let doc = await Report.findOne({ _id: new ObjectId(id) });
     doc.state = state;
     doc.information = information;
-    
+
     await doc.save();
     res.status(200).json({success: true});
   }
