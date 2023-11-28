@@ -16,7 +16,6 @@ module.exports.createReport = async (req, res, next) => {
       address,
       state,
     });
-    console.log(content);
     res.status(201).json({ success: true });
   } catch (err) {
     console.error(err.message);
@@ -49,7 +48,6 @@ module.exports.getAllReports = async (req, res, next) => {
 module.exports.updateState = async (req, res, next) => {
   try {
     const { id, state, information } = req.body;
-    console.log(id, state, information);
 
     if (!information || information.length === 0) {
       res

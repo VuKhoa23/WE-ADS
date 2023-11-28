@@ -4,8 +4,8 @@
   <table class="table table-striped">
     <thead>
       <tr>
-        <th scope="col">#</th>
         <th scope="col">Họ tên người gửi</th>
+        <th scope="col">Địa chỉ bị báo cáo</th>
         <th scope="col">Hình thức báo cáo</th>
         <th scope="col">Email</th>
         <th scope="col">Điện thoại</th>
@@ -15,7 +15,6 @@
     <tbody>
       <% for(var i = 0; i < reports.length; i++) { %>
       <tr>
-        <td></td>
         <td><%= reports[i].name %></td>
         <td><%=reports[i].address %></td>
         <td><%=reports[i].reportType %></td>
