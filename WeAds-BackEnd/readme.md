@@ -1,4 +1,4 @@
-## Email Middleware Instruction
+## Email Controller Instruction
 
 This middleware is used for sending verification emails.\
 Select an email as sender(should be Gmail), create an app password for that email and copy it. If you don't know how to create an app password, click [here](https://support.google.com/mail/answer/185833?hl=en). Then, go to .env and specify:
