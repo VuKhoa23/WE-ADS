@@ -2,10 +2,6 @@ const express = require("express");
 const router = express.Router();
 const Report = require("../model/reportSchema");
 
-router.get("/create", (req, res) => {
-  res.render("createReport");
-});
-
 router.get("/details/:id", async (req, res) => {
   const id = req.params.id;
   const report = await Report.findOne({ _id: id });
