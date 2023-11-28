@@ -13,4 +13,7 @@
 
 - cd WeAds-BackEnd
 - npm start
-- Search for localhost:PORT on browser
+- Search for localhost:PORT/weads/home on browser
+- Backend URLS
+  - Views: /weads/home, /weads/report
+  - Apis: /api/weads-admin/
