@@ -1,5 +1,5 @@
 const NodeMailer = require('nodemailer');
-const email = require('./forgetPassword.json');
+const email = require('../template/forgetPassword.json');
 require('dotenv').config();
 
 
@@ -36,16 +36,16 @@ module.exports.sendMail = (req, res, next) => {
     from: process.env.EMAIL_ADDRESS,
     to: req.email_to,
     subject: email.subject,
-    text: populateBody(email.body, req.user, '123 456 abc')
+    text: populateBody(email.body, req.user, req.code)
   };
   
-  return transporter.sendMail(mailOptions, function(error, info){
+  transporter.sendMail(mailOptions, function(error, info){
     if (error) {
       console.log(error);
       res.status(500).json({success: false, message: "Error sending email"})
     } else {
       console.log('Email sent: ' + info.response);
-      res.status(200).json({success: true})
+      res.status(200).json({success: true, username: req.username})
     }
   });
 };
