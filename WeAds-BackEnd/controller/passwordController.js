@@ -1,4 +1,3 @@
-const UserInfo = require('../model/userInfoSchema'); 
 const User = require('../model/userSchema');
 require('dotenv').config();
 
@@ -15,14 +14,12 @@ const generateCode = () => {
   return code;
 };
 
-const codeExpire = async (username , code) => {
+const codeExpire = async (email , code) => {
   try {
-    const user = User.findOne({ username: username });
+    const user = await User.findOne({ email: email });
 
-    if (!user) {
-      console.log('codeExpire: cannot find user');
+    if (!user) 
       return;
-    }
 
     //if reset password code is somehow removed before(user has entered it on the website and successfully changed password, etc..), return
     if (!user.resetCode) 
@@ -34,7 +31,7 @@ const codeExpire = async (username , code) => {
 
     user.resetCode = undefined;
     await user.save();
-    console.log(`The reset password code for account with username "${user.username}" has expired`);
+    console.log(`The reset password code sent to ${email} has expired`);
   }
   catch (err) {
     console.log('Error in making verification code expire:\n')
@@ -49,20 +46,20 @@ module.exports.validateRequest = async (req, res, next) => {
   //missing email information
   if (!email) {
     res.status(400).json({success: false, message: 'Missing user email'})
-  }
+    return;
+  } 
 
   try {
-    const user = await UserInfo.findOne({email: email}).populate('username');
+    const user = await User.findOne({email: email});
 
     //email is not registered
     if (!user) {
-      res.status(404).json({success: false, message: 'Email is not registered by any user'});
+      res.status(404).json({success: false, notExist: true, message: 'Email is not registered by any user'});
+      return;
     }
 
-    //add account username to request foe next middleware to find
-    req.username = user.account.username;
     //account info, user's name for sending email
-    req.user = user.name;
+    req.user = user.username;
     req.email_to = email;
 
     next(); // call next middleware 
@@ -75,18 +72,24 @@ module.exports.validateRequest = async (req, res, next) => {
 
 module.exports.createCode = async (req, res, next) => {
   try {
-    const user = await User.findOne({username: req.username});
+    const user = await User.findOne({email: req.email_to});
     const code = generateCode();
+
+    if (!user) {
+      console.log('Error in creating code: user not found');
+      res.status(404).json({success: false, message:'User not found'});
+      return;
+    }
 
     //add code to request to pass to next middleware
     req.code = code;
     //add code to account document
     user.resetCode = code;
+    const email = req.email_to;
+
     await user.save();
-
     //making code expired
-    setTimeout(codeExpire, process.env.EMAIL_EXPIRE_TIME);
-
+    setTimeout(() => {codeExpire(email, code)}, parseInt(process.env.EMAIL_EXPIRE_TIME, 10) * 1000);
     next();
   }
   catch (err) {
@@ -96,34 +99,35 @@ module.exports.createCode = async (req, res, next) => {
 };
 
 module.exports.verifyCode = async (req, res, next) => {
-  const { code, username } = req.body;
+  const { code, email_to } = req.body;
 
   if (!code) {
-    console.log('verifyCode: missing code');
     res.status(400).json({success: false, message: 'Missing code'});
+    return;
   }
 
-  if (!username) {
-    console.log('verifyCode: missing username');
-    res.status(400).json({success: false, message: 'Missing username'});
+  if (!email_to) {
+    res.status(400).json({success: false, message: 'Missing email'});
+    return;
   }
 
   try {
-    const user = User.findOne({username: username});
+    const user = await User.findOne({email: email_to});
     
     if (!user) {
-      console.log('verifyCode: user not found');
       res.status(404).json({success: false, message: 'user not found'});
+      return;
     }
 
     if (!user.resetCode) {
-      console.log('verifyCode: code is expired/not found');
       res.status(404).json({success: false, message: 'Code is expired/removed'});
+      return;
     }
 
     if (user.resetCode === code) {
-      res.status(200).json({success: true, message: 'Code is correct'});
-      codeExpire(username, code);
+      user.resetCode = undefined;
+      await user.save();
+      res.status(200).json({success: true, message: 'Code is correct, let user change password'});
     }
     else 
       res.status(400).json({success: false, message: 'Code is incorrect'});

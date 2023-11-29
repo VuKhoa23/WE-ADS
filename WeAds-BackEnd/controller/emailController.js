@@ -44,8 +44,8 @@ module.exports.sendMail = (req, res, next) => {
       console.log(error);
       res.status(500).json({success: false, message: "Error sending email"})
     } else {
-      console.log('Email sent: ' + info.response);
-      res.status(200).json({success: true, username: req.username})
+      console.log('Reset password code sent: ' + info.response);
+      res.status(200).json({success: true, message: "Email sent successfully", email: req.email_to});
     }
   });
 };
