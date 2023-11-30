@@ -57,6 +57,7 @@
   <script src="/js/index.js"></script>
   <!-- const places -->
   <script src="/js/geojson.js"></script>
+  <script src="/js/placesData.js"></script>
   <!-- ------------ -->
   <script>
     mapboxgl.accessToken = "<%= API_KEY %>";
@@ -96,10 +97,9 @@
       // add style as symbol
 
       map.addLayer({
-        id: 'points',
+        id: 'point',
         type: 'circle',
         source: 'data',
-
         "paint": {
           "circle-radius": 15,
           'circle-color': [
@@ -108,7 +108,8 @@
             1, '#11780a', // if planned is true, set color to green
             '#ba0606' // if planned is false, set color to red
           ],
-        }
+        },
+
       })
 
       // markers layer
