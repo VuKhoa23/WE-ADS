@@ -18,6 +18,13 @@
 }
 
 #notification-container {
+  width: 90%;
+  max-height: 95%;
+  height: 95%;
+  position: absolute;
+}
+
+#notification-parent {
   width: 25vw;
   max-height: 95vh;
   height: 95vh;
@@ -26,4 +33,7 @@
   top: 2.5vh;
   border: 1px solid black;
   border-radius: 5%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
