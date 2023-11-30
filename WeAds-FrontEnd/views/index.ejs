@@ -21,6 +21,7 @@
     body {
       margin: 0;
       padding: 0;
+      font-family: consolas, "Courier New", monospace;
     }
 
     #map {
@@ -100,7 +101,7 @@
 
       const marker = new mapboxgl.Marker(el)
         .setLngLat(place.geometry.coordinates)
-        .setPopup(new mapboxgl.Popup().setHTML(popUp(address)))
+        .setPopup(new mapboxgl.Popup().setHTML(popUp(address, place.properties.adType, place.properties.adPlanned)))
         .addTo(map)
 
       const markerDiv = marker.getElement();
@@ -290,7 +291,7 @@
     // map onclick event
     let notiContainer = document.getElementById("notification-container");
 
-    function populateDataToModal(place) {
+    function populateDataToModal(place, address) {
       let indicator = document.getElementById("carousel-indicators-id");
       indicator.innerHTML = "";
       indicator.innerHTML += '<button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>'
@@ -311,11 +312,32 @@
       </div>
       `
       }
+
+      $("#modal-header").html(place.adName)
+      $("#modal-address").html("Địa chỉ: " + address)
+      $("#modal-scale").html("Kích thước: " + place.adScale)
+      $("#modal-type").html("Loại: " + place.adType)
+      if (place.adPlanned == 1) {
+        $("#modal-planned").html("Đã quy hoạch")
+      }
+      else {
+        $("#modal-planned").html("Chưa quy hoạch")
+      }
+
     }
 
-    function showModal(index) {
-      $(".modal-body > p").text(geojson.features[index].properties.adName);
-      populateDataToModal(geojson.features[index].properties)
+    async function showModal(index) {
+      lng = geojson.features[index].geometry.coordinates[0]
+      lat = geojson.features[index].geometry.coordinates[1]
+      const response = await fetch(
+        `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?country=vn&access_token=${mapboxgl.accessToken}`
+      );
+      const result = await response.json();
+      const name = result.features[0].text;
+      let address = result.features[0].place_name;
+      address = address.replace(name + ", ", "")
+
+      populateDataToModal(geojson.features[index].properties, address)
       $("#ads-modal").modal("show");
     }
   </script>

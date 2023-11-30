@@ -34,15 +34,20 @@ function warnAlert(name) {
   `;
 }
 
-function popUp(address) {
+function popUp(address, type, planned) {
   return `
   <div style="width: 15vw">
     <h6 class="m-0 p-0">
       Co dong chinh tri
     </h6>
-    <p>Dat cong, hanh lang an toan</p>
+    <p>${type}</p>
     <p>${address}</p>
-    <h6 style="font-style: italic;">Da Quy Hoach</h6>
+    ${
+      planned === 1
+        ? '<h6 style="font-style: italic;">Đã quy hoạch</h6'
+        : '<h6 style="font-style: italic;">Chưa quy hoạch</h6'
+    }
+    >
   </div>
   `;
 }
