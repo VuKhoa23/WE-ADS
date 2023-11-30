@@ -2,6 +2,7 @@ $(document).ready(function () {
   $("#plannedCbx").change(function () {
     if (this.checked === true) {
       $(".planned-marker").css("display", "flex");
+      //map.setFilter("point", ["==", "adType", "1"]);
     } else {
       $(".planned-marker").css("display", "none");
     }

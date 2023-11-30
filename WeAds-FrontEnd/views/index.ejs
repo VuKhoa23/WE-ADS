@@ -21,7 +21,7 @@
     body {
       margin: 0;
       padding: 0;
-      font-family: consolas, "Courier New", monospace;
+      font-family: monospace;
     }
 
     #map {
@@ -34,18 +34,11 @@
 </head>
 
 <body>
-  <div class="form-check m-2">
-    <input class="form-check-input" type="checkbox" value="" id="plannedCbx" checked>
-    <label class="form-check-label" for="plannedCbx">
-      Đã quy hoạch
-    </label>
-  </div>
-  <div class="form-check m-2">
-    <input class="form-check-input" type="checkbox" value="" id="un-plannedCbx" checked>
-    <label class="form-check-label" for="un-plannedCbx">
-      Chưa quy hoạch
-    </label>
-  </div>
+  <select class="form-select m-3 w-25 " id="typeFilter">
+    <option value="-1" selected>Tất cả</option>
+    <option value="0">Chưa quy hoạch</option>
+    <option value="1">Đã quy hoạch</option>
+  </select>
   <div id="map">
     <div id="geocoder" class="geocoder"></div>
   </div>
@@ -136,6 +129,7 @@
         clusterRadius: 50 // Radius of each cluster when clustering points (defaults to 50)
       });
 
+
       // add style as symbol
 
       map.addLayer({
@@ -151,8 +145,22 @@
             '#ba0606' // if planned is false, set color to red
           ],
         },
-
       })
+
+      const filterElem = document.getElementById('typeFilter');
+
+      filterElem.onchange = () => {
+        const pubType = filterElem.value;
+        if (pubType == -1) {
+          const newGeoJSON = { ...geojson };
+          map.getSource('data').setData(newGeoJSON);
+        }
+        else {
+          const newGeoJSON = { ...geojson };
+          newGeoJSON.features = geojson.features.filter(feature => feature.properties.adPlanned == pubType);
+          map.getSource('data').setData(newGeoJSON);
+        }
+      };
 
       // markers layer
       map.addLayer({
