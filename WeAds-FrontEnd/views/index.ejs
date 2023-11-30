@@ -57,7 +57,6 @@
   <script src="/js/index.js"></script>
   <!-- const places -->
   <script src="/js/geojson.js"></script>
-  <script src="/js/placesData.js"></script>
   <!-- ------------ -->
   <script>
     mapboxgl.accessToken = "<%= API_KEY %>";
@@ -68,6 +67,48 @@
       center: [106.7222035, 10.794952],
       zoom: 13,
     });
+
+    // add markers to map
+    geojson.features.forEach(async (place, index) => {
+      lng = place.geometry.coordinates[0]
+      lat = place.geometry.coordinates[1]
+      const response = await fetch(
+        `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?country=vn&access_token=${mapboxgl.accessToken}`
+      );
+      const result = await response.json();
+
+      const name = result.features[0].text;
+      let address = result.features[0].place_name;
+      address = address.replace(name + ", ", "")
+
+      const el = document.createElement("div");
+      if (place.properties.adPlanned === true) {
+        el.className = "planned-marker";
+      }
+      else {
+        el.className = "un-planned-marker";
+      }
+
+      el.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const div = document.createElement("div")
+        div.innerHTML = infoAlert(name, address, index)
+        notiContainer.prepend(div);
+      }, false);
+      // make a marker for each feature and add to the map
+
+
+      const marker = new mapboxgl.Marker(el)
+        .setLngLat(place.geometry.coordinates)
+        .setPopup(new mapboxgl.Popup().setHTML(popUp(address)))
+        .addTo(map)
+
+      const markerDiv = marker.getElement();
+
+      markerDiv.addEventListener("mouseenter", () => marker.togglePopup());
+      markerDiv.addEventListener("mouseleave", () => marker.togglePopup());
+    });
+
 
     // locate the user
     map.addControl(
@@ -101,7 +142,7 @@
         type: 'circle',
         source: 'data',
         "paint": {
-          "circle-radius": 15,
+          "circle-radius": 10,
           'circle-color': [
             'match',
             ['to-number', ['get', 'adPlanned']],
@@ -245,46 +286,6 @@
     });
     document.getElementById("geocoder").appendChild(geocoder.onAdd(map));
 
-    // add markers to map
-    geojson.features.forEach(async (place, index) => {
-      lng = place.geometry.coordinates[0]
-      lat = place.geometry.coordinates[1]
-      const response = await fetch(
-        `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?country=vn&access_token=${mapboxgl.accessToken}`
-      );
-      const result = await response.json();
-
-      const name = result.features[0].text;
-      let address = result.features[0].place_name;
-      address = address.replace(name + ", ", "")
-
-      const el = document.createElement("div");
-      if (place.properties.adPlanned === true) {
-        el.className = "planned-marker";
-      }
-      else {
-        el.className = "un-planned-marker";
-      }
-
-      el.addEventListener("click", (e) => {
-        e.stopPropagation();
-        const div = document.createElement("div")
-        div.innerHTML = infoAlert(name, address, index)
-        notiContainer.prepend(div);
-      }, false);
-      // make a marker for each feature and add to the map
-
-
-      const marker = new mapboxgl.Marker(el)
-        .setLngLat(result.features[0].center)
-        .setPopup(new mapboxgl.Popup().setHTML(popUp(address)))
-        .addTo(map)
-
-      const markerDiv = marker.getElement();
-
-      markerDiv.addEventListener("mouseenter", () => marker.togglePopup());
-      markerDiv.addEventListener("mouseleave", () => marker.togglePopup());
-    });
 
     // map onclick event
     let notiContainer = document.getElementById("notification-container");
@@ -293,28 +294,28 @@
       let indicator = document.getElementById("carousel-indicators-id");
       indicator.innerHTML = "";
       indicator.innerHTML += '<button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>'
-      for (i = 0; i < place.images.length - 1; i++) {
+      for (i = 0; i < place.adImages.length - 1; i++) {
         indicator.innerHTML += `<button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="${i + 1}" aria-label="Slide ${i + 2}"></button>`
       }
       let inner = document.getElementById("carousel-inner-id");
       inner.innerHTML = "";
       inner.innerHTML += `
       <div class="carousel-item active">
-        <img src="${place.images[0].url}" alt="..." class="m-auto d-block w-75">
+        <img src="${place.adImages[0].url}" alt="..." class="m-auto d-block w-75">
       </div>
       `
-      for (i = 0; i < place.images.length - 1; i++) {
+      for (i = 0; i < place.adImages.length - 1; i++) {
         inner.innerHTML += `
       <div class="carousel-item">
-        <img src="${place.images[i + 1].url}" alt="..." class="m-auto d-block w-75">
+        <img src="${place.adImages[i + 1].url}" alt="..." class="m-auto d-block w-75">
       </div>
       `
       }
     }
 
     function showModal(index) {
-      $(".modal-body > p").text(places[index].name);
-      populateDataToModal(places[index])
+      $(".modal-body > p").text(geojson.features[index].properties.adName);
+      populateDataToModal(geojson.features[index].properties)
       $("#ads-modal").modal("show");
     }
   </script>

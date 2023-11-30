@@ -12,10 +12,14 @@ const geojson = {
         adScale: "2.5m x 5.4m",
         adName: "Landmark 81",
         adPlanned: 1,
-        title: "Adam",
-        "marker-color": "#FC5C53",
-        "marker-size": "large",
-        "marker-symbol": "rocket",
+        adImages: [
+          {
+            url: "https://brandcom.vn/wp-content/uploads/2020/09/quang-cao-truyen-hinh-1-1080x675.jpg",
+          },
+          {
+            url: "https://d32q3bqti6sa3p.cloudfront.net/uploads/tang-phieu-quang-cao-google-ho-tro-doanh-nghiep-banner-xs-1645434534.jpg",
+          },
+        ],
       },
     },
     {
@@ -29,10 +33,14 @@ const geojson = {
         adScale: "2.5m x 5.4m",
         adName: "Cầu Thủ Thiêm",
         adPlanned: 0,
-        title: "Adam",
-        "marker-color": "#FC5C53",
-        "marker-size": "large",
-        "marker-symbol": "rocket",
+        adImages: [
+          {
+            url: "https://brandcom.vn/wp-content/uploads/2020/09/quang-cao-truyen-hinh-1-1080x675.jpg",
+          },
+          {
+            url: "https://d32q3bqti6sa3p.cloudfront.net/uploads/tang-phieu-quang-cao-google-ho-tro-doanh-nghiep-banner-xs-1645434534.jpg",
+          },
+        ],
       },
     },
     {
@@ -46,10 +54,35 @@ const geojson = {
         adScale: "2.5m x 5.4m",
         adName: "Đại học tôn đức thắng",
         adPlanned: 0,
-        title: "Adam",
-        "marker-color": "#FC5C53",
-        "marker-size": "large",
-        "marker-symbol": "rocket",
+        adImages: [
+          {
+            url: "https://brandcom.vn/wp-content/uploads/2020/09/quang-cao-truyen-hinh-1-1080x675.jpg",
+          },
+          {
+            url: "https://d32q3bqti6sa3p.cloudfront.net/uploads/tang-phieu-quang-cao-google-ho-tro-doanh-nghiep-banner-xs-1645434534.jpg",
+          },
+        ],
+      },
+    },
+    {
+      type: "Feature",
+      geometry: {
+        type: "Point",
+        coordinates: [106.72193892781468, 10.795127128722854],
+      },
+      properties: {
+        adType: "Trụ treo băng rôn dọc",
+        adScale: "2.5m x 5.4m",
+        adName: "Blank Lounge",
+        adPlanned: 0,
+        adImages: [
+          {
+            url: "https://brandcom.vn/wp-content/uploads/2020/09/quang-cao-truyen-hinh-1-1080x675.jpg",
+          },
+          {
+            url: "https://d32q3bqti6sa3p.cloudfront.net/uploads/tang-phieu-quang-cao-google-ho-tro-doanh-nghiep-banner-xs-1645434534.jpg",
+          },
+        ],
       },
     },
   ],

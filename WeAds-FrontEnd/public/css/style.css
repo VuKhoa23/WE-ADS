@@ -11,14 +11,10 @@
   min-width: 100%;
 }
 
-.planned-marker {
-  width: 30px;
-  height: 30px;
-}
-
+.planned-marker,
 .un-planned-marker {
-  width: 30px;
-  height: 30px;
+  width: 10px;
+  height: 10px;
 }
 
 #notification-container {
