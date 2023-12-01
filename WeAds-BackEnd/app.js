@@ -41,3 +41,9 @@ app.get("/", (req, res) => {
 });
 app.use("/weads", userRoutes);
 app.use("/api/weads-admin/report", reportApi);
+
+//testing code
+const passRoutes = require("./routes/passwordRoutes");
+
+app.use("/test/password/", passRoutes);
+//----------------------------------------------------------------
