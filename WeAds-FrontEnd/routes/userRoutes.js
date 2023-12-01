@@ -7,4 +7,12 @@ router.get("/home", function (req, res, next) {
   });
 });
 
+router.get("/report/:placeIndex", function (req, res, next) {
+  const placeIndex = req.params.placeIndex;
+  res.render("report", {
+    placeIndex: placeIndex,
+    API_KEY: process.env.MAP_KEY,
+  });
+});
+
 module.exports = router;
