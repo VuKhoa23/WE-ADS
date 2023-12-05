@@ -1,30 +1,34 @@
 <%- include('./partials/header') %>
-
-<body>
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th scope="col">Họ tên người gửi</th>
-        <th scope="col">Địa chỉ bị báo cáo</th>
-        <th scope="col">Hình thức báo cáo</th>
-        <th scope="col">Email</th>
-        <th scope="col">Điện thoại</th>
-        <th scope="col">Nội dung báo cáo</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% for(var i = 0; i < reports.length; i++) { %>
-      <tr>
-        <td><%= reports[i].name %></td>
-        <td><%=reports[i].address %></td>
-        <td><%=reports[i].reportType %></td>
-        <td><%=reports[i].email %></td>
-        <td><%=reports[i].phone %></td>
-        <td>
-          <a href="/weads/report/details/<%= reports[i]._id %>">Click here to view details</a>
-        </td>
-      </tr>
-      <% } %>
-    </tbody>
-  </table>
-</body>
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-11 col-lg-10">
+      <table style="border-right: 1px solid #dee2e6; border-left: 1px solid #dee2e6;" class="table table-hover">
+        <thead>
+          <tr>
+            <th class="text-center" style="background-color: #2b2929; color: white; border-top-left-radius: 5px;" scope="col">Họ tên người gửi</th>
+            <th class="text-center" style="background-color: #2b2929; color: white;" scope="col">Địa chỉ bị báo cáo</th>
+            <th class="text-center" style="background-color: #2b2929; color: white;" scope="col">Hình thức báo cáo</th>
+            <th class="text-center" style="background-color: #2b2929; color: white; border-top-right-radius: 5px;" scope="col">Nội dung báo cáo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (reports.length > 0) { %>
+            <% for(var i = 0; i < reports.length; i++) { %>
+            <tr>
+              <td class="text-center"><%= reports[i].name %></td>
+              <td class="text-center"><%=reports[i].address %></td>
+              <td class="text-center"><%=reports[i].reportType %></td>
+              <td class="text-center">
+                <a class="btn btn-success" href="/weads/report/details/<%= reports[i]._id %>">Xem chi tiết</a>
+              </td>
+            </tr>
+            <% } %>
+          <% } else { %>
+            <tr>
+              <td class="text-center" colspan="4">Không có báo cáo</td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+<%- include('./partials/footer') %>

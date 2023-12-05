@@ -37,8 +37,38 @@ li {
   display: none;
 }
 
+.close-sidebar {
+  font-size: 30px;
+}
+
+.collapse-toggle {
+  width: 100%;
+  display: flex;
+  cursor: pointer;
+  position: relative;
+}
+
+.collapse-arrow {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  transition: transform 0.3s ease-in-out;
+}
+
+.collapse-toggle.open .collapse-arrow {
+  transform: rotate(-90deg) translateX(50%);
+}
+
 .sidebar-item:hover {
   background-color: #f4f5f7;
+}
+
+.sidebar-link {
+  display: block;
+  width: 100%;
 }
 
 .main {

@@ -9,11 +9,10 @@ const app = express();
 app.use(cors());
 
 const userRoutes = require("./routes/userRoutes");
+const reportRoutes = require("./routes/reportRoutes");
 
 const reportApi = require("./api/reportApi");
 
-const reportRoutes = require("./routes/reportRoutes");
-app.use("/weads/report", reportRoutes); //test api report
 
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
@@ -41,6 +40,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/weads", userRoutes);
+app.use("/weads/report", reportRoutes); 
 app.use("/api/weads-admin/report", reportApi);
 
 //test code-------------------------------------------------------------
