@@ -1,5 +1,10 @@
-const Report = require("../model/reportSchema");
+const Report = require("../model/report");
 const ObjectId = require("mongoose").Types.ObjectId;
+
+module.exports.getReportById = async (id) => {
+  const report = await Report.findOne({ _id: id });
+  return report;
+};
 
 //create new report
 module.exports.createReport = async (req, res, next) => {
@@ -24,24 +29,19 @@ module.exports.createReport = async (req, res, next) => {
 };
 
 module.exports.getAllReports = async (req, res, next) => {
-  try {
-    const reports = await Report.find({});
+  const reports = await Report.find({});
 
-    //get create time from document and add it to the results
-    const results = reports.map((report) => {
-      const timeStamp = new Date(report.createdAt);
-      return {
-        ...report._doc,
-        createTime: `${timeStamp.getDate()}/${
-          timeStamp.getMonth() + 1
-        }/${timeStamp.getFullYear()}`,
-      };
-    });
-    res.status(200).json({ success: true, reports: results });
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).json({ success: false, message: err.message });
-  }
+  //get create time from document and add it to the results
+  const results = reports.map((report) => {
+    const timeStamp = new Date(report.createdAt);
+    return {
+      ...report._doc,
+      createTime: `${timeStamp.getDate()}/${
+        timeStamp.getMonth() + 1
+      }/${timeStamp.getFullYear()}`,
+    };
+  });
+  return results;
 };
 
 //update report state

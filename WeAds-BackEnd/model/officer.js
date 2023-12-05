@@ -1,32 +1,40 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const userSchema = new Schema({
+const officer = new Schema({
     username: {
         type: String,
-        require: true
+        require: [true, 'Missing username']
+    },
+    password: {
+        type: String,
+        require: [true, 'Missing password']
+    },
+    name: {
+        type: String,
+        require: [true, 'Missing officer\'s name']
     },
     birthday: {
         type: Date,
-        require: true
+        require: [true, 'Missing birthday']
     },
     email: {
         type: String,
-        require: true
+        require: [true, 'Missing email']
     },
     phone: {
         type: String,
-        require: true
+        require: [true, 'Missing phone number']
     }, 
     role: { 
         type: {type: String, enum: ['District', 'Ward']},
-        require: true
+        require: [true, 'Missing office role']
     },
     resetCode: { // reset password code
         type: String
     }
 })
 
-const User = mongoose.model('officer', userSchema);
+const User = mongoose.model('officer', officer);
 
 module.exports = User;

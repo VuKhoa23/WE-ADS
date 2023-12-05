@@ -25,7 +25,7 @@ app.set("view engine", "ejs");
 const MAP_KEY = process.env.MAP_KEY;
 
 mongoose
-  .connect(process.env.DB_URI)
+  .connect(process.env.MONGO_PHAT)
   .then(() => {
     console.log("connected to MongoDB");
   })
@@ -39,11 +39,13 @@ console.log("listening on port: " + process.env.PORT);
 app.get("/", (req, res) => {
   res.redirect("/weads/home");
 });
+
 app.use("/weads", userRoutes);
 app.use("/api/weads-admin/report", reportApi);
 
-//testing code
-const passRoutes = require("./routes/passwordRoutes");
-
-app.use("/test/password/", passRoutes);
-//----------------------------------------------------------------
+//test code-------------------------------------------------------------
+app.use('/test-ui', (req, res) => {
+  res.render("test", {
+    role: 'Department'
+  });
+});
