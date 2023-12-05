@@ -11,7 +11,10 @@ router.get("/details/:id", async (req, res) => {
 
 router.get("/", async (req, res) => {
   const reports = await controller.getAllReports();
-  res.render("viewReport", { reports: reports });
+  res.render("viewReport", { 
+    reports: reports, 
+    role: "Department" 
+  });
 });
 
 module.exports = router;
