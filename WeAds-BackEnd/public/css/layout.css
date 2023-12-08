@@ -62,8 +62,18 @@ li {
   transform: rotate(-90deg) translateX(50%);
 }
 
-.sidebar-item:hover {
+.sidebar-link {
+  color: #212529
+}
+
+.sidebar-item:hover  {
   background-color: #f4f5f7;
+}
+
+.sidebar-item:hover i,
+.sidebar-item:hover + i,
+.sidebar-item:hover .sidebar-link {
+  color: #42bff5; 
 }
 
 .sidebar-link {

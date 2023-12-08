@@ -49,3 +49,7 @@ app.use('/test-ui', (req, res) => {
     role: 'Department'
   });
 });
+
+app.use('/test-login', (req, res) => {
+  res.render("login");
+});
