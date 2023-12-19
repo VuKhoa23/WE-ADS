@@ -1,16 +1,61 @@
 const path = require("path");
 const express = require("express");
 const mongoose = require("mongoose");
+const jwt = require('jsonwebtoken')
+const cookieParser = require('cookie-parser')
+const passport = require('passport')
+const googleAuth = require("./controller/googleAuth")
+var bodyParser = require('body-parser')
 require("dotenv").config();
 const cors = require("cors");
+const {
+  checkUser,
+} = require("./middlewares/authMiddleware");
 
-const app = express();
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
+
+const app = express()
+
+app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(passport.initialize()); 
+app.use(cookieParser())
+
+
+passport.use(new GoogleStrategy({
+  clientID: process.env.GOOGLE_CLIENT_ID,
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  callbackURL: "http://localhost:3000/googleRedirect"
+},
+function(accessToken, refreshToken, profile, done) {
+    //console.log(accessToken, refreshToken, profile)
+    return done(null, profile)
+}
+))
+
+passport.serializeUser(function(user, done) {
+  done(null, user)
+})
+passport.deserializeUser(function(obj, done) {
+  done(null, obj)
+})
+
+app.get('/auth/google',
+  passport.authenticate('google', { scope:
+      [ 'email', 'profile' ] }
+));
+
+
+app.get("*", checkUser);
+
+app.get('/googleRedirect', passport.authenticate('google'), googleAuth.createToken)
 
 app.use(cors());
 
 const userRoutes = require("./routes/userRoutes");
 const reportRoutes = require("./routes/reportRoutes");
-
 const reportApi = require("./api/reportApi");
 
 
@@ -24,7 +69,7 @@ app.set("view engine", "ejs");
 const MAP_KEY = process.env.MAP_KEY;
 
 mongoose
-  .connect(process.env.MONGO_PHAT)
+  .connect(process.env.DB_URI)
   .then(() => {
     console.log("connected to MongoDB");
   })
@@ -42,6 +87,13 @@ app.get("/", (req, res) => {
 app.use("/weads", userRoutes);
 app.use("/weads/report", reportRoutes); 
 app.use("/api/weads-admin/report", reportApi);
+app.use('/weads/login', (req, res) => {
+  res.render("login");
+});
+app.get("/weads/current", (req, res)=>{
+  console.log(res.locals.username)
+  res.send(res.locals.username)
+})
 
 //test code-------------------------------------------------------------
 app.use('/test-ui', (req, res) => {
@@ -50,6 +102,3 @@ app.use('/test-ui', (req, res) => {
   });
 });
 
-app.use('/test-login', (req, res) => {
-  res.render("login");
-});

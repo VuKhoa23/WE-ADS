@@ -32,6 +32,12 @@ const officer = new Schema({
     },
     resetCode: { // reset password code
         type: String
+    },
+    district:{
+        type: String
+    },
+    ward: {
+        type: String
     }
 })
 
