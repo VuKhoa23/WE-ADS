@@ -4,7 +4,6 @@ const mongoose = require("mongoose");
 const jwt = require('jsonwebtoken')
 const cookieParser = require('cookie-parser')
 const passport = require('passport')
-const googleAuth = require("./controller/googleAuth")
 var bodyParser = require('body-parser')
 require("dotenv").config();
 const cors = require("cors");
@@ -15,6 +14,9 @@ const {
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 const app = express()
+
+const googleAuth = require("./controller/googleAuth")
+const authRoutes = require("./routes/authRoutes")
 
 app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
 
@@ -85,20 +87,31 @@ app.get("/", (req, res) => {
 });
 
 app.use("/weads", userRoutes);
+app.use("/weads", authRoutes)
 app.use("/weads/report", reportRoutes); 
 app.use("/api/weads-admin/report", reportApi);
 app.use('/weads/login', (req, res) => {
   res.render("login");
 });
 app.get("/weads/current", (req, res)=>{
-  console.log(res.locals.username)
-  res.send(res.locals.username)
+  if(res.locals.username === null){
+    res.send("Not logged in")
+  }
+  else{
+    res.send(res.locals.username)
+  }
 })
 
 //test code-------------------------------------------------------------
 app.use('/test-ui', (req, res) => {
-  res.render("test", {
-    role: 'Department'
+  let username = "Not logged in"
+  if(res.locals.username != null){
+    username = res.locals.username
+  }
+  res.render("index", {
+    API_KEY: process.env.MAP_KEY,
+    role: 'Department',
+    username: username
   });
 });
 

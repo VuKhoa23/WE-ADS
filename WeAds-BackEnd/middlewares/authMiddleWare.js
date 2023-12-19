@@ -14,14 +14,12 @@ const checkUser = function (req, res, next) {
           res.locals.username = null;
           next();
         } else {
-          console.log(decodedToken);
           res.locals.username = decodedToken.username;
           next();
         }
       }
     );
   } else {
-    console.log("No token")
     res.locals.username = null;
     next();
   }
