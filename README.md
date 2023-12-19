@@ -12,7 +12,7 @@
 # BACK END
 
 - cd WeAds-BackEnd
-- create .env file specify PORT, MAP_KEY, MONGO_DATABASE
+- create .env file specify PORT, MAP_KEY, MONGO_DATABASE, JWT_SECRET_TOKEN, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET
 - npm start
 - Search for localhost:PORT/weads/home on browser
 - Backend URLS
