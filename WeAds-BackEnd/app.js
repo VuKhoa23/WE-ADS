@@ -9,11 +9,10 @@ const app = express();
 app.use(cors());
 
 const userRoutes = require("./routes/userRoutes");
+const reportRoutes = require("./routes/reportRoutes");
 
 const reportApi = require("./api/reportApi");
 
-const reportRoutes = require("./routes/reportRoutes");
-app.use("/weads/report", reportRoutes); //test api report
 
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
@@ -25,7 +24,7 @@ app.set("view engine", "ejs");
 const MAP_KEY = process.env.MAP_KEY;
 
 mongoose
-  .connect(process.env.DB_URI)
+  .connect(process.env.MONGO_PHAT)
   .then(() => {
     console.log("connected to MongoDB");
   })
@@ -39,11 +38,18 @@ console.log("listening on port: " + process.env.PORT);
 app.get("/", (req, res) => {
   res.redirect("/weads/home");
 });
+
 app.use("/weads", userRoutes);
+app.use("/weads/report", reportRoutes); 
 app.use("/api/weads-admin/report", reportApi);
 
-//testing code
-const passRoutes = require("./routes/passwordRoutes");
+//test code-------------------------------------------------------------
+app.use('/test-ui', (req, res) => {
+  res.render("test", {
+    role: 'Department'
+  });
+});
 
-app.use("/test/password/", passRoutes);
-//----------------------------------------------------------------
+app.use('/test-login', (req, res) => {
+  res.render("login");
+});
