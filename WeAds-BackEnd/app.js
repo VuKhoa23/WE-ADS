@@ -94,21 +94,12 @@ app.use('/weads/login', (req, res) => {
   res.render("login");
 });
 app.get("/weads/current", (req, res)=>{
-  if(res.locals.username === null){
+  if(res.locals.user === null){
     res.send("Not logged in")
   }
   else{
-    res.send(res.locals.username)
+    console.log(res.locals.user)
+    res.send(res.locals.user)
   }
 })
-
-//test code-------------------------------------------------------------
-app.use('/test-ui', (req, res) => {
-  let username = res.locals.username
-  res.render("department/index", {
-    API_KEY: process.env.MAP_KEY,
-    role: 'Department',
-    username: username
-  });
-});
 

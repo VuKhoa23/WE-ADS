@@ -5,31 +5,21 @@ const bcrypt = require('bcrypt');
 const officer = new Schema({
     username: {
         type: String,
-        require: [true, 'Missing username']
     },
     password: {
         type: String,
-        require: [true, 'Missing password']
     },
     name: {
         type: String,
-        require: [true, 'Missing officer\'s name']
-    },
-    birthday: {
-        type: Date,
-        require: [true, 'Missing birthday']
     },
     email: {
         type: String,
-        require: [true, 'Missing email']
     },
     phone: {
         type: String,
-        require: [true, 'Missing phone number']
     }, 
     role: { 
-        type: {type: String, enum: ['District', 'Ward']},
-        require: [true, 'Missing office role']
+        type: {type: String, enum: ['Department','District', 'Ward']},
     },
     resetCode: { // reset password code
         type: String
@@ -60,6 +50,6 @@ officer.statics.login = async function(email, password){
     throw Error('incorrect email');
 }
 
-const User = mongoose.model('officer', officer);
+const Officer = mongoose.model('officer', officer);
 
-module.exports = User;
+module.exports = Officer;
