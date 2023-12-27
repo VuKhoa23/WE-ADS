@@ -1,9 +1,10 @@
 const jwt = require("jsonwebtoken");
+const Officer = require("../model/officer")
+
 
 const checkUser = function (req, res, next) {
   const token = req.cookies.jwt;
 
-  // check if jwt exists & verified
   if (token) {
     jwt.verify(
       token,
@@ -11,18 +12,18 @@ const checkUser = function (req, res, next) {
       async function (err, decodedToken) {
         if (err) {
           console.log(err.message);
-          res.locals.username = null;
+          res.locals.user = null;
           next();
         } else {
           console.log(decodedToken);
-          res.locals.username = decodedToken.username;
+          let user = await Officer.findById(decodedToken.id);
+          res.locals.user = user;
           next();
         }
       }
     );
   } else {
-    console.log("No token")
-    res.locals.username = null;
+    res.locals.user = null;
     next();
   }
 };
