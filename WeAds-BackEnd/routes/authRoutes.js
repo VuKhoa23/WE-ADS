@@ -22,10 +22,15 @@ router.post("/process-login", async (req, res)=>{
     const officer = await Officer.login(email, password);
     const token = createToken(officer._id);
     res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 });
-    res.redirect('/weads/home')
+    res.send("OK")
   } catch (err) {
-    console.log(err)
-    res.send("Error")
+    if(err.message === "incorrect password"){
+      res.send("Wrong password")
+      return
+    }else{
+      res.send("Email not exists")
+      return
+    }
   }
 })
 
