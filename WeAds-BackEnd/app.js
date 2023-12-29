@@ -109,13 +109,3 @@ app.get("/weads/current", (req, res)=>{
 })
 
 
-{
-  "username": "vukhoa23",
-  "password": "$2b$10$n8a3nOz1zOVrMLyWQzkCJemKtZH6EhHQOBXmc4n3BnGSmW6DRPY7i",
-  "email": "huutam287@gmail.com",
-  "phone": "0932715653",
-  "role": "Department",
-  "district": "12",
-  "ward": "12",
-  "__v": 0
-}
