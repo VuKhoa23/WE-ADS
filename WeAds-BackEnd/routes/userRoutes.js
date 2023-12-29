@@ -10,9 +10,14 @@ router.get("/home", function (req, res, next) {
   if(res.locals.user){
     username = res.locals.user.username
   }
+
+  let role = null
+  if(res.locals.user){
+    role = res.locals.user.role
+  }
   res.render("department/index", {
     API_KEY: process.env.MAP_KEY,
-    role: 'Department',
+    role: role,
     username: username,
     createMessage: createMessage
   });

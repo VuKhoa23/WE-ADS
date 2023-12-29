@@ -20,6 +20,8 @@ const geojson = {
             url: "https://d32q3bqti6sa3p.cloudfront.net/uploads/tang-phieu-quang-cao-google-ho-tro-doanh-nghiep-banner-xs-1645434534.jpg",
           },
         ],
+        ward: "22",
+        district: "Binh Thanh"
       },
     },
     {
@@ -41,27 +43,8 @@ const geojson = {
             url: "https://d32q3bqti6sa3p.cloudfront.net/uploads/tang-phieu-quang-cao-google-ho-tro-doanh-nghiep-banner-xs-1645434534.jpg",
           },
         ],
-      },
-    },
-    {
-      type: "Feature",
-      geometry: {
-        type: "Point",
-        coordinates: [106.71136034376843, 10.792355602618315],
-      },
-      properties: {
-        adType: "Trụ treo băng rôn dọc",
-        adScale: "2.5m x 5.4m",
-        adName: "Đại học tôn đức thắng",
-        adPlanned: 0,
-        adImages: [
-          {
-            url: "https://brandcom.vn/wp-content/uploads/2020/09/quang-cao-truyen-hinh-1-1080x675.jpg",
-          },
-          {
-            url: "https://d32q3bqti6sa3p.cloudfront.net/uploads/tang-phieu-quang-cao-google-ho-tro-doanh-nghiep-banner-xs-1645434534.jpg",
-          },
-        ],
+        ward: "Da Kao",
+        district: "1"
       },
     },
     {
@@ -83,6 +66,8 @@ const geojson = {
             url: "https://d32q3bqti6sa3p.cloudfront.net/uploads/tang-phieu-quang-cao-google-ho-tro-doanh-nghiep-banner-xs-1645434534.jpg",
           },
         ],
+        ward: "1",
+        district: "1"
       },
     },
   ],

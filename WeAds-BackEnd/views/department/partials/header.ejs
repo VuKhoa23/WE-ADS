@@ -17,14 +17,14 @@
         <div class="h-100">
           <div class="d-flex justify-content-between border-bottom">
             <% if(username != null){ %>
-            <a class="h3 my-2 text-body pt-4" style="font-size: 1rem;" href="/weads/home">Hi <%- username %></a>
+            <a class="h3 text-body pt-4" style="font-size: 1rem;" href="/weads/home">Hi <%- username %></a>
             <% } else { %>
-            <a class="h3 my-2 text-body" href="/weads/home">Not login</a>
+            <a class="h3 text-body" href="/weads/home">Not login</a>
             <% } %>
             <button class="btn close-sidebar"><i class="bi bi-x"></i></button>
           </div>
           <ul class="sidebar-list">
-            <% if (username!= null) { %>
+            <% if (username!= null && role === 'Department') { %>
             <li class="sidebar-item w-100 d-flex align-items-center p-2"><a href="/weads/report" class="sidebar-link sidebar-link">Xem báo cáo</a></li>
             <div class="collapse-toggle">
               <li class="sidebar-item w-100 d-flex align-items-center p-2" data-bs-toggle="collapse" data-bs-target="#collapse-list">Quản lí</li>
@@ -38,6 +38,12 @@
             </div>
             <li class="sidebar-item w-100 d-flex align-items-center p-2"><a href="/weads/department/create" class="sidebar-link">Tạo tài khoản cán bộ</a></li>
             <li class="sidebar-item w-100 d-flex align-items-center p-2"><a href="" class="sidebar-link">Xét duyệt yêu cầu</a></li>
+            <li class="sidebar-item w-100 d-flex align-items-center p-2">
+              <i style="font-size: 20px;" class="bi bi-box-arrow-right"></i>
+              <a href="/weads/logout" class="sidebar-link mx-2">Đăng xuất</a>
+            </li>
+            <% } else if(username!= null && role === 'District') { %>
+            <li class="sidebar-item w-100 d-flex align-items-center p-2"><a href="/weads/report" class="sidebar-link sidebar-link">Xem báo cáo</a></li>
             <li class="sidebar-item w-100 d-flex align-items-center p-2">
               <i style="font-size: 20px;" class="bi bi-box-arrow-right"></i>
               <a href="/weads/logout" class="sidebar-link mx-2">Đăng xuất</a>

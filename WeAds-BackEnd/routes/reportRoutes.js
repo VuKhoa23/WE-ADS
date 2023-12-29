@@ -13,7 +13,7 @@ router.get("/", async (req, res) => {
   const reports = await controller.getAllReports();
   res.render("department/viewReport", { 
     reports: reports, 
-    role: "Department",
+    role: res.locals.user.role,
     username: res.locals.user.username
   });
 });

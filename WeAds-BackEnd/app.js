@@ -95,7 +95,7 @@ app.use("/weads/report", reportRoutes);
 app.use("/api/weads-admin/report", reportApi);
 app.use('/weads/login', (req, res) => {
   res.render("login", {
-    username: res.locals.user.username
+    username: res.locals.user ? res.locals.user.username : null
   });
 });
 app.get("/weads/current", (req, res)=>{
