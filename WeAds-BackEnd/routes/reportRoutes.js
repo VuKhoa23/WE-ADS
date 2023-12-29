@@ -10,10 +10,16 @@ router.get("/details/:id", async (req, res) => {
 });
 
 router.get("/", async (req, res) => {
-  const reports = await controller.getAllReports();
+  let reports = null
+  if(res.locals.user.role === 'District'){
+    reports = await Report.find({district: res.locals.user.district})
+  }
+  else {
+    reports = await Report.find({})
+  }
   res.render("department/viewReport", { 
     reports: reports, 
-    role: "Department",
+    role: res.locals.user.role,
     username: res.locals.user.username
   });
 });

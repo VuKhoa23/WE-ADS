@@ -6,6 +6,7 @@ const District = require("../model/district")
 router.get('/department/create', (req, res) => {
   res.render("department/create-account", {
     username: res.locals.user.username,
+    role: res.locals.user.role,
     emailMessage: null,
     usernameMessage: null,
     body: null
@@ -37,6 +38,7 @@ router.post('/department/create', async (req, res) => {
     usernameMessage: usernameMessage,
     body: req.body,
     username: res.locals.user.username,
+    role: res.locals.user.role,
   })
 })
 

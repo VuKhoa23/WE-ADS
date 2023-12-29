@@ -1,5 +1,13 @@
 <%- include('./partials/header') %>
 <div class="row justify-content-center">
+
+  <% if(role === 'District'){ %>
+  <select id="ward-select" class="form-control w-25 bg-primary text-center m-3" name="ward-select">
+    <option selected value="all">Chọn phường muốn xem</option>
+    <option value="1">1</option>
+    <option value="2">2</option>
+  </select>
+  <% } %>
   <div class="col-12 col-md-11 col-lg-10">
     <table style="border-right: 1px solid #dee2e6; border-left: 1px solid #dee2e6;" class="table table-hover">
       <thead>
@@ -31,4 +39,15 @@
     </table>
   </div>
 </div>
+<script>
+  $(document).ready(async function () {
+    $("#ward-select").change(function () {
+      if ($(this).val() === 'all') {
+        window.location.href = "/weads/report"
+      } else {
+        window.location.href = "/weads/report/ward/" + $(this).val()
+      }
+    })
+  })
+</script>
 <%- include('./partials/footer') %>
