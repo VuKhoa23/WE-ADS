@@ -34,16 +34,5 @@ router.post("/process-login", async (req, res)=>{
   }
 })
 
-// router.get('/create', async (req, res) => {
-//   await Officer.create({
-//     username: "vukhoa23",
-//     password: "anhkhoa0123",
-//     name: "Vu Anh Khoa",
-//     email: "vuanhkhoa007@gmail.com",
-//     phone: "123456789",
-//     role: "Department",
-//   })
-//   res.send("CREATED")
-// });
 
 module.exports = router;
