@@ -53,7 +53,7 @@
 
 
   <%- include('./partials/modal.ejs') %>
-
+  <%- include('./partials/infoModal.ejs') %>
 
   <script src="/js/htmlComponent.js"></script>
   <script src="/js/index.js"></script>
@@ -356,6 +356,15 @@
       populateDataToModal(geojson.features[index].properties, address)
       $("#ads-modal").modal("show");
     }
+
+    $(document).ready(function () {
+      let successMessage = '<% if (createMessage) { %> <%=parseInt(0)%> <% } else { %> <%=parseInt(1)%> <% } %>'
+      successMessage = successMessage.trim()
+      if (successMessage === '0') {
+        $("#modal-msg-body").html("Tài khoản được tạo thành công")
+        $("#info-modal").modal("show");
+      }
+    })
   </script>
 
 
