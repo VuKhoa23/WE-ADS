@@ -24,6 +24,11 @@ router.post("/process-login", async (req, res)=>{
     res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 });
     res.redirect('/weads/home')
   } catch (err) {
+    if (err.message == "incorrect password") {
+      res.cookie("loginErr", "Email hoặc mật khẩu không chính xác", { maxAge: 60 * 60 * 1000 });
+      res.redirect("/weads/login");
+      return;
+    }
     console.log(err)
     res.send("Error")
   }
@@ -31,14 +36,22 @@ router.post("/process-login", async (req, res)=>{
 
 // router.get('/create', async (req, res) => {
 //   await Officer.create({
-//     username: "vukhoa23",
-//     password: "anhkhoa0123",
-//     name: "Vu Anh Khoa",
-//     email: "vuanhkhoa007@gmail.com",
-//     phone: "123456789",
+//     username: "admin_phat",
+//     password: "123456",
+//     name: "Nguyen Thuan Phat",
+//     email: "nguyenthuanphat301212@gmail.com",
+//     phone: "0123456789",
 //     role: "Department",
 //   })
 //   res.send("CREATED")
 // });
+
+router.get('/forget-password', async (req, res) => {
+  res.render('forget_password/sendCode');
+});
+
+router.get('/forget-password/verify', async (req, res) => {
+  res.render('forget_password/verifyCode');
+});
 
 module.exports = router;

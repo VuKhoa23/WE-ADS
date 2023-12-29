@@ -17,12 +17,13 @@
         <div class="form-container card col-11 col-sm-9 col-md-7 col-lg-5 col-xl-4">
           <div class="card-body">
             <h3 class="text-center form-title">Đăng nhập</h3>
+            <p class="card-text text-danger text-center"><%- error %></p>
             <form class="d-flex-column align-items-center" action="/weads/process-login" method="post">
               <div class="mb-3 form-input">
                 <label for="usernameInput" class="form-label">Tên tài khoản</label>
                 <div class="d-flex align-items-center justify-content-between">
                   <i class="bi bi-person-fill"></i>
-                  <input class="form-control" id="usernameInput" aria-describedby="emailHelp" name="email">
+                  <input type="email" class="form-control" id="usernameInput" name="email" required>
                   <div class="line"></div>
                 </div>
               </div>
@@ -30,17 +31,17 @@
                 <label for="passwordInput" class="form-label">Mật khẩu</label>
                 <div class="d-flex align-items-center justify-content-between">
                   <i class="bi bi-key-fill"></i>
-                  <input type="password" class="form-control" id="passwordInput" name="password">
+                  <input type="password" class="form-control" id="passwordInput" name="password" required>
                   <div class="line"></div>
                 </div>
               </div>
               <div class="mb-3 d-flex justify-content-end">
-                <div id="emailHelp" class="form-text"><a class="form-link text-body">Quên mật khẩu?</a> </div>
+                <div id="emailHelp" class="form-text"><a class="form-link text-body" href="/weads/forget-password">Quên mật khẩu?</a> </div>
               </div>
               <div class="mb-3 d-flex flex-column align-items-center">
                 <button type="submit" class="form-button">Đăng nhập</button>
                 <a class="btn google-button" href="/auth/google">
-                  <img class="google-icon" src="/images/google_icon.png"/>
+                  <img class=" google-icon" src="/images/google_icon.png"/>
                   Đăng nhập với google
                 </a>
               </div>
