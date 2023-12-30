@@ -24,6 +24,9 @@ const officer = new Schema({
     resetCode: { // reset password code
         type: String
     },
+    changePassword: {
+        type: Boolean
+    },
     district:{
         type: String
     },
