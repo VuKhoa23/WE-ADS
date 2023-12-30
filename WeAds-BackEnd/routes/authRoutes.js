@@ -79,7 +79,6 @@ router.post('/forget-password/verify', resetPasswordController.verifyCode);
 
 router.get("/forget-password/:id/change-password", async (req, res) => {
   const id = req.params;
-  res.cookie("resetEmail", "", { maxAge: 1 });
   try {
     const user = await Officer.findOne({ _id: new ObjectId(id) });
     if (!user) {
@@ -103,6 +102,7 @@ router.get("/forget-password/:id/change-password", async (req, res) => {
 router.post("/forget-password/:id/change-password", async (req, res) => {
   const id = req.params;
   const { email, newPassword } = req.body;
+  res.cookie("resetEmail", "", { maxAge: 1 });
   if (!email || !newPassword) {
     res.cookie("changePasswordErr", "Vui lòng thử lại", { maxAge: 60 * 60 * 1000 });
     res.redirect(`/weads/forget-password/${id}/change-password`);
@@ -122,7 +122,7 @@ router.post("/forget-password/:id/change-password", async (req, res) => {
     }
     if (user.email != email) {
       res.cookie("changePasswordErr", "Vui lòng nhập email đã liên kết với tài khoản này", { maxAge: 60 * 60 * 1000 });
-      res.redirect(`/weads/forget-password/${id}/change-password`);
+      res.redirect(`/weads/forget-password/${id.id}/change-password`);
       return;
     }
     user.changePassword = false;
