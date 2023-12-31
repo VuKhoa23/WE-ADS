@@ -107,5 +107,3 @@ app.get("/weads/current", (req, res)=>{
     res.send(res.locals.user)
   }
 })
-
-
