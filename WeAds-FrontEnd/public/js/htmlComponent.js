@@ -14,7 +14,7 @@ function infoAlert(name, address, index) {
         <button class="btn" onclick="showModal(${index})">
           <i class="fa-solid fa-circle-info"></i>
         </button>
-        <button class="w-50 btn btn-danger" style="font-size: 12px"><a class="link-secondary" target="_blank" href="/weads/report/${index}">Báo cáo sai phạm</a></button>
+        <a class="link-secondary w-50" target="_blank" href="/weads/report/${index}"><button class="btn btn-danger" style="font-size: 12px">Báo cáo sai phạm</button></a>
       </div>
     </div>
   `;
