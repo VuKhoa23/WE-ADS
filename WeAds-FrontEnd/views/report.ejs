@@ -182,7 +182,9 @@
                 phone: $("#phone").val(),
                 reportType: $("#reportType").val(),
                 ward: geojson.features[index].properties.ward,
-                district: geojson.features[index].properties.district
+                district: geojson.features[index].properties.district,
+                placeId: index,
+                adId: null,
               })
             })
             $("#notiModal").modal("show")
