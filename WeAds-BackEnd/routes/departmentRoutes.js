@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Officer = require("../model/officer")
+const District = require("../model/district")
 
 router.get('/department/create', (req, res) => {
   res.render("department/create-account", {
@@ -39,6 +40,12 @@ router.post('/department/create', async (req, res) => {
     username: res.locals.user.username,
     role: res.locals.user.role,
   })
+})
+
+router.get('/department/places/allDistrict', function (req, res) {
+  const districts = District.find({});
+
+  res.render("district", districts);
 })
 
 module.exports = router
