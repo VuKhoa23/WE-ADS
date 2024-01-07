@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Officer = require("../model/officer")
 const resetPasswordController = require('../controller/resetPassword');
-const sendMailController = require('../controller/sendEMail');
+const sendMailController = require('../controller/sendEmail');
 const jwt = require('jsonwebtoken');
 const ObjectId = require('mongoose').Types.ObjectId;
 require("dotenv").config();
@@ -135,5 +135,7 @@ router.post("/forget-password/:id/change-password", async (req, res) => {
     res.redirect('/weads/home');
   }
 });
+
+router.post('/send-result', sendMailController.sendReportResult);
 
 module.exports = router;
