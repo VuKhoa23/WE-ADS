@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Officer = require("../model/officer")
 const District = require("../model/district")
+const Ward = require("../model/ward") 
 
 router.get('/department/create', (req, res) => {
   res.render("department/create-account", {
@@ -11,19 +12,6 @@ router.get('/department/create', (req, res) => {
     body: null
   })
 });
-
-router.get("/create-account", async (req, res)=>{
-  await Officer.create({
-    username: "youngHT",
-    password: "12345678",
-    email: "huutam287@gmail.com",
-    phone: "0932715653",
-    role: "Department",
-    district: "12",
-    ward: "12",
-  })
-  res.send("OK")
-})
 
 router.post('/department/create', async (req, res) => {
   let emailMessage = null;
@@ -53,10 +41,49 @@ router.post('/department/create', async (req, res) => {
   })
 })
 
-router.get('/department/places/allDistrict', function (req, res) {
-  const districts = District.find({});
-
-  res.render("district", districts);
+router.get("/create-account", async (req, res)=>{
+  await Officer.create({
+    username: "youngHT",
+    password: "12345678",
+    email: "hohuutam287@gmail.com",
+    phone: "0932715653",
+    role: "Department",
+    district: "12",
+    ward: "12",
+  })
+  res.send("OK")
 })
+
+router.get('/department/places/allDistrict', async function (req, res) {
+  const districts = await District.find({});
+
+  res.render("department/district", {
+    districts: districts,
+    username: res.locals.user ? res.locals.user.username : null,
+    role: res.locals.user ? res.locals.user.role : null,
+
+  })
+})
+
+router.get('/department/places/allWard/:_id', async function(req, res) {
+    try {
+        const districtId = req.params._id;
+
+        const district = await District.findOne({_id: districtId});
+
+        const wards = await Ward.find({district: districtId});
+
+        res.render("department/ward", {
+          wards: wards,
+          district: district.name,
+          username: res.locals.user ? res.locals.user.username : null,
+          role: res.locals.user ? res.locals.user.role : null,
+        });
+
+    } catch (error) {
+      console.error('Error fetching ward:', error);
+      res.status(500).send('Internal Server Error');
+    }
+});
 
 module.exports = router
