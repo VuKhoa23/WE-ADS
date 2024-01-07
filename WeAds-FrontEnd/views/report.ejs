@@ -29,6 +29,7 @@
 <body>
 
   <form id="reportForm" method="post" style="max-width: 700px; margin: 3rem auto">
+
     <div class="border border-secondary rounded p-3" style="font-size: 1rem;">
       <div class="mb-3 form-group row">
         <label for="address" class="form-label col-3">Địa chỉ</label>
@@ -180,6 +181,10 @@
                 email: $("#email").val(),
                 phone: $("#phone").val(),
                 reportType: $("#reportType").val(),
+                ward: geojson.features[index].properties.ward,
+                district: geojson.features[index].properties.district,
+                placeId: index,
+                adId: null,
               })
             })
             $("#notiModal").modal("show")

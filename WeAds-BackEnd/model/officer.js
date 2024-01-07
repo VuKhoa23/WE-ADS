@@ -19,7 +19,7 @@ const officer = new Schema({
         type: String,
     }, 
     role: { 
-        type: {type: String, enum: ['Department','District', 'Ward']},
+        type: String
     },
     resetCode: { // reset password code
         type: String
