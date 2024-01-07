@@ -2,10 +2,6 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const ward = new Schema ({
-    sid: {
-        type: Number,
-    },
-    
     name: {
         type: String,
     },

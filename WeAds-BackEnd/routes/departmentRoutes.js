@@ -57,7 +57,7 @@ router.get("/create-account", async (req, res)=>{
 router.get('/department/places/allDistrict', async function (req, res) {
   const districts = await District.find({});
 
-  res.render("department/district", {
+  res.render("department/district/viewAllDistrict", {
     districts: districts,
     username: res.locals.user ? res.locals.user.username : null,
     role: res.locals.user ? res.locals.user.role : null,
@@ -85,5 +85,71 @@ router.get('/department/places/allWard/:_id', async function(req, res) {
       res.status(500).send('Internal Server Error');
     }
 });
+
+router.post('/department/places/addDistrict', async function(req, res) {
+  try {
+    const isExist = await District.findOne({name: req.body.name});
+
+    if(isExist){
+      res.status(400).json({ message: 'This district already exists' });
+    } else {
+      const district = await District.create(req.body);
+      const districts = await District.find({});
+
+      res.render("department/district/viewAllDistrict", {
+        districts: districts,
+        username: res.locals.user ? res.locals.user.username : null,
+        role: res.locals.user ? res.locals.user.role : null,
+      })
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+router.get('/department/places/deleteDistrict/:_id', async function(req, res) {
+  try {
+      const district = await District.findOne({_id: req.params._id});
+      if(!district){
+          return res.status(404).json({message: `cannot find any district with ID ${req.params._id}`})
+      } else {
+          await District.findByIdAndDelete(district._id);
+          const districts = await District.find({});
+
+          res.render("department/district/viewAllDistrict", {
+            districts: districts,
+            username: res.locals.user ? res.locals.user.username : null,
+            role: res.locals.user ? res.locals.user.role : null,
+          })
+      }
+      
+  } catch (error) {
+      res.status(500).json({message: error.message})
+  }
+})
+
+router.post('/department/places/editDistrict/:_id/:i', async function(req, res) {
+  try {
+
+      const id = req.params._id;
+      const i = req.params.i;
+      const district = await District.findOne({_id: id});
+      const name = req.body.name;
+      
+
+      if(district){
+          await District.findByIdAndUpdate(district._id, {name: name});
+
+          const districts = await District.find({});
+          res.render("department/district/viewAllDistrict", {
+            districts: districts,
+            username: res.locals.user ? res.locals.user.username : null,
+            role: res.locals.user ? res.locals.user.role : null,
+          })
+      }
+  } catch (error) {
+      res.status(500).json({message: error.message})
+  }
+})
 
 module.exports = router
