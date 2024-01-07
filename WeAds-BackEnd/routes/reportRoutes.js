@@ -14,6 +14,9 @@ router.get("/", async (req, res) => {
   if(res.locals.user.role === 'District'){
     reports = await Report.find({district: res.locals.user.district})
   }
+  else if(res.locals.user.role === 'Ward'){
+    reports = await Report.find({ward: res.locals.user.ward})
+  }
   else {
     reports = await Report.find({})
   }
