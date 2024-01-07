@@ -1,4 +1,4 @@
-const User = require('../model/userSchema');
+const Officer = require('../model/officer');
 require('dotenv').config();
 
 //function to create verification code
@@ -16,7 +16,7 @@ const generateCode = () => {
 
 const codeExpire = async (email , code) => {
   try {
-    const user = await User.findOne({ email: email });
+    const user = await Officer.findOne({ email: email });
 
     if (!user) 
       return;
@@ -39,101 +39,101 @@ const codeExpire = async (email , code) => {
   }
 };
 
-//validate the reset password request of user
-module.exports.validateRequest = async (req, res, next) => {
+//validate the reset password request of user and create code in database
+module.exports.preprocess = async (req, res, next) => {
   const { email } =  req.body;
+  const code = generateCode();
 
   //missing email information
   if (!email) {
-    res.status(400).json({success: false, message: 'Missing user email'})
+    res.cookie("sendCodeErr", "Vui lòng nhập email", { maxAge: 60 * 60 });
+    res.redirect('/weads/forget-password');
     return;
   } 
 
   try {
-    const user = await User.findOne({email: email});
+    const user = await Officer.findOne({email: email});
 
     //email is not registered
     if (!user) {
-      res.status(404).json({success: false, notExist: true, message: 'Email is not registered by any user'});
+      res.cookie("sendCodeErr", "Không tìm thấy tài khoản liên kết với email này", { maxAge: 60 * 60 * 1000 });
+      res.redirect('/weads/forget-password');
+      return;
+    }
+
+    if (user.resetCode) {
+      res.redirect('/weads/forget-password/verify');
       return;
     }
 
     //account info, user's name for sending email
-    req.user = user.username;
+    req.user = user.name;
     req.email_to = email;
-
-    next(); // call next middleware 
-  }
-  catch (err) {
-    console.log(err.message);
-    res.status(400).json({success: false, message: err.message});
-  }
-};
-
-module.exports.createCode = async (req, res, next) => {
-  try {
-    const user = await User.findOne({email: req.email_to});
-    const code = generateCode();
-
-    if (!user) {
-      console.log('Error in creating code: user not found');
-      res.status(404).json({success: false, message:'User not found'});
-      return;
-    }
-
     //add code to request to pass to next middleware
     req.code = code;
     //add code to account document
     user.resetCode = code;
-    const email = req.email_to;
 
     await user.save();
-    //making code expired
+    //making code expire
     setTimeout(() => {codeExpire(email, code)}, parseInt(process.env.EMAIL_EXPIRE_TIME, 10) * 1000);
-    next();
+    //save reset email to cookie
+    res.cookie("resetEmail", email, { maxAge: 60 * 60 * 24 * 1000});
+    next(); // call next middleware 
   }
   catch (err) {
     console.log(err.message);
-    res.status(400).json({success: false, message: err.message});
+    res.cookie("sendCodeErr", "Có lỗi xảy ra, vui lòng thử lại", { maxAge: 60 * 60 * 1000 });
+    res.redirect('/weads/forget-password');
+    return;
   }
 };
 
 module.exports.verifyCode = async (req, res, next) => {
-  const { code, email_to } = req.body;
+  const { code, email } = req.body;
 
   if (!code) {
-    res.status(400).json({success: false, message: 'Missing code'});
+    res.cookie("verifyCodeErr", "Vui lòng thử lại", { maxAge: 60 * 60 * 1000 });
+    res.redirect('/weads/forget-password/verify');
     return;
   }
 
-  if (!email_to) {
-    res.status(400).json({success: false, message: 'Missing email'});
+  if (!email) {
+    res.cookie("verifyCodeErr", "Vui lòng thử lại", { maxAge: 60 * 60 * 1000 });
+    res.redirect('/weads/forget-password/verify');
     return;
   }
 
   try {
-    const user = await User.findOne({email: email_to});
+    const user = await Officer.findOne({email: email});
     
     if (!user) {
-      res.status(404).json({success: false, message: 'user not found'});
+      res.cookie("sendCodeErr", "Không tìm thấy tài khoản liên kết với email này, vui lòng thử lại", { maxAge: 60 * 60 * 1000 });
+      res.redirect('/weads/forget-password');
       return;
     }
 
     if (!user.resetCode) {
-      res.status(404).json({success: false, message: 'Code is expired/removed'});
+      res.cookie("sendCodeErr", "Mã xác nhận quá hạn, vui lòng gửi lại mã", { maxAge: 60 * 60 * 1000 });
+      res.redirect('/weads/forget-password');
       return;
     }
 
-    if (user.resetCode === code) {
+    if (user.resetCode == code) {
       user.resetCode = undefined;
+      user.changePassword = true;
       await user.save();
-      res.status(200).json({success: true, message: 'Code is correct, let user change password'});
+      res.redirect(`/weads/forget-password/${user._id}/change-password`);
     }
-    else 
-      res.status(400).json({success: false, message: 'Code is incorrect'});
+    else {
+      res.cookie("verifyCodeErr", "Mã xác nhận không đúng", { maxAge: 60 * 60 * 1000 });
+      res.redirect('/weads/forget-password/verify');
+    }
   }
   catch (err) {
     console.log(err.message);
-    res.status(500).json({success: false, message: err.message});
+    res.cookie("verifyCodeErr", "Có lỗi xảy ra, vui lòng thử lại", { maxAge: 60 * 60 * 1000 });
+    res.redirect('/weads/forget-password/verify');
+    return;
   }
 };

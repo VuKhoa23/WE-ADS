@@ -21,7 +21,7 @@ const populateBody = (template, user, code) => {
 //   next();
 // }
 
-module.exports.sendMail = (req, res, next) => {
+module.exports.sendCode = (req, res, next) => {
   let transporter = NodeMailer.createTransport({
     host: process.env.EMAIL_HOST,
     port: process.env.EMAIL_PORT,
@@ -36,16 +36,17 @@ module.exports.sendMail = (req, res, next) => {
     from: process.env.EMAIL_ADDRESS,
     to: req.email_to,
     subject: email.subject,
-    text: populateBody(email.body, req.user, req.code)
+    html: populateBody(email.body, req.user, req.code)
   };
   
   transporter.sendMail(mailOptions, function(error, info){
     if (error) {
       console.log(error);
-      res.status(500).json({success: false, message: "Error sending email"})
+      res.cookie("sendCodeErr", "Có lỗi xảy ra, vui lòng thử lại", { maxAge: 60 * 60 });
+      res.redirect('/weads/forget-password');
     } else {
       console.log('Reset password code sent: ' + info.response);
-      res.status(200).json({success: true, message: "Email sent successfully", email: req.email_to});
+      res.redirect('/weads/forget-password/verify');
     }
   });
 };
