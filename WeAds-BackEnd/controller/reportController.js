@@ -10,7 +10,6 @@ module.exports.getReportById = async (id) => {
 module.exports.createReport = async (req, res, next) => {
   const { name, reportType, email, phone, content, address, ward, district } = req.body;
   let state = false;
-  console.log(district)
   try {
     const report = await Report.create({
       name,
