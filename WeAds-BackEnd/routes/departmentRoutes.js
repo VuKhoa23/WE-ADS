@@ -54,38 +54,6 @@ router.get("/create-account", async (req, res)=>{
   res.send("OK")
 })
 
-router.get('/department/places/allDistrict', async function (req, res) {
-  const districts = await District.find({});
-
-  res.render("department/district/viewAllDistrict", {
-    districts: districts,
-    username: res.locals.user ? res.locals.user.username : null,
-    role: res.locals.user ? res.locals.user.role : null,
-
-  })
-})
-
-router.get('/department/places/allWard/:_id', async function(req, res) {
-    try {
-        const districtId = req.params._id;
-
-        const district = await District.findOne({_id: districtId});
-
-        const wards = await Ward.find({district: districtId});
-
-        res.render("department/ward", {
-          wards: wards,
-          district: district.name,
-          username: res.locals.user ? res.locals.user.username : null,
-          role: res.locals.user ? res.locals.user.role : null,
-        });
-
-    } catch (error) {
-      console.error('Error fetching ward:', error);
-      res.status(500).send('Internal Server Error');
-    }
-});
-
 router.post('/department/places/addDistrict', async function(req, res) {
   try {
     const isExist = await District.findOne({name: req.body.name});
@@ -106,6 +74,40 @@ router.post('/department/places/addDistrict', async function(req, res) {
     res.status(500).json({ message: error.message });
   }
 });
+
+router.get('/department/places/allDistrict', async function (req, res) {
+  const districts = await District.find({});
+
+  res.render("department/district/viewAllDistrict", {
+    districts: districts,
+    username: res.locals.user ? res.locals.user.username : null,
+    role: res.locals.user ? res.locals.user.role : null,
+
+  })
+})
+
+router.post('/department/places/editDistrict/:_id', async function(req, res) {
+  try {
+
+      const id = req.params._id;
+      const district = await District.findOne({_id: id});
+      const name = req.body.name;
+      
+
+      if(district){
+          await District.findByIdAndUpdate(district._id, {name: name});
+
+          const districts = await District.find({});
+          res.render("department/district/viewAllDistrict", {
+            districts: districts,
+            username: res.locals.user ? res.locals.user.username : null,
+            role: res.locals.user ? res.locals.user.role : null,
+          })
+      }
+  } catch (error) {
+      res.status(500).json({message: error.message})
+  }
+})
 
 router.get('/department/places/deleteDistrict/:_id', async function(req, res) {
   try {
@@ -128,25 +130,101 @@ router.get('/department/places/deleteDistrict/:_id', async function(req, res) {
   }
 })
 
-router.post('/department/places/editDistrict/:_id/:i', async function(req, res) {
+router.post('/department/places/addWard/:oid', async function(req, res) {
   try {
+    const isExist = await Ward.findOne({name: req.body.name, district: req.params.oid});
 
-      const id = req.params._id;
-      const i = req.params.i;
-      const district = await District.findOne({_id: id});
-      const name = req.body.name;
-      
+    if(isExist){
+      res.status(400).json({ message: 'This ward already exists' });
+    } else {
 
-      if(district){
-          await District.findByIdAndUpdate(district._id, {name: name});
+      const district = await District.findOne({_id: req.params.oid});
+      const ward = await Ward.create({name: req.body.name, district: req.params.oid});
+      const wards = await Ward.find({district: req.params.oid});
 
-          const districts = await District.find({});
-          res.render("department/district/viewAllDistrict", {
-            districts: districts,
+      res.render("department/ward", {
+        wards: wards,
+        district_name: district.name,
+        district_id: district._id,
+        username: res.locals.user ? res.locals.user.username : null,
+        role: res.locals.user ? res.locals.user.role : null,
+      });
+    }
+  } catch (error) {
+    console.error('Error fetching ward:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+router.get('/department/places/allWard/:_id', async function(req, res) {
+  try {
+      const districtId = req.params._id;
+
+      const district = await District.findOne({_id: districtId});
+
+      const wards = await Ward.find({district: districtId});
+
+      res.render("department/ward", {
+        wards: wards,
+        district_name: district.name,
+        district_id: district._id,
+        username: res.locals.user ? res.locals.user.username : null,
+        role: res.locals.user ? res.locals.user.role : null,
+      });
+
+  } catch (error) {
+    console.error('Error fetching ward:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+router.post('/department/places/editWard/:_id', async function(req, res) {
+  try {
+    const id = req.params._id;
+    const ward = await Ward.findOne({_id: id});
+    const name = req.body.name;
+
+    if(ward){
+      await Ward.findByIdAndUpdate(ward._id, {name: name});
+
+      const district = await District.findOne({_id: ward.district});
+
+      const wards = await Ward.find({district: ward.district});
+
+      res.render("department/ward", {
+        wards: wards,
+        district_name: district.name,
+        district_id: district._id,
+        username: res.locals.user ? res.locals.user.username : null,
+        role: res.locals.user ? res.locals.user.role : null,
+      });
+    }
+  } catch (error) {
+    console.error('Error fetching ward:', error);
+    res.status(500).send('Internal Server Error');
+  }
+})
+
+router.get('/department/places/deleteWard/:_id', async function(req, res) {
+  try {
+      const ward = await Ward.findOne({_id: req.params._id});
+      if(!ward){
+          return res.status(404).json({message: `cannot find any ward with ID ${req.params._id}`})
+      } else {
+          await Ward.findByIdAndDelete(ward._id);
+
+          const wards = await Ward.find({district: ward.district});
+
+          const district = await District.findOne({_id: ward.district});
+          res.render("department/ward", {
+            wards: wards,
+            district_name: district.name,
+            district_id: district._id,
             username: res.locals.user ? res.locals.user.username : null,
             role: res.locals.user ? res.locals.user.role : null,
-          })
+          });
       }
+      
   } catch (error) {
       res.status(500).json({message: error.message})
   }

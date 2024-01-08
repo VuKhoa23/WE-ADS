@@ -31,7 +31,7 @@
                 
                             <!-- Modal edit District -->
                             <div class="modal fade" id="editDistrictModal<%= i %>" tabindex="-1" aria-labelledby="editDistrictModalLabel<%= i %>" aria-hidden="true">
-                                <form action="/weads/department/places/editDistrict/<%= districts[i]._id %>/<%= i %>" method="post">
+                                <form action="/weads/department/places/editDistrict/<%= districts[i]._id %>/" method="post">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
@@ -72,7 +72,7 @@
             </tbody>
         </table>
     <% } else { %>
-        <p>There are no districts.</p>
+        <p>Không có quận nào tron danh sách.</p>
     <% } %>
 
     <a href="/weads/home">
@@ -111,6 +111,7 @@
     </div>
     </form>
   </div>
+
 
 </div>
 
