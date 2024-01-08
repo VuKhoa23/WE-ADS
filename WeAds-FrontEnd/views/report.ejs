@@ -24,6 +24,11 @@
   .ql-editor {
     padding: 6px;
   }
+
+  .g-recaptcha {
+    display: flex;
+    justify-content: center;
+  }
 </style>
 
 <body>
@@ -31,6 +36,13 @@
   <form id="reportForm" method="post" style="max-width: 700px; margin: 3rem auto">
 
     <div class="border border-secondary rounded p-3" style="font-size: 1rem;">
+      <div class="text-center mb-3 ">
+        <%if(reportType === 0){%>
+        <h1>Báo cáo điểm đặt quảng cáo</h1>
+        <% } else {%>
+        <h1>Báo cáo bảng quảng cáo</h1>
+        <% } %>
+      </div>
       <div class="mb-3 form-group row">
         <label for="address" class="form-label col-3">Địa chỉ</label>
         <div class="col-9">
@@ -125,9 +137,10 @@
   <script>
     const accessToken = "<%= API_KEY %>";
     $(document).ready(async function () {
-      const index = '<%= placeIndex %>'
-      lng = geojson.features[index].geometry.coordinates[0]
-      lat = geojson.features[index].geometry.coordinates[1]
+      let coordinates = '<%- coordinates %>'
+      coordinates = coordinates.split(",")
+      lng = coordinates[0]
+      lat = coordinates[1]
       // get address by reverse geocoding
       const response = await fetch(
         `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?country=vn&access_token=${accessToken}`
@@ -181,10 +194,11 @@
                 email: $("#email").val(),
                 phone: $("#phone").val(),
                 reportType: $("#reportType").val(),
-                ward: geojson.features[index].properties.ward,
-                district: geojson.features[index].properties.district,
-                placeId: index,
-                adId: null,
+                ward: '<%- ward %>',
+                district: '<%- district %>',
+                placeId: '<%- placeId %>',
+                adId: '<%- adId%>',
+                reportType: '<%- reportType %>'
               })
             })
             $("#notiModal").modal("show")

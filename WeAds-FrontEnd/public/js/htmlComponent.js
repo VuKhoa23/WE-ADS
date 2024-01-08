@@ -1,4 +1,4 @@
-function infoAlert(name, address, index) {
+function infoAlert(name, address, index, id) {
   return `
     <div class="alert alert-success alert-dismissible fade show m-auto mb-2 mt-1 row" role="alert" style="font-size: 13px; width: 90%">
       <i class="fa-solid fa-check col-3"></i>
@@ -14,7 +14,7 @@ function infoAlert(name, address, index) {
         <button class="btn" onclick="showModal(${index})">
           <i class="fa-solid fa-circle-info"></i>
         </button>
-        <a class="link-secondary w-50" target="_blank" href="/weads/report/${index}"><button class="btn btn-danger" style="font-size: 12px">Báo cáo sai phạm</button></a>
+        <a class="link-secondary w-50" target="_blank" href="/weads/report/${id}"><button class="btn btn-danger" style="font-size: 12px">Báo cáo sai phạm</button></a>
       </div>
     </div>
   `;
