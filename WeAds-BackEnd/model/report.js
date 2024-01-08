@@ -8,12 +8,6 @@ const reportSchema = mongoose.Schema(
     address: {
       type: String,
     },
-    district:{
-      type: String
-    },
-    ward:{
-      type: String
-    },
     reportType: {
       type: String,
     },
