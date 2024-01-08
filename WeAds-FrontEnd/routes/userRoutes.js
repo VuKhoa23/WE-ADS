@@ -15,4 +15,10 @@ router.get("/report/:placeIndex", function (req, res, next) {
   });
 });
 
+router.get("/report", function (req, res, next) {
+  console.log(req.query)
+  res.send("OK")
+});
+
+
 module.exports = router;

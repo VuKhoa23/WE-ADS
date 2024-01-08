@@ -276,9 +276,11 @@
         const name = result.features[0].text;
         let address = result.features[0].place_name;
         address = address.replace(name + ", ", "")
+        const ward = result.features[0].context[0].text
+        const district = result.features[0].context[2].text
 
         const div = document.createElement("div")
-        div.innerHTML = warnAlert(name)
+        div.innerHTML = warnAlert(name, address, ward, district, coordinates)
         notiContainer.prepend(div);
       });
 
