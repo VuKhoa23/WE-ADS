@@ -8,6 +8,9 @@ const reportSchema = mongoose.Schema(
     address: {
       type: String,
     },
+    // 0: báo cáo điểm đặt
+    // 1: báo cáo điểm quảng cáo
+    // 2: báo cáo một điểm bất kì trên map
     reportType: {
       type: String,
     },
@@ -26,6 +29,19 @@ const reportSchema = mongoose.Schema(
     information: {
       type: String,
     },
+    placeId: {
+      type: String
+    },
+    adId:{
+      type: String,
+      default: null
+    },
+    ward: {
+      type: String
+    },
+    district: {
+      type: String
+    }
   },
   { timestamps: true }
 );

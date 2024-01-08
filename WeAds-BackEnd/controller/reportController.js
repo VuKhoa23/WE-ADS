@@ -8,8 +8,14 @@ module.exports.getReportById = async (id) => {
 
 //create new report
 module.exports.createReport = async (req, res, next) => {
-  const { name, reportType, email, phone, content, address, ward, district } = req.body;
+  let { name, reportType, email, phone, content, address, ward, district, placeId, adId} = req.body;
   let state = false;
+  if(adId === ""){
+    adId = null
+  }
+  if(placeId === ""){
+    placeId = null
+  }
   try {
     const report = await Report.create({
       name,
@@ -20,7 +26,9 @@ module.exports.createReport = async (req, res, next) => {
       address,
       state,
       ward,
-      district
+      district,
+      placeId,
+      adId
     });
     res.status(201).json({ success: true });
   } catch (err) {

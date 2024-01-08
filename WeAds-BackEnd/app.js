@@ -62,6 +62,8 @@ const departmentRoutes = require("./routes/departmentRoutes");
 const reportRoutes = require("./routes/reportRoutes");
 const updateRoutes = require("./routes/updateRoutes");
 const reportApi = require("./api/reportApi");
+const placeRoutes = require("./routes/placeRoutes");
+const adRoutes = require("./routes/adRoutes");
 
 
 app.use(express.static(path.join(__dirname, "public")));
@@ -94,6 +96,8 @@ app.use("/weads", departmentRoutes);
 app.use("/weads", authRoutes)
 app.use("/weads/update", updateRoutes)
 app.use("/weads/report", reportRoutes); 
+app.use("/weads/place", placeRoutes)
+app.use("/weads/ad", adRoutes)
 app.use("/api/weads-admin/report", reportApi);
 app.use('/weads/login', (req, res) => {
   const errorMsg = req.cookies.loginErr;

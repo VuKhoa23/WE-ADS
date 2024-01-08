@@ -1,0 +1,118 @@
+<%- include('../partials/header') %>
+
+<div class="container mt-5">
+    <h1>Danh sách Quận</h1>
+
+    <% if (districts.length > 0) { %>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>Tên</th>
+                    <th>Danh sách Phường</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for (let i = 0; i < districts.length; i++) { %>
+                    <tr>
+                        <td><%= i + 1 %></td>
+                        <td><%= districts[i].name %></td>
+                        <td>
+                            <a href="/weads/department/places/allWard/<%= districts[i]._id %>">
+                                <i class="bi bi-arrow-right-circle-fill"></i>
+                                Xem danh sách phường
+                            </a>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editDistrictModal<%= i %>">
+                                <i class="bi bi-pencil-square"></i>
+                            </button>
+                
+                            <!-- Modal edit District -->
+                            <div class="modal fade" id="editDistrictModal<%= i %>" tabindex="-1" aria-labelledby="editDistrictModalLabel<%= i %>" aria-hidden="true">
+                                <form action="/weads/department/places/editDistrict/<%= districts[i]._id %>/" method="post">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel<%= i %>">ĐỔI TÊN QUẬN</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="form-group">
+                                                    <label for="ex-name<%= i %>">Tên quận cũ: </label>
+                                                    <br>
+                                                    <input type="text" class="form-control" id="ex-name<%= i %>" name="ex-name" value="<%= districts[i].name %>" readonly>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="name">Nhập tên quận mới (vd: Quận 1, Quận Bình Thạnh): </label>
+                                                    <br>
+                                                    <input type="text" class="form-control" id="name" name="name" required>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="submit" class="btn btn-primary">Cập nhật</button>
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                
+                            <a href="/weads/department/places/deleteDistrict/<%= districts[i]._id %>">
+                                <button class="btn btn-danger">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </a>
+                
+                        </td>
+                    </tr>
+                <% } %>
+                
+            </tbody>
+        </table>
+    <% } else { %>
+        <p>Không có quận nào tron danh sách.</p>
+    <% } %>
+
+    <a href="/weads/home">
+        <button class="btn btn-secondary">
+            <i class="bi bi-arrow-left-circle-fill"></i>
+            Trở về
+        </button>
+    </a>
+
+    <!-- Button add Distric -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addDistrictModal">
+        Thêm Quận
+    </button>
+    
+  <!-- Modal add District -->
+  <div class="modal fade" id="addDistrictModal" tabindex="-1" aria-labelledby="addDistrictModalLabel" aria-hidden="true">
+    <form action="/weads/department/places/addDistrict" method="post">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">THÊM QUẬN</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label for="name">Tên quận (vd: Quận 1, Quận Bình Thạnh): </label>
+                <br>
+                <input type="text" class="form-control" id="name" name="name" required>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Thêm</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+        </div>
+      </div>
+    </div>
+    </form>
+  </div>
+
+
+</div>
+
+<%- include('../partials/footer') %>
