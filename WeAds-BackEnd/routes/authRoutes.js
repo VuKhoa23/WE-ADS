@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Officer = require("../model/officer")
+const Report = require('../model/report');
 const resetPasswordController = require('../controller/resetPassword');
 const sendMailController = require('../controller/sendEmail');
 const jwt = require('jsonwebtoken');
@@ -136,6 +137,32 @@ router.post("/forget-password/:id/change-password", async (req, res) => {
   }
 });
 
-router.post('/send-result', sendMailController.sendReportResult);
+router.post('/send-result', async (req, res, next) => {
+  try {
+    const { reportId, reportSolution } = req.body;
+    console.log(reportSolution, reportId);
+    if (!reportSolution || !reportId) {
+      res.status(400).json({ success: false, error: 'Missing information1' });
+      return;
+    }
+    const report = await Report.findOne({ _id: new ObjectId(reportId) });
+    if (!report) {
+      res.status(400).json({ success: false, error: 'Report not found' });
+      return;
+    }
+    report.state = true;
+    report.information = reportSolution;
+    await report.save();
+    req.receiver = report.email;
+    req.name = report.name;
+    req.address = report.address;
+    req.result = reportSolution;
+    next();
+  }
+  catch (err) {
+    console.log(err);
+    res.status(500).json({ success: false, error: err.message});
+  }
+} ,sendMailController.sendReportResult);
 
 module.exports = router;

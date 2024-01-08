@@ -53,8 +53,7 @@ module.exports.sendCode = (req, res, next) => {
 };
 
 module.exports.sendReportResult = (req, res, next) => {
-  const { receiver, name, address, result} = req.body;
-  if (!receiver || !name || !address || !result) {
+  if (!req.receiver || !req.name || !req.address || !req.result) {
     res.status(500).json({ success: false, error: "Missing information"});
     return;
   }
@@ -70,9 +69,9 @@ module.exports.sendReportResult = (req, res, next) => {
   
   let mailOptions = {
     from: process.env.EMAIL_ADDRESS,
-    to: receiver,//destination email
+    to: req.receiver,//destination email
     subject: resultTemplate.subject,
-    html: populateResultEmail(resultTemplate.body, name, address, result)
+    html: populateResultEmail(resultTemplate.body, req.name, req.address, req.result)
     //name: reporter name; address: address of the billboard; result: result of the report
   };
   
