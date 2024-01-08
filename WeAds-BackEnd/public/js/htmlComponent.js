@@ -1,5 +1,6 @@
-function infoAlert(name, address, index) {
-  return `
+function infoAlert(name, address, index, placeId, role) {
+  if(role === "Department"){
+    return `
     <div class="alert alert-success alert-dismissible fade show m-auto mb-2 mt-1 row" role="alert" style="font-size: 13px; width: 90%">
       <i class="fa-solid fa-check col-3"></i>
       <div class="col-9">
@@ -15,10 +16,33 @@ function infoAlert(name, address, index) {
           <i class="fa-solid fa-circle-info"></i>
         </button>
 
-        <a href="/weads/update/${index}" class="link-secondary w-50" target="_blank"><button class="btn btn-primary" style="font-size: 12px">Yêu cầu chỉnh sửa</button></a>
       </div>
     </div>
   `;
+  }
+  else{
+    return `
+    <div class="alert alert-success alert-dismissible fade show m-auto mb-2 mt-1 row" role="alert" style="font-size: 13px; width: 90%">
+      <i class="fa-solid fa-check col-3"></i>
+      <div class="col-9">
+        Thông tin địa điểm
+        <hr>
+        <strong>${name}</strong> <br>
+        ${address}
+      </div>
+      <button type="button" class="btn-close m-2" data-bs-dismiss="alert" aria-label="Close"></button>
+      <br>
+      <div class="d-flex justify-content-between mt-3">
+        <button class="btn" onclick="showModal(${index})">
+          <i class="fa-solid fa-circle-info"></i>
+        </button>
+
+        <a href="/weads/update/${placeId}" class="link-secondary w-50" target="_blank"><button class="btn btn-primary" style="font-size: 12px">Yêu cầu chỉnh sửa</button></a>
+      </div>
+    </div>
+  `;
+  }
+  
 }
 
 function warnAlert(name, address, role, coordinates, ward, district) {
