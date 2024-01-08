@@ -305,6 +305,14 @@
           notiContainer.prepend(div);
         });
 
+
+        const role = '<%- role %>'
+        console.log(role)
+        const div = document.createElement("div")
+        div.innerHTML = warnAlert(name, address, role, coordinates, ward, district)
+        notiContainer.prepend(div);
+      });
+
         map.on('mouseenter', 'clusters', () => {
           map.getCanvas().style.cursor = 'pointer';
         });
@@ -312,6 +320,7 @@
           map.getCanvas().style.cursor = '';
         });
       })
+
 
       // Add the control to the map.
       const geocoder = new MapboxGeocoder({

@@ -42,6 +42,7 @@ router.get("/report/:placeId/:adId", async function (req, res, next) {
   });
 });
 
+
 router.get("/report", async function (req, res, next) {
   let coordinates = []
   coordinates.push(req.query.lng)

@@ -20,8 +20,8 @@ const authRoutes = require("./routes/authRoutes")
 
 app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
 
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+app.use(express.json({limit: '50mb'}));
 app.use(passport.initialize()); 
 app.use(cookieParser())
 
@@ -60,6 +60,7 @@ app.use(cors());
 const userRoutes = require("./routes/userRoutes");
 const departmentRoutes = require("./routes/departmentRoutes");
 const reportRoutes = require("./routes/reportRoutes");
+const updateRoutes = require("./routes/updateRoutes");
 const reportApi = require("./api/reportApi");
 const placeRoutes = require("./routes/placeRoutes");
 const adRoutes = require("./routes/adRoutes");
@@ -93,6 +94,7 @@ app.get("/", (req, res) => {
 app.use("/weads", userRoutes);
 app.use("/weads", departmentRoutes);
 app.use("/weads", authRoutes)
+app.use("/weads/update", updateRoutes)
 app.use("/weads/report", reportRoutes); 
 app.use("/weads/place", placeRoutes)
 app.use("/weads/ad", adRoutes)
