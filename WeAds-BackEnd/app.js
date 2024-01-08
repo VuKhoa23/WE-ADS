@@ -94,9 +94,17 @@ app.use("/weads", authRoutes)
 app.use("/weads/report", reportRoutes); 
 app.use("/api/weads-admin/report", reportApi);
 app.use('/weads/login', (req, res) => {
-  res.render("login", {
-    username: res.locals.user ? res.locals.user.username : null
-  });
+  const errorMsg = req.cookies.loginErr;
+  if (!errorMsg) 
+    res.render("login", {
+      error: ""
+    });
+  else {
+    res.cookie("loginErr", "", { maxAge: 1 });
+    res.render("login", {
+      error: errorMsg
+    });
+  }
 });
 app.get("/weads/current", (req, res)=>{
   if(res.locals.user === null){
@@ -107,6 +115,3 @@ app.get("/weads/current", (req, res)=>{
     res.send(res.locals.user)
   }
 })
-
-
-

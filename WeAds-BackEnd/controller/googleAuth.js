@@ -20,6 +20,7 @@ module.exports.createToken = async (req, res, next) => {
     res.redirect('/weads/home')
   }
   else{
-    res.send("ERROR")
+    res.cookie("loginErr", "Tài khoản Gmail không liên kết với bất kỳ tài khoản nào", { maxAge: 60 * 60 * 1000 });
+    res.redirect("/weads/login")
   }
 };

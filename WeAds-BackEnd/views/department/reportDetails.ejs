@@ -4,8 +4,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>WeAds</title>
 
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
   <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
@@ -16,16 +17,96 @@
   <!-- Theme included stylesheets -->
   <link href="//cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
   <link href="//cdn.quilljs.com/1.3.6/quill.bubble.css" rel="stylesheet">
-
+  
   <style>
-    #editor {
-      height: 90vh;
-      width: 70%;
-      margin-top: 10px;
-      margin: auto;
-
+    .back-btn {
+      position: absolute;
+      left: 10px;
     }
-
+    .title {
+      font-size: 20px;
+      font-weight: 700;
+      margin: 0;
+      padding: 8px 0;
+    }
+    .title-icon {
+      font-size: 23px;
+      margin-right: 4px;
+    }
+    .info-row {
+      display: flex;
+    }
+    .row-name, 
+    .row-info {
+      font-size: 16px;
+    }
+    .row-name {
+      min-width: 150px;
+    }
+    .row-info {
+      font-weight: normal;
+      margin-left: 8px;
+    }
+    .content {
+      width: 100%;
+      min-height: 100px;
+      padding: 5px;
+      border: 1px solid #000;
+      border-radius: 10px;
+      margin-bottom: 8px;
+    }
+    .solution {
+      width: 100%;
+      height: 200px;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid black;
+      border-radius: 10px;
+      outline: none;
+      resize: none;
+    }
+    .overlay {
+      position: fixed;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content:center;
+      top: 0;
+      left: 0;
+      background-color: rgba(0, 0, 0, 0.05);
+      z-index: 999;
+    }
+    .custom-modal {
+      width: 400px;
+      height: 200px;
+      background: #fff;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .custom-modal i {
+      font-size: 50px;
+      margin-bottom: 8px;
+    }
+    .custom-modal h3 {
+      font-size: 20px;
+      font-weight: 500;
+      margin-bottom: 16px;
+    }
+    #editor {
+      width: 100%;
+      height: 100px;
+      margin: 8px 0;
+      border: 1px solid #000;
+      border-radius: 10px;
+      padding: 5px;
+      font-size: 16px;
+      font-weight: normal;
+      overflow-y: scroll;
+    }
     .ql-toolbar {
       width: 70%;
       margin: auto
@@ -34,12 +115,111 @@
 </head>
 
 <body>
-
-  <div id="editor">
-
+  <div class="card">
+    <div class="card-header d-flex justify-content-center align-item-center">
+      <a class="back-btn btn btn-outline-success" href="/weads/report"><i class="bi bi-chevron-left"></i>Trở lại</a>
+      <i class="bi bi-file-earmark-richtext title-icon"></i>
+      <h3 class="title">Chi tiết báo cáo</h3>
+    </div>
+    <div class="card-body">
+      <div class="report-info">
+        <div class="info-row">
+          <h3 class="row-name">Họ tên người gửi:</h3>
+          <h3 class="row-info"> <%- report.name %></h3>
+        </div>
+        <div class="info-row">
+          <h3 class="row-name">Email:</h3>
+          <h3 class="row-info"> <%- report.email %></h3>
+        </div>
+        <div class="info-row">
+          <h3 class="row-name">Điện thoại liên lạc:</h3>
+          <h3 class="row-info"> <%- report.phone %></h3>
+        </div>
+        <div class="info-row">
+          <h3 class="row-name">Hình thức báo cáo:</h3>
+          <h3 class="row-info"> <%- report.reportType %></h3>
+        </div>
+        <div class="info-row">
+          <h3 class="row-name">Địa chỉ bị báo cáo:</h3>
+          <h3 class="row-info"> <%- report.address %></h3>
+        </div>
+      </div>
+      <div class="report-content">
+        <h3 class="row-name">Nội dung báo cáo:</h3>
+        <div id="editor">
+        </div>
+      </div>
+      <div class="report-solution">
+        <h3 class="row-name">Cách thức xử lí:</h3>
+        <% if (report.state) { %>
+          <textarea placeholder="Nhập cách thức xử lí cho vấn đề này" class="solution"><%- report.information %></textarea>
+        <% } else { %>
+          <textarea placeholder="Nhập cách thức xử lí cho vấn đề này" class="solution"></textarea>
+        <% } %>
+      </div>
+    </div>
+    <div class="card-footer">
+      <form class="d-flex justify-content-center" id="resolve-form">
+        <button type="submit" class="resolve-submit btn btn-success">Đã gải quyết <i class="bi bi-check2"></i></button>
+      </form>
+    </div>
   </div>
 
-  <button class="btn btn-success " onclick="clicked()">Mark as resolved</button>
+  <div class="success-modal d-none">
+    <div class="overlay">
+      <div class="custom-modal">
+        <i style="color: green" class="bi bi-check-circle"></i>
+        <h3 class="modal-text">Đã giải quyết báo cáo</h3>
+        <a class="btn btn-primary" href="/weads/report">Ok</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="fail-modal d-none">
+    <div class="overlay">
+      <div class="custom-modal">
+        <i style="color: red" class="bi bi-x-circle"></i>
+        <h3 class="modal-text">Có lỗi xảy ra, vui lòng thử lại</h3>
+        <button class="close-modal btn btn-primary">Ok</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    $('#resolve-form').on('submit', async function(event) {
+      event.preventDefault();
+
+      let solution = $.trim($(".solution").val());
+
+      if (solution.length == 0) 
+        return;
+      $('.resolve-submit').prop("disabled", true);
+      
+      const response = await fetch('/weads/send-result', {
+        method: 'POST',
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ 
+          reportId: '<%- report._id %>',
+          reportSolution: solution
+        })
+      })
+      .then (function(result) {
+        return result.json();
+      })
+      if (response.success)
+        $('.success-modal').toggleClass('d-none');
+      else {
+        $('.resolve-submit').prop("disabled", false);
+        $('.fail-modal').toggleClass('d-none');
+      }
+    });
+
+    $(".close-modal").click(function(){
+      $(".fail-modal").toggleClass("d-none");
+    });
+  </script>
   <script>
     $(document).ready(function () {
       var quill = new Quill('#editor', {
@@ -52,10 +232,8 @@
       });
 
       var p = document.querySelector("#editor");
-      p.innerHTML = `<%- content %>`
+      p.innerHTML = `<%- report.content %>`
     })
-
-
   </script>
 </body>
 

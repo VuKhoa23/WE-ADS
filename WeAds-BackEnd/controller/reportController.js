@@ -8,9 +8,8 @@ module.exports.getReportById = async (id) => {
 
 //create new report
 module.exports.createReport = async (req, res, next) => {
-  const { name, reportType, email, phone, content, address } = req.body;
+  const { name, reportType, email, phone, content, address, ward, district } = req.body;
   let state = false;
-
   try {
     const report = await Report.create({
       name,
@@ -20,6 +19,8 @@ module.exports.createReport = async (req, res, next) => {
       content,
       address,
       state,
+      ward,
+      district
     });
     res.status(201).json({ success: true });
   } catch (err) {

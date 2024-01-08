@@ -8,6 +8,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
   <link rel="stylesheet" href="/css/layout.css">
+  <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -17,14 +18,14 @@
         <div class="h-100">
           <div class="d-flex justify-content-between border-bottom">
             <% if(username != null){ %>
-            <a class="h3 my-2 text-body pt-4" style="font-size: 1rem;" href="/weads/home">Hi <%- username %></a>
+            <a class="h3 text-body pt-4" style="font-size: 1rem;" href="/weads/home">Hi <%- username %></a>
             <% } else { %>
-            <a class="h3 my-2 text-body" href="/weads/home">Not login</a>
+            <a class="h3 text-body" href="/weads/home">Not login</a>
             <% } %>
             <button class="btn close-sidebar"><i class="bi bi-x"></i></button>
           </div>
           <ul class="sidebar-list">
-            <% if (username!= null) { %>
+            <% if (username!= null && role === 'Department') { %>
             <li class="sidebar-item w-100 d-flex align-items-center p-2"><a href="/weads/report" class="sidebar-link sidebar-link">Xem báo cáo</a></li>
             <div class="collapse-toggle">
               <li class="sidebar-item w-100 d-flex align-items-center p-2" data-bs-toggle="collapse" data-bs-target="#collapse-list">Quản lí</li>
@@ -42,6 +43,27 @@
               <i style="font-size: 20px;" class="bi bi-box-arrow-right"></i>
               <a href="/weads/logout" class="sidebar-link mx-2">Đăng xuất</a>
             </li>
+            <% } else if(username!= null && role === 'District') { %>
+            <li class="sidebar-item w-100 d-flex align-items-center p-2"><a href="/weads/report" class="sidebar-link sidebar-link">Xem báo cáo</a></li>
+            <li class="sidebar-item w-100 d-flex align-items-center p-2">
+              <i style="font-size: 20px;" class="bi bi-box-arrow-right"></i>
+              <a href="/weads/logout" class="sidebar-link mx-2">Đăng xuất</a>
+            </li>
+            <% } else if(username!= null && role === 'Ward') { %>
+              <li class="sidebar-item w-100 d-flex align-items-center p-2"><a href="/weads/report" class="sidebar-link sidebar-link">Xem báo cáo</a></li>
+              <div class="collapse-toggle">
+                <li class="sidebar-item w-100 d-flex align-items-center p-2" data-bs-toggle="collapse" data-bs-target="#collapse-list">Quản lí</li>
+                <i style="width: 16px; height: 16px;" class="collapse-arrow bi bi-caret-left-fill"></i>
+              </div>
+              <div id="collapse-list" class="collapse border-top border-bottom">
+                <li class="sidebar-item w-100 d-flex align-items-center p-2"><a href="" class="sidebar-link">Hình thức quảng cáo</a></li>
+                <li class="sidebar-item w-100 d-flex align-items-center p-2"><a href="" class="sidebar-link">Điểm đặt quảng cáo</a></li>
+                <li class="sidebar-item w-100 d-flex align-items-center p-2"><a href="" class="sidebar-link">Bảng quảng cáo</a></li>
+              </div>
+              <li class="sidebar-item w-100 d-flex align-items-center p-2">
+                <i style="font-size: 20px;" class="bi bi-box-arrow-right"></i>
+                <a href="/weads/logout" class="sidebar-link mx-2">Đăng xuất</a>
+              </li>
             <% } else { %>
             <li class="sidebar-item w-100 d-flex align-items-center p-2">
               <a href="/weads/login" class="sidebar-link mx-2">Đăng nhập</a>

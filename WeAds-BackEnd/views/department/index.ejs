@@ -281,9 +281,12 @@
         const name = result.features[0].text;
         let address = result.features[0].place_name;
         address = address.replace(name + ", ", "")
+        const ward = result.features[0].context[0].text
+        const district = result.features[0].context[2].text
+
 
         const div = document.createElement("div")
-        div.innerHTML = warnAlert(name)
+        div.innerHTML = warnAlert(name, address)
         notiContainer.prepend(div);
       });
 
@@ -307,7 +310,8 @@
     // map onclick event
     let notiContainer = document.getElementById("notification-container");
 
-    function populateDataToModal(place, address) {
+    function populateDataToModal(place, address, index, adNum, planned) {
+      console.log(place)
       let indicator = document.getElementById("carousel-indicators-id");
       indicator.innerHTML = "";
       indicator.innerHTML += '<button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>'
@@ -329,11 +333,11 @@
       `
       }
 
-      $("#modal-header").html(place.adName)
+      $("#modal-header").html(place.adName + " - QC số " + adNum)
       $("#modal-address").html("Địa chỉ: " + address)
       $("#modal-scale").html("Kích thước: " + place.adScale)
       $("#modal-type").html("Loại: " + place.adType)
-      if (place.adPlanned == 1) {
+      if (planned == 1) {
         $("#modal-planned").html("Đã quy hoạch")
       }
       else {
@@ -342,7 +346,10 @@
 
     }
 
+    let adNum = 0
+
     async function showModal(index) {
+      adNum = 0
       lng = geojson.features[index].geometry.coordinates[0]
       lat = geojson.features[index].geometry.coordinates[1]
       const response = await fetch(
@@ -353,7 +360,21 @@
       let address = result.features[0].place_name;
       address = address.replace(name + ", ", "")
 
-      populateDataToModal(geojson.features[index].properties, address)
+      if (geojson.features[index].properties.ads.length > 1) {
+        $("#next-ad-btn").css("display", "block")
+        $("#next-ad-btn").off("click")
+        $("#next-ad-btn").on("click", function () {
+          adNum++
+          if (adNum == geojson.features[index].properties.ads.length) {
+            adNum = 0
+          }
+          populateDataToModal(geojson.features[index].properties.ads[adNum], address, index, adNum, geojson.features[index].properties.adPlanned)
+        })
+      } else {
+        $("#next-ad-btn").css("display", "none")
+      }
+
+      populateDataToModal(geojson.features[index].properties.ads[adNum], address, index, adNum, geojson.features[index].properties.adPlanned)
       $("#ads-modal").modal("show");
     }
 
