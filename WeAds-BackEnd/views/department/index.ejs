@@ -285,8 +285,10 @@
         const district = result.features[0].context[2].text
 
 
+        const role = '<%- role %>'
+        console.log(role)
         const div = document.createElement("div")
-        div.innerHTML = warnAlert(name, address)
+        div.innerHTML = warnAlert(name, address, role, coordinates, ward, district)
         notiContainer.prepend(div);
       });
 
