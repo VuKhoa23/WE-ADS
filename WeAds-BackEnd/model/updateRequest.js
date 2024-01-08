@@ -5,33 +5,20 @@ const updateReqSchema = mongoose.Schema({
       type: String,
       required: [true, 'Update information needed']
     },
-    location: {
-      type: String,
-      required: [true, 'Update information needed']
-    },
-    locationType: {
-      type: String,
-      required: [true, 'Update information needed']
-    },
-    adsType: {
-      type: String,
-      required: [true, 'Update information needed']
-    },
-    images: {
+    content: {
       type: String
     },
-    organized: {
-      type: Boolean,
-      require: true
+    placeIndex:{
+      type: Number
     },
-    processed: {
-      type: Boolean,
-      require: true
+    adIndex:{
+      type: Number,
+      default: null
     },
-    reason: {
-      type: String,
-      require: [true, 'Update information needed']
-    },
+    state: {
+      type: Number,
+      default: 0
+    }
   },
   {timestamps: true}
 )

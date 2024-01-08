@@ -60,6 +60,7 @@ app.use(cors());
 const userRoutes = require("./routes/userRoutes");
 const departmentRoutes = require("./routes/departmentRoutes");
 const reportRoutes = require("./routes/reportRoutes");
+const updateRoutes = require("./routes/updateRoutes");
 const reportApi = require("./api/reportApi");
 
 
@@ -91,6 +92,7 @@ app.get("/", (req, res) => {
 app.use("/weads", userRoutes);
 app.use("/weads", departmentRoutes);
 app.use("/weads", authRoutes)
+app.use("/weads/update", updateRoutes)
 app.use("/weads/report", reportRoutes); 
 app.use("/api/weads-admin/report", reportApi);
 app.use('/weads/login', (req, res) => {
