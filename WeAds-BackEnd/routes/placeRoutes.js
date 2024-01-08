@@ -34,7 +34,8 @@ router.get("/geojson", async (req, res)=>{
         ads: [],
         ward: place.ward,
         district: place.district,
-        adPlanned: place.adPlanned
+        adPlanned: place.adPlanned,
+        placeId: place._id
       }
     }
 
@@ -47,7 +48,8 @@ router.get("/geojson", async (req, res)=>{
         adType: ad.adType,
         adScale: ad.adScale,
         adName: ad.adName,
-        adImages: []
+        adImages: [],
+        adId: ad._id
       }
       ad.adImages.forEach(img=>{
         theAd.adImages.push({url: img})
@@ -60,5 +62,14 @@ router.get("/geojson", async (req, res)=>{
   }
   res.json(geojson)
 })
+
+router.get("/details/:placeId", async (req, res)=>{
+  const place = await Place.findById(req.params.placeId)
+  const result = {
+    place: place
+  }
+  res.json(result)
+})
+
 
 module.exports = router

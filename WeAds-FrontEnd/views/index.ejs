@@ -97,7 +97,7 @@
         el.addEventListener("click", (e) => {
           e.stopPropagation();
           const div = document.createElement("div")
-          div.innerHTML = infoAlert(name, address, index)
+          div.innerHTML = infoAlert(name, address, index, place.properties.placeId)
           notiContainer.prepend(div);
         }, false);
         // make a marker for each feature and add to the map
@@ -314,7 +314,8 @@
 
     function populateDataToModal(place, address, index, adNum, planned) {
       // set report href
-      $("#report-link").attr("href", "/weads/report/" + index + "/" + adNum)
+      $("#report-link").attr("href", "/weads/report/" + geojson.features[index].properties.placeId + "/"
+        + geojson.features[index].properties.ads[adNum].adId)
 
       //
       let indicator = document.getElementById("carousel-indicators-id");
