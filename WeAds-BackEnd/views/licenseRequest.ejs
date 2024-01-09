@@ -1,8 +1,9 @@
-<%- include('./partials/header') %>
+<%- include('./department/partials/header') %>
   <div class="container-fluid d-flex justify-content-center">
     <div class="row justify-content-center col-12 col-sm-11 col-md-10 col-lg-8">
       <form class="license-form">
         <div class="license-form-header">
+          <a href="/weads/place/view-all" class="btn btn-outline-success back-btn">Trở lại</a>
           <h3 class="license-form-title">Cấp phép quảng cáo</h3>
         </div>
         <div class="license-form-row">
@@ -116,7 +117,6 @@
   <script>
     $(".license-form").on("submit" , async function(event) {
       event.preventDefault();
-      console.log("haha");
       let images = $(".ads-images-input");
       const imageArray = [];
 
@@ -157,7 +157,6 @@
       if (response.success)
         $('.success-modal').toggleClass('d-none');
       else {
-        $('.resolve-submit').prop("disabled", false);
         $('.fail-modal').toggleClass('d-none');
       }
     });
@@ -167,4 +166,4 @@
       $(".fail-modal").toggleClass("d-none");
     });
   </script>
-<%- include('./partials/footer') %>
+<%- include('./department/partials/footer') %>

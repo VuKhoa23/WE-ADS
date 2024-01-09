@@ -12,6 +12,7 @@
   margin-bottom: 8px;
   justify-content: center;
   border-bottom: 1px solid #ccc;
+  position: relative;
 }
 
 .license-form-title {
@@ -149,8 +150,84 @@
   border-radius: 5px;
   outline: none;
 }
+/* licenseDetail.ejs ------------------------ */
+.card-header {
+  position: relative;
+}
 
-/* modal ---------------- */
+.detail-back-btn {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+
+@media (max-width: 480px) {
+  .detail-back-btn {
+    position: absolute;
+    left: 70px;
+    top: -65px;
+  }
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+  padding: 8px 0;
+}
+
+.title-icon {
+  font-size: 23px;
+  margin-right: 4px;
+}
+
+.info-row {
+  display: flex;
+}
+
+.contact-data {
+  display: flex;
+}
+
+.contact-data .info-row {
+  margin-right: 30px;
+}
+
+.centered-row {
+  text-align: center;
+}
+
+.row-name, 
+.row-data {
+  font-size: 16px;
+}
+
+.row-data {
+  font-weight: normal;
+  margin-left: 8px;
+}
+
+.content {
+  width: 100%;
+  min-height: 100px;
+  padding: 5px;
+  border: 1px solid #000;
+  border-radius: 10px;
+  margin-bottom: 8px;
+}
+
+.image-container {
+
+}
+
+.ads-image {
+  width: 100%;
+  background-size: contain;
+  border: 1px solid #000;
+  margin-bottom: 10px;
+}
+
+/* modal ------------------------------------ */
 .overlay {
   position: fixed;
   width: 100vw;
@@ -181,4 +258,18 @@
   font-size: 20px;
   font-weight: 500;
   margin-bottom: 16px;
+}
+
+.back-btn {
+  position: absolute;
+  left: 5px;
+  top: -5px;
+}
+
+@media (max-width: 480px) {
+  .back-btn {
+    position: absolute;
+    left: 50px;
+    top: -72px;
+  }
 }

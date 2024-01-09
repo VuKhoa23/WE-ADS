@@ -1,3 +1,36 @@
 <%- include('./partials/header') %>
-
+<div class="row d-flex justify-content-center">
+  <div class="col-12 col-md-11 col-lg-10">
+    <table style="border-right: 1px solid #dee2e6; border-left: 1px solid #dee2e6;" class="table table-hover">
+      <thead>
+        <tr>
+          <th class="text-center" style="background-color: #2b2929; color: white; border-top-left-radius: 5px;" scope="col">Tên công ty</th>
+          <th class="text-center" style="background-color: #2b2929; color: white;" scope="col">Loại hình quảng cáo</th>
+          <th class="text-center" style="background-color: #2b2929; color: white;" scope="col">Kích thước</th>
+          <th class="text-center" style="background-color: #2b2929; color: white;" scope="col">Địa chỉ điểm đặt</th>
+          <th class="text-center" style="background-color: #2b2929; color: white; border-top-right-radius: 5px;" scope="col">Nội dung chi tiết</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (requests.length > 0) { %>
+        <% for(var i = 0; i < requests.length; i++) { %>
+        <tr>
+          <td class="text-center"><%= requests[i].companyName %></td>
+          <td class="text-center"><%= requests[i].adType %></td>  
+          <td class="text-center"><%= requests[i].adScale %></td>
+          <td class="text-center"><%= requests[i].place.ward %>, <%= requests[i].place.district %></td>
+          <td class="text-center">
+            <a class="btn btn-success" href="/weads/license-request/view/<%- requests[i]._id %>">Xem chi tiết</a>
+          </td>
+        </tr>
+        <% } %>
+        <% } else { %>
+        <tr>
+          <td class="text-center" colspan="5">Không có yêu cầu</td>
+        </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+</div>
 <%- include('./partials/footer') %>
