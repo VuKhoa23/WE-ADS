@@ -10,7 +10,6 @@
                     <th>STT</th>
                     <th>Tên</th>
                     <th></th>
-                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -18,7 +17,6 @@
                     <tr>
                         <td><%= i + 1 %></td>
                         <td><%= wards[i].name %></td>
-                        <td></td>
                         <td>
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editWardModal<%= i %>">
                                 <i class="bi bi-pencil-square"></i>
@@ -54,11 +52,10 @@
                                 </form>
                             </div>
                 
-                            <a href="/weads/department/places/deleteWard/<%= wards[i]._id %>">
-                                <button class="btn btn-danger">
+                                <button class="btn btn-danger" onclick="showDeleteConfirmation('<%= wards[i]._id %>')">
                                     <i class="bi bi-trash"></i>
                                 </button>
-                            </a>
+
                         </td>
                     </tr>
                 <% } %>
@@ -104,6 +101,66 @@
     </div>
     </form>
   </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <% if (announce === 'delete') { %>
+      <script>
+          Swal.fire({
+              icon: 'success',
+              title: 'Xóa thành công',
+              showCancelButton: false,
+              timer: 1500
+          });
+      </script>
+  <% } else if (announce === 'create') { %>
+      <script>
+          Swal.fire({
+              icon: 'success',
+              title: 'Thêm phường thành công',
+              showCancelButton: false,
+              timer: 1500
+          });
+      </script>
+  <% } else if (announce === 'edit') { %>
+      <script>
+          Swal.fire({
+              icon: 'success',
+              title: 'Đổi tên thành công',
+              showCancelButton: false,
+              timer: 1500
+          });
+      </script>
+  <% } else if (announce === 'exist') { %>
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Tên phường đã tồn tại',
+            showCancelButton: false,
+            timer: 1500
+        });
+    </script>
+<% } %>
+  
+  
+  <script>
+      function showDeleteConfirmation(wardId) {
+          Swal.fire({
+              title: 'Xác nhận xóa',
+              text: 'Bạn có chắc muốn xóa phường này?',
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#d33',
+              cancelButtonColor: '#3085d6',
+              confirmButtonText: 'Xóa',
+              cancelButtonText: 'Hủy'
+          }).then((result) => {
+              if (result.isConfirmed) {
+                  window.location.href = '/weads/department/places/deleteWard/' + wardId;
+              }
+          });
+      }
+  </script>
 
 </div>
 

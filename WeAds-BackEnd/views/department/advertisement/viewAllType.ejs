@@ -1,51 +1,44 @@
 <%- include('../partials/header') %>
 
 <div class="container mt-5">
-    <h1>Danh sách Quận</h1>
+    <h1>Danh sách các Loại bảng quảng cáo</h1>
 
-    <% if (districts.length > 0) { %>
+    <% if (types.length > 0) { %>
         <table class="table table-bordered">
             <thead>
                 <tr>
                     <th>STT</th>
                     <th>Tên</th>
-                    <th>Danh sách Phường</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
-                <% for (let i = 0; i < districts.length; i++) { %>
+                <% for (let i = 0; i < types.length; i++) { %>
                     <tr>
                         <td><%= i + 1 %></td>
-                        <td><%= districts[i].name %></td>
+                        <td><%= types[i].name %></td>
                         <td>
-                            <a href="/weads/department/places/allWard/<%= districts[i]._id %>">
-                                <i class="bi bi-arrow-right-circle-fill"></i>
-                                Xem danh sách phường
-                            </a>
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editDistrictModal<%= i %>">
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editTypeModal<%= i %>">
                                 <i class="bi bi-pencil-square"></i>
                             </button>
                 
                             <!-- Modal edit District -->
-                            <div class="modal fade" id="editDistrictModal<%= i %>" tabindex="-1" aria-labelledby="editDistrictModalLabel<%= i %>" aria-hidden="true">
-                                <form action="/weads/department/places/editDistrict/<%= districts[i]._id %>/" method="post">
+                            <div class="modal fade" id="editTypeModal<%= i %>" tabindex="-1" aria-labelledby="editTypeModalLabel<%= i %>" aria-hidden="true">
+                                <form action="/weads/department/advertisement/editType/<%= types[i]._id %>/" method="post">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLabel<%= i %>">ĐỔI TÊN QUẬN</h5>
+                                                <h5 class="modal-title" id="exampleModalLabel<%= i %>">ĐỔI TÊN LOẠI BẢNG QUẢNG CÁO</h5>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
                                                 <div class="form-group">
-                                                    <label for="ex-name<%= i %>">Tên quận cũ: </label>
+                                                    <label for="ex-name<%= i %>">Tên loại cũ: </label>
                                                     <br>
-                                                    <input type="text" class="form-control" id="ex-name<%= i %>" name="ex-name" value="<%= districts[i].name %>" readonly>
+                                                    <input type="text" class="form-control" id="ex-name<%= i %>" name="ex-name" value="<%= types[i].name %>" readonly>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="name">Nhập tên quận mới (vd: Quận 1, Quận Bình Thạnh): </label>
+                                                    <label for="name">Nhập tên loại mới (vd: Trụ bảng hiflex, Trụ hộp đèn): </label>
                                                     <br>
                                                     <input type="text" class="form-control" id="name" name="name" required>
                                                 </div>
@@ -59,7 +52,7 @@
                                 </form>
                             </div>
 
-                            <button class="btn btn-danger" onclick="showDeleteConfirmation('<%= districts[i]._id %>')">
+                            <button class="btn btn-danger" onclick="showDeleteConfirmation('<%= types[i]._id %>')">
                                 <i class="bi bi-trash"></i>
                             </button>
                 
@@ -70,7 +63,7 @@
             </tbody>
         </table>
     <% } else { %>
-        <p>Không có quận nào trong danh sách.</p>
+        <p>Không có loại bảng quảng cáo nào trong danh sách.</p>
     <% } %>
 
     <a href="/weads/home">
@@ -80,14 +73,14 @@
         </button>
     </a>
 
-    <!-- Button add Distric -->
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addDistrictModal">
-        Thêm Quận
+    <!-- Button add Type -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addTypeModal">
+        Thêm Loại
     </button>
     
   <!-- Modal add District -->
-  <div class="modal fade" id="addDistrictModal" tabindex="-1" aria-labelledby="addDistrictModalLabel" aria-hidden="true">
-    <form action="/weads/department/places/addDistrict" method="post">
+  <div class="modal fade" id="addTypeModal" tabindex="-1" aria-labelledby="addTypeModalLabel" aria-hidden="true">
+    <form action="/weads/department/advertisement/addType" method="post">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -96,7 +89,7 @@
         </div>
         <div class="modal-body">
             <div class="form-group">
-                <label for="name">Tên quận (vd: Quận 1, Quận Bình Thạnh): </label>
+                <label for="name">Tên loại (vd: Trụ bảng hiflex, Trụ hộp đèn): </label>
                 <br>
                 <input type="text" class="form-control" id="name" name="name" required>
             </div>
@@ -125,7 +118,7 @@
         <script>
             Swal.fire({
                 icon: 'success',
-                title: 'Thêm quận thành công',
+                title: 'Thêm loại thành công',
                 showCancelButton: false,
                 timer: 1500
             });
@@ -134,7 +127,7 @@
         <script>
             Swal.fire({
                 icon: 'success',
-                title: 'Đổi tên thành công',
+                title: 'Đổi tên loại thành công',
                 showCancelButton: false,
                 timer: 1500
             });
@@ -143,7 +136,7 @@
         <script>
             Swal.fire({
                 icon: 'error',
-                title: 'Tên quận đã tồn tại',
+                title: 'Tên loại đã tồn tại',
                 showCancelButton: false,
                 timer: 1500
             });
@@ -152,10 +145,10 @@
     
     
     <script>
-        function showDeleteConfirmation(districtId) {
+        function showDeleteConfirmation(typeId) {
             Swal.fire({
                 title: 'Xác nhận xóa',
-                text: 'Bạn có chắc muốn xóa quận này?',
+                text: 'Bạn có chắc muốn xóa loại bảng quảng cáo này?',
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#d33',
@@ -164,7 +157,7 @@
                 cancelButtonText: 'Hủy'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location.href = '/weads/department/places/deleteDistrict/' + districtId;
+                    window.location.href = '/weads/department/advertisement/deleteType/' + typeId;
                 }
             });
         }
