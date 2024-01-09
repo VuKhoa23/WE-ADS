@@ -1,0 +1,51 @@
+<%- include('./partials/header') %>
+  <div class="container-fluid d-flex justify-content-center">
+    <div class="row justify-content-center col-12 col-sm-11 col-md-10 col-lg-8">
+      <form class="license-form">
+        <div class="license-form-header">
+          <h3 class="license-form-title">Cấp phép quảng cáo</h3>
+        </div>
+        <div class="license-form-row">
+          <h3 class="row-label">Địa điểm đặt quảng cáo:</h3>
+          <input type="text" class="place-input" disabled>
+        </div>
+        <div class="license-form-row">
+          <h3 class="row-label">Tên công ty đặt quảng cáo:</h3>
+          <input type="text" class="license-form-input" name="companyName">
+        </div>
+        <div class="license-form-row">
+          <h3 class="row-label">Thông tin liên lạc công ty:</h3>
+          <div class="row d-flex align-items-center justify-content-between">
+            <div class="company-info-row col-12 col-md-4">
+                <h4 class="company-info-label">SĐT:</h4>         
+                <input type="text" class="company-info-input" name="companyPhone">
+            </div>
+            <div class="company-info-row col-12 col-md-7">
+                <h4 class="company-info-label">Email:</h4>       
+                <input type="email" class="company-info-input" name="companyEmail">
+            </div>
+          </div>
+        </div>
+
+        <div class="license-form-row">
+          <h3 class="row-label">Thời hạn quảng cáo:</h3>
+          <div class="row d-flex align-items-center justify-content-between">
+            <div class="company-info-row col-8 col-md-6">
+                <h4 class="company-info-label">Bắt đầu:</h4>         
+                <input type="date" class="company-info-input" name="startDate">
+            </div>
+            <div class="company-info-row col-8 col-md-6">
+                <h4 class="company-info-label">Kết thúc:</h4>       
+                <input type="date" class="company-info-input" name="endDate">
+            </div>
+          </div>
+        </div>
+        <button type="submit">OK</button>
+      </form>
+    </div>
+  </div>
+  <script>
+    const place = '<%- ward %>' + ', ' + '<%- district %>'
+    $('.place-input').val(place);
+  </script>
+<%- include('./partials/footer') %>

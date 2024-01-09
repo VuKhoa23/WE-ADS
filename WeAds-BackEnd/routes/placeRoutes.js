@@ -40,7 +40,8 @@ router.get("/geojson", async (req, res)=>{
     }
 
     const ads = await Ad.find({
-      place: place._id
+      place: place._id,
+      lincensed: true
     })
 
     ads.forEach((ad)=>{

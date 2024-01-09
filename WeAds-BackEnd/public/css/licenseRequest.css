@@ -1,0 +1,71 @@
+.license-form {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #000;
+  border-radius: 5px;
+}
+
+.license-form-header {
+  width: 100%;
+  display: flex;
+  padding-bottom: 10px;
+  margin-bottom: 8px;
+  justify-content: center;
+  border-bottom: 1px solid #ccc;
+}
+
+.license-form-title {
+  font-size: 23px;
+  margin: 0;
+}
+
+
+.license-form-row {
+  margin-bottom: 8px;
+}
+
+.row-label {
+  color: #000;
+  margin-bottom: 4px;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.license-form-input,
+.place-input {
+  width: 100%;
+  padding: 2px 4px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+}
+
+.company-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.company-info-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 8px;
+}
+
+.company-info-label{
+  font-size: 16px;
+  font-weight: normal;
+  margin-bottom: 0;
+  margin-right: 4px;
+}
+
+.company-info-input {
+  padding: 2px 4px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+  flex: 1;
+}
