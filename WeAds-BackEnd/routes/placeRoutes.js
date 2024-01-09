@@ -71,5 +71,60 @@ router.get("/details/:placeId", async (req, res)=>{
   res.json(result)
 })
 
+router.get("/view-all", async (req, res)=>{
+  const places = await Place.find({})
+
+  let username = null
+  createMessage = null
+  if(req.query.createSuccess){
+    createMessage = "Account created"
+  }
+  if(res.locals.user){
+    username = res.locals.user.username
+  }
+
+  let role = null
+  if(res.locals.user){
+    role = res.locals.user.role
+  }
+
+  res.render("viewPlaces", {
+    places: places,
+    role: role,
+    username: username,
+    createMessage: createMessage,
+    ward: res.locals.user ? res.locals.user.ward : null,
+    district: res.locals.user ? res.locals.user.district : null
+  })
+})
+
+router.get("/view-by-ward", async (req, res)=>{
+  const places = await Place.find({ward: res.locals.user.ward})
+  
+  let username = null
+  createMessage = null
+  if(req.query.createSuccess){
+    createMessage = "Account created"
+  }
+  if(res.locals.user){
+    username = res.locals.user.username
+  }
+
+  let role = null
+  if(res.locals.user){
+    role = res.locals.user.role
+  }
+
+  res.render("viewPlaces", {
+    places: places,
+    role: role,
+    username: username,
+    createMessage: createMessage,
+    ward: res.locals.user ? res.locals.user.ward : null,
+    district: res.locals.user ? res.locals.user.district : null
+  })
+})
+
+
 
 module.exports = router

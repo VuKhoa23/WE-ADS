@@ -19,7 +19,9 @@ router.get("/home", function (req, res, next) {
     API_KEY: process.env.MAP_KEY,
     role: role,
     username: username,
-    createMessage: createMessage
+    createMessage: createMessage,
+    ward: res.locals.user ? res.locals.user.ward : null,
+    district: res.locals.user ? res.locals.user.district : null
   });
 });
 
