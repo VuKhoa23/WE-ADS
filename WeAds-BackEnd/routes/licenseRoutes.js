@@ -45,9 +45,35 @@ Router.get('/create/:id', async (req, res) => {
   }
 });
 
-Router.post('/test-post', function(req, res){
+Router.post('/create/:id', async (req, res) => {
+  const id = req.params.id;
+  const { adType, width, height, adName, adImages, companyName, companyPhone, companyEmail, startDate, endDate } = req.body;
   console.log(req.body);
-  res.json({ ok: true});
+  const adScale = width + "m x " + height + "m";
+
+  if (!adType || !width || !height || !adName || !adImages || !companyName || !companyPhone || !companyEmail || !startDate || !endDate) {
+    res.status(400).json({ success: false, error: "Missing information" });
+    return;
+  }
+  if (!id) {
+    res.status(400).json({ success: false, error: "Missing id" });
+    return;
+  }
+  try {
+    const place = await Place.findById(id);
+    if (!place) {
+      res.status(400).json({ success: false, error: "Place not found" });
+      return;
+    }
+
+    const ads = await Ad.create({ adType, adScale, adName, adImages, companyName, companyPhone, companyEmail, startDate, endDate, licensed: false, place: place._id });
+    res.status(201).json({ success: true });
+  }
+  catch (err) {
+    console.log(err.message);
+    res.status(400).json({ success: false, error: err.message });
+    return;
+  }
 });
 
 module.exports = Router;
