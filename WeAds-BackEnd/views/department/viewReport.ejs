@@ -4,8 +4,9 @@
   <% if(role === 'District'){ %>
   <select id="ward-select" class="form-control w-25 bg-primary text-center m-3" name="ward-select">
     <option selected value="all">Chọn phường muốn xem</option>
-    <option value="1">1</option>
-    <option value="2">2</option>
+    <% wards.forEach(function(ward){ %>
+      <option value="<%= ward.name %>"><%= ward.name %></option>
+    <% }); %>
   </select>
   <% } %>
   <div class="col-12 col-md-11 col-lg-10">
