@@ -73,6 +73,7 @@
     async function checkReport() {
       for (place of geojson.features) {
         place.properties.isReport = 0
+        place.properties.isPersisted = 1;
       }
 
       for (report of reports.reports) {
@@ -94,10 +95,33 @@
       }
     }
 
+    async function addNonPersistedPlaces() {
+      for (report of reports.reports) {
+        if (report.adId === null && report.placeId === null) {
+          let thePlace = {
+            type: "Feature",
+            geometry: {
+              type: "Point",
+              coordinates: report.coordinates,
+            },
+            properties: {
+              ads: [],
+              isReport: 1,
+              placeId: null,
+              adId: null,
+              reportId: report.reportId
+            }
+          }
+          geojson.features.push(thePlace)
+        }
+      }
+    }
+
 
     $(document).ready(async function () {
       await getData();
       await checkReport();
+      await addNonPersistedPlaces();
       mapboxgl.accessToken = "<%= API_KEY %>";
       const map = new mapboxgl.Map({
         container: "map",
@@ -131,17 +155,22 @@
         el.addEventListener("click", (e) => {
           e.stopPropagation();
           const div = document.createElement("div")
-          let isReported = 0
-          for (report of reports.reports) {
-            if (report.adId === null) {
-              if (place.properties.placeId === report.placeId) {
-                isReported = 1
+          if (place.properties.adId === null && place.properties.placeId === null) {
+            div.innerHTML = unpersistedAlert(name, address, place.properties.reportId)
+            notiContainer.prepend(div);
+          }
+          else {
+            let isReported = 0
+            for (report of reports.reports) {
+              if (report.adId === null) {
+                if (place.properties.placeId === report.placeId) {
+                  isReported = 1
+                }
               }
             }
-            console.log(isReported)
+            div.innerHTML = infoAlert(name, address, index, place.properties.placeId, isReported)
+            notiContainer.prepend(div);
           }
-          div.innerHTML = infoAlert(name, address, index, place.properties.placeId, isReported)
-          notiContainer.prepend(div);
         }, false);
         // make a marker for each feature and add to the map
 
@@ -208,7 +237,6 @@
         const filterElem = document.getElementById('typeFilter');
 
         filterElem.onchange = () => {
-          console.log(geojson)
           const pubType = filterElem.value;
           if (pubType == -1) {
             const newGeoJSON = { ...geojson };
@@ -327,7 +355,6 @@
             return;
           }
           const coordinates = e.lngLat;
-          console.log(coordinates);
 
           const response = await fetch(
             `https://api.mapbox.com/geocoding/v5/mapbox.places/${coordinates.lng},${coordinates.lat}.json?country=vn&access_token=${mapboxgl.accessToken}`
@@ -364,7 +391,6 @@
 
     // map onclick event
     let notiContainer = document.getElementById("notification-container");
-    console.log(reports)
     function populateDataToModal(place, address, index, adNum, planned) {
       let isReported = 0
       for (report of reports.reports) {
