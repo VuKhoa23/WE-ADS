@@ -20,8 +20,8 @@ router.get("/home", function (req, res, next) {
     role: role,
     username: username,
     createMessage: createMessage,
-    ward: res.locals.user.ward,
-    district: res.locals.user.district
+    ward: res.locals.user ? res.locals.user.ward : null,
+    district: res.locals.user ? res.locals.user.district : null
   });
 });
 

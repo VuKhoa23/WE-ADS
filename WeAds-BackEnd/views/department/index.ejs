@@ -97,7 +97,7 @@
             `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?country=vn&access_token=${mapboxgl.accessToken}`
           );
           const result = await response.json();
-
+          console.log(result)
           const name = result.features[0].text;
           let address = result.features[0].place_name;
           address = address.replace(name + ", ", "")

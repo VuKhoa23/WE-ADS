@@ -45,20 +45,12 @@
             <a href="/weads/logout" class="sidebar-link mx-2">Đăng xuất</a>
           </li>
           <% } else if(username!= null && role === 'Ward') { %>
-            <li class="sidebar-item w-100 d-flex align-items-center p-2"><a href="/weads/report" class="sidebar-link sidebar-link">Xem báo cáo</a></li>
-            <div class="collapse-toggle">
-              <li class="sidebar-item w-100 d-flex align-items-center p-2" data-bs-toggle="collapse" data-bs-target="#collapse-list">Quản lí</li>
-              <i style="width: 16px; height: 16px;" class="collapse-arrow bi bi-caret-left-fill"></i>
-            </div>
-            <div id="collapse-list" class="collapse border-top border-bottom">
-              <li class="sidebar-item w-100 d-flex align-items-center p-2"><a href="" class="sidebar-link">Hình thức quảng cáo</a></li>
-              <li class="sidebar-item w-100 d-flex align-items-center p-2"><a href="" class="sidebar-link">Điểm đặt quảng cáo</a></li>
-              <li class="sidebar-item w-100 d-flex align-items-center p-2"><a href="" class="sidebar-link">Bảng quảng cáo</a></li>
-            </div>
-            <li class="sidebar-item w-100 d-flex align-items-center p-2">
-              <i style="font-size: 20px;" class="bi bi-box-arrow-right"></i>
-              <a href="/weads/logout" class="sidebar-link mx-2">Đăng xuất</a>
-            </li>
+          <li class="sidebar-item w-100 d-flex align-items-center p-2"><a href="/weads/report" class="sidebar-link sidebar-link">Xem báo cáo</a></li>
+          <li class="sidebar-item w-100 d-flex align-items-center p-2"><a href="/weads/place/view-all" class="sidebar-link sidebar-link">Xem các điểm đặt quảng cáo</a></li>
+          <li class="sidebar-item w-100 d-flex align-items-center p-2">
+            <i style="font-size: 20px;" class="bi bi-box-arrow-right"></i>
+            <a href="/weads/logout" class="sidebar-link mx-2">Đăng xuất</a>
+          </li>
           <% } else { %>
           <li class="sidebar-item w-100 d-flex align-items-center p-2">
             <a href="/weads/login" class="sidebar-link mx-2">Đăng nhập</a>
