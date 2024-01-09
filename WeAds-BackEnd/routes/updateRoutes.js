@@ -1,11 +1,15 @@
 const express = require("express");
 const router = express.Router();
 
-router.get("/:index", function (req, res, next) {
+router.get("/:placeId", async function (req, res, next) {
+  const placeRes = await fetch("http://localhost:3000/weads/place/details/" + req.params.placeId)
+  const placeResult = await placeRes.json()
+  const coordinates = placeResult.place.coordinates
+
   res.render("update-form", {
     role: res.locals.user.role,
     username: res.locals.user.username,
-    placeIndex: req.params.index,
+    coordinates: coordinates,
     API_KEY: process.env.MAP_KEY,
   })
 });
