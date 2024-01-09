@@ -4,6 +4,7 @@ const Officer = require("../model/officer")
 const District = require("../model/district")
 const Ward = require("../model/ward") 
 const Advertisement = require("../model/advertisement")
+const ReportType = require("../model/reportType")
 
 router.get('/department/create', (req, res) => {
   res.render("department/create-account", {
@@ -308,6 +309,85 @@ router.get('/department/advertisement/deleteType/:_id', async function(req, res)
           const types = await Advertisement.find({});
 
           res.render("department/advertisement/viewAllType", {
+            announce: 'delete',
+            types: types,
+            username: res.locals.user ? res.locals.user.username : null,
+            role: res.locals.user ? res.locals.user.role : null,
+          })
+      }
+      
+  } catch (error) {
+      res.status(500).json({message: error.message})
+  }
+})
+
+router.post('/department/report/addType', async function(req, res) {
+  try {
+    const isExist = await ReportType.findOne({name: req.body.name});
+
+    if(isExist){
+      res.status(400).json({ message: 'This type already exists' });
+    } else {
+      const type = await ReportType.create(req.body);
+      const types = await ReportType.find({});
+
+      res.render("department/reportType", {
+        announce: 'create',
+        types: types,
+        username: res.locals.user ? res.locals.user.username : null,
+        role: res.locals.user ? res.locals.user.role : null,
+      })
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+router.get('/department/report/allType', async function (req, res) {
+  const types = await ReportType.find({});
+
+  res.render("department/reportType", {
+    announce: null,
+    types: types,
+    username: res.locals.user ? res.locals.user.username : null,
+    role: res.locals.user ? res.locals.user.role : null,
+  })
+})
+
+router.post('/department/report/editType/:_id', async function(req, res) {
+  try {
+
+      const id = req.params._id;
+      const type = await ReportType.findOne({_id: id});
+      const name = req.body.name;
+      
+
+      if(type){
+          await ReportType.findByIdAndUpdate(type._id, {name: name});
+
+          const types = await ReportType.find({});
+          res.render("department/reportType", {
+            announce: 'edit',
+            types: types,
+            username: res.locals.user ? res.locals.user.username : null,
+            role: res.locals.user ? res.locals.user.role : null,
+          })
+      }
+  } catch (error) {
+      res.status(500).json({message: error.message})
+  }
+})
+
+router.get('/department/report/deleteType/:_id', async function(req, res) {
+  try {
+      const type = await ReportType.findOne({_id: req.params._id});
+      if(!type){
+          return res.status(404).json({message: `cannot find any type with ID ${req.params._id}`})
+      } else {
+          await ReportType.findByIdAndDelete(type._id);
+          const types = await ReportType.find({});
+
+          res.render("department/reportType", {
             announce: 'delete',
             types: types,
             username: res.locals.user ? res.locals.user.username : null,
