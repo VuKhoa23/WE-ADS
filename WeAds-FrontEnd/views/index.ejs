@@ -86,7 +86,7 @@
         } else {
           for (place of geojson.features) {
             for (ad of place.properties.ads) {
-              if (report.adId = ad.adId) {
+              if (report.adId == ad.adId) {
                 place.properties.isReport = 1
               }
             }
@@ -401,7 +401,7 @@
         }
       }
       // set report href
-      if (isReported) {
+      if (!isReported) {
         $("#report-link").attr("href", "/weads/report/" + geojson.features[index].properties.placeId + "/"
           + geojson.features[index].properties.ads[adNum].adId)
         $("#view-link").css("display", "none")
