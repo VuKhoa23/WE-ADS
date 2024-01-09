@@ -8,7 +8,7 @@ module.exports.getReportById = async (id) => {
 
 //create new report
 module.exports.createReport = async (req, res, next) => {
-  let { name, reportType, email, phone, content, address, ward, district, placeId, adId} = req.body;
+  let { name, reportType, email, phone, content, address, ward, district, placeId, adId, reportCode} = req.body;
   let state = false;
   if(adId === ""){
     adId = null
@@ -28,9 +28,10 @@ module.exports.createReport = async (req, res, next) => {
       ward,
       district,
       placeId,
-      adId
+      adId,
+      reportCode
     });
-    res.status(201).json({ success: true });
+    res.status(201).json({reportId: report._id, placeId: report.placeId, adId: report.adId });
   } catch (err) {
     console.error(err.message);
     res.status(400).json({ success: false, message: err.message });

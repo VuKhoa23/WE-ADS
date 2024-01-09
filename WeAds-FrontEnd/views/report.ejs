@@ -37,7 +37,7 @@
 
     <div class="border border-secondary rounded p-3" style="font-size: 1rem;">
       <div class="text-center mb-3 ">
-        <%if(reportType === 0){%>
+        <%if(reportCode === 0){%>
         <h1>Báo cáo điểm đặt quảng cáo</h1>
         <% } else {%>
         <h1>Báo cáo bảng quảng cáo</h1>
@@ -133,8 +133,13 @@
     </div>
   </div>
   <!--  -->
-  <script src="/js/geojson.js"></script>
   <script>
+    if (window.localStorage.getItem('reports') === null) {
+      window.localStorage.setItem('reports', JSON.stringify({
+        reports: []
+      }))
+    }
+    const reports = JSON.parse(window.localStorage.getItem('reports'))
     const accessToken = "<%= API_KEY %>";
     $(document).ready(async function () {
       let coordinates = '<%- coordinates %>'
@@ -182,7 +187,7 @@
           const imgs = doc.querySelectorAll('img');
           if (imgs.length <= 2) {
             $(".ql-editor").attr("contenteditable", false);
-            await fetch("http://127.0.0.1:3000/api/weads-admin/report", {
+            const response = await fetch("http://127.0.0.1:3000/api/weads-admin/report", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json; charset=utf-8"
@@ -198,9 +203,13 @@
                 district: '<%- district %>',
                 placeId: '<%- placeId %>',
                 adId: '<%- adId%>',
-                reportType: '<%- reportType %>'
+                reportType: $("#reportType").val(),
+                reportCode: '<%- reportCode %>'
               })
             })
+            const result = await response.json();
+            reports.reports.push(result)
+            window.localStorage.setItem('reports', JSON.stringify(reports))
             $("#notiModal").modal("show")
           }
           else {

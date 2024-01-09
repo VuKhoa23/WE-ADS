@@ -39,6 +39,7 @@
     <option value="-1" selected>Tất cả</option>
     <option value="0">Chưa quy hoạch</option>
     <option value="1">Đã quy hoạch</option>
+    <option value="2">Các điểm đã báo cáo</option>
   </select>
   <div id="map">
     <div id="geocoder" class="geocoder"></div>
@@ -56,14 +57,47 @@
   <!-- <script src="/js/geojson.js"></script> -->
   <!-- ------------ -->
   <script>
+    if (window.localStorage.getItem('reports') === null) {
+      window.localStorage.setItem('reports', JSON.stringify({
+        reports: []
+      }))
+    }
+    const reports = JSON.parse(window.localStorage.getItem('reports'))
+
     let geojson = null
     async function getData() {
       const response = await fetch("http://localhost:3000/weads/place/geojson")
       geojson = await response.json()
     }
 
+    async function checkReport() {
+      for (place of geojson.features) {
+        place.properties.isReport = 0
+      }
+
+      for (report of reports.reports) {
+        if (report.adId === null) {
+          for (place of geojson.features) {
+            if (place.properties.placeId === report.placeId) {
+              place.properties.isReport = 1
+            }
+          }
+        } else {
+          for (place of geojson.features) {
+            for (ad of place.properties.ads) {
+              if (report.adId = ad.adId) {
+                place.properties.isReport = 1
+              }
+            }
+          }
+        }
+      }
+    }
+
+
     $(document).ready(async function () {
       await getData();
+      await checkReport();
       mapboxgl.accessToken = "<%= API_KEY %>";
       const map = new mapboxgl.Map({
         container: "map",
@@ -97,7 +131,16 @@
         el.addEventListener("click", (e) => {
           e.stopPropagation();
           const div = document.createElement("div")
-          div.innerHTML = infoAlert(name, address, index, place.properties.placeId)
+          let isReported = 0
+          for (report of reports.reports) {
+            if (report.adId === null) {
+              if (place.properties.placeId === report.placeId) {
+                isReported = 1
+              }
+            }
+            console.log(isReported)
+          }
+          div.innerHTML = infoAlert(name, address, index, place.properties.placeId, isReported)
           notiContainer.prepend(div);
         }, false);
         // make a marker for each feature and add to the map
@@ -149,25 +192,35 @@
           "paint": {
             "circle-radius": 10,
             'circle-color': [
-              'match',
-              ['to-number', ['get', 'adPlanned']],
-              1, '#11780a', // if planned is true, set color to green
-              '#ba0606' // if planned is false, set color to red
+              'case',
+              ["==", ['to-number', ['get', 'isReport']], 1],
+              "#ccf502",
+              ["==", ['to-number', ['get', 'adPlanned']], 1],
+              "#11780a",
+              '#ba0606'
             ],
           },
         })
 
+        // green
+        // red 
+
         const filterElem = document.getElementById('typeFilter');
 
         filterElem.onchange = () => {
+          console.log(geojson)
           const pubType = filterElem.value;
           if (pubType == -1) {
             const newGeoJSON = { ...geojson };
             map.getSource('data').setData(newGeoJSON);
           }
-          else {
+          else if (pubType == 0 || pubType == 1) {
             const newGeoJSON = { ...geojson };
             newGeoJSON.features = geojson.features.filter(feature => feature.properties.adPlanned == pubType);
+            map.getSource('data').setData(newGeoJSON);
+          } else {
+            const newGeoJSON = { ...geojson };
+            newGeoJSON.features = geojson.features.filter(feature => feature.properties.isReport == 1);
             map.getSource('data').setData(newGeoJSON);
           }
         };
@@ -311,11 +364,28 @@
 
     // map onclick event
     let notiContainer = document.getElementById("notification-container");
-
+    console.log(reports)
     function populateDataToModal(place, address, index, adNum, planned) {
+      let isReported = 0
+      for (report of reports.reports) {
+        if (report.adId !== null) {
+          if (geojson.features[index].properties.ads[adNum].adId === report.adId) {
+            isReported = 1
+          }
+        }
+      }
       // set report href
-      $("#report-link").attr("href", "/weads/report/" + geojson.features[index].properties.placeId + "/"
-        + geojson.features[index].properties.ads[adNum].adId)
+      if (isReported) {
+        $("#report-link").attr("href", "/weads/report/" + geojson.features[index].properties.placeId + "/"
+          + geojson.features[index].properties.ads[adNum].adId)
+        $("#view-link").css("display", "none")
+        $("#report-link").css("display", "block")
+      } else {
+        $("#view-link").attr("href", "/weads/view-report/" + geojson.features[index].properties.placeId + "/"
+          + geojson.features[index].properties.ads[adNum].adId)
+        $("#report-link").css("display", "none")
+        $("#view-link").css("display", "block")
+      }
 
       //
       let indicator = document.getElementById("carousel-indicators-id");
@@ -365,7 +435,10 @@
       let address = result.features[0].place_name;
       address = address.replace(name + ", ", "")
 
-      if (geojson.features[index].properties.ads.length > 1) {
+      if (geojson.features[index].properties.ads.length == 0) {
+        $("#no-ads-modal").modal("show")
+      }
+      else if (geojson.features[index].properties.ads.length > 1) {
         $("#next-ad-btn").css("display", "block")
         $("#next-ad-btn").off("click")
         $("#next-ad-btn").on("click", function () {
