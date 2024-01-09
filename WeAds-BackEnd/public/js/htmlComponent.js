@@ -15,7 +15,6 @@ function infoAlert(name, address, index, placeId, role) {
         <button class="btn" onclick="showModal(${index})">
           <i class="fa-solid fa-circle-info"></i>
         </button>
-
       </div>
     </div>
   `;
@@ -58,6 +57,9 @@ function warnAlert(name, address, role, coordinates, ward, district) {
       </div>
       <button type="button" class="btn-close m-2" data-bs-dismiss="alert" aria-label="Close"></button>
       <br>
+      <div class="d-flex justify-content-end mt-3">
+
+        <a href="/weads/create-place?lat=${coordinates.lat}&lng=${coordinates.lng}&ward=${ward}&district=${district}" class="link-secondary w-50" target="_blank"><button class="btn btn-primary" style="font-size: 12px">Tạo điểm đặt mới</button></a>
       </div>
     </div>
   `;
