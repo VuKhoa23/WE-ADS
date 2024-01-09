@@ -8,8 +8,8 @@ module.exports.getReportById = async (id) => {
 
 //create new report
 module.exports.createReport = async (req, res, next) => {
-  let { name, reportType, email, phone, content, address, ward, district, placeId, adId, reportCode} = req.body;
-  let state = false;
+  let { name, reportType, email, phone, content, address, ward, district, placeId, adId, reportCode, coordinates} = req.body;
+  let state = 0;
   if(adId === ""){
     adId = null
   }
@@ -31,10 +31,10 @@ module.exports.createReport = async (req, res, next) => {
       adId,
       reportCode
     });
-    res.status(201).json({reportId: report._id, placeId: report.placeId, adId: report.adId });
+    res.status(201).json({reportId: report._id, placeId: report.placeId, adId: report.adId, coordinates: coordinates });
   } catch (err) {
     console.error(err.message);
-    res.status(400).json({ success: false, message: err.message });
+    res.status(400).json({ success: false, message: err.message});
   }
 };
 

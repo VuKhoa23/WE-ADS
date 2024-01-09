@@ -39,8 +39,10 @@
       <div class="text-center mb-3 ">
         <%if(reportCode === 0){%>
         <h1>Báo cáo điểm đặt quảng cáo</h1>
-        <% } else {%>
+        <% } else if (reportCode == 1) {%>
         <h1>Báo cáo bảng quảng cáo</h1>
+        <% } else {%>
+        <h1>Báo cáo địa điểm</h1>
         <% } %>
       </div>
       <div class="mb-3 form-group row">
@@ -204,10 +206,12 @@
                 placeId: '<%- placeId %>',
                 adId: '<%- adId%>',
                 reportType: $("#reportType").val(),
-                reportCode: '<%- reportCode %>'
+                reportCode: '<%- reportCode %>',
+                coordinates: coordinates
               })
             })
             const result = await response.json();
+            console.log(result)
             reports.reports.push(result)
             window.localStorage.setItem('reports', JSON.stringify(reports))
             $("#notiModal").modal("show")
