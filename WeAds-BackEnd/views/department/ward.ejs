@@ -10,7 +10,6 @@
                     <th>STT</th>
                     <th>Tên</th>
                     <th></th>
-                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -18,7 +17,6 @@
                     <tr>
                         <td><%= i + 1 %></td>
                         <td><%= wards[i].name %></td>
-                        <td></td>
                         <td>
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editWardModal<%= i %>">
                                 <i class="bi bi-pencil-square"></i>
@@ -133,7 +131,16 @@
               timer: 1500
           });
       </script>
-  <% } %>
+  <% } else if (announce === 'exist') { %>
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Tên phường đã tồn tại',
+            showCancelButton: false,
+            timer: 1500
+        });
+    </script>
+<% } %>
   
   
   <script>

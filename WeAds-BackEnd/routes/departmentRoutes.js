@@ -61,11 +61,16 @@ router.post('/department/places/addDistrict', async function(req, res) {
     const isExist = await District.findOne({name: req.body.name});
 
     if(isExist){
-      res.status(400).json({ message: 'This district already exists' });
-    } else {
-      const district = await District.create(req.body);
       const districts = await District.find({});
-
+      res.render("department/district/viewAllDistrict", {
+        announce: 'exist',
+        districts: districts,
+        username: res.locals.user ? res.locals.user.username : null,
+        role: res.locals.user ? res.locals.user.role : null,
+      })
+    } else {
+      await District.create(req.body);
+      const districts = await District.find({});
       res.render("department/district/viewAllDistrict", {
         announce: 'create',
         districts: districts,
@@ -92,26 +97,33 @@ router.get('/department/places/allDistrict', async function (req, res) {
 
 router.post('/department/places/editDistrict/:_id', async function(req, res) {
   try {
-
-      const id = req.params._id;
+    const id = req.params._id;
       const district = await District.findOne({_id: id});
       const name = req.body.name;
       
+      const isExist = await District.findOne({name: name});
+      if(isExist){
+        const districts = await District.find({});
+        res.render("department/district/viewAllDistrict", {
+          announce: 'exist',
+          districts: districts,
+          username: res.locals.user ? res.locals.user.username : null,
+          role: res.locals.user ? res.locals.user.role : null,
+        })
+      } else {
+        await District.findByIdAndUpdate(district._id, {name: name});
 
-      if(district){
-          await District.findByIdAndUpdate(district._id, {name: name});
-
-          const districts = await District.find({});
-          res.render("department/district/viewAllDistrict", {
-            announce: 'edit',
-            districts: districts,
-            username: res.locals.user ? res.locals.user.username : null,
-            role: res.locals.user ? res.locals.user.role : null,
-          })
+        const districts = await District.find({});
+        res.render("department/district/viewAllDistrict", {
+          announce: 'edit',
+          districts: districts,
+          username: res.locals.user ? res.locals.user.username : null,
+          role: res.locals.user ? res.locals.user.role : null,
+        })
       }
   } catch (error) {
       res.status(500).json({message: error.message})
-  }
+    }
 })
 
 router.get('/department/places/deleteDistrict/:_id', async function(req, res) {
@@ -141,7 +153,16 @@ router.post('/department/places/addWard/:oid', async function(req, res) {
     const isExist = await Ward.findOne({name: req.body.name, district: req.params.oid});
 
     if(isExist){
-      res.status(400).json({ message: 'This ward already exists' });
+      const district = await District.findOne({_id: req.params.oid});
+      const wards = await Ward.find({district: req.params.oid});
+      res.render("department/ward", {
+        announce: 'exist',
+        wards: wards,
+        district_name: district.name,
+        district_id: district._id,
+        username: res.locals.user ? res.locals.user.username : null,
+        role: res.locals.user ? res.locals.user.role : null,
+      });
     } else {
 
       const district = await District.findOne({_id: req.params.oid});
@@ -191,14 +212,23 @@ router.post('/department/places/editWard/:_id', async function(req, res) {
     const id = req.params._id;
     const ward = await Ward.findOne({_id: id});
     const name = req.body.name;
+    const isExist = await Ward.findOne({name: name});
 
-    if(ward){
-      await Ward.findByIdAndUpdate(ward._id, {name: name});
-
+    if(isExist){
       const district = await District.findOne({_id: ward.district});
-
       const wards = await Ward.find({district: ward.district});
-
+      res.render("department/ward", {
+        announce: 'exist',
+        wards: wards,
+        district_name: district.name,
+        district_id: district._id,
+        username: res.locals.user ? res.locals.user.username : null,
+        role: res.locals.user ? res.locals.user.role : null,
+      });
+    } else {
+      await Ward.findByIdAndUpdate(ward._id, {name: name});
+      const district = await District.findOne({_id: ward.district});
+      const wards = await Ward.find({district: ward.district});
       res.render("department/ward", {
         announce: 'edit',
         wards: wards,
@@ -208,6 +238,7 @@ router.post('/department/places/editWard/:_id', async function(req, res) {
         role: res.locals.user ? res.locals.user.role : null,
       });
     }
+
   } catch (error) {
     console.error('Error fetching ward:', error);
     res.status(500).send('Internal Server Error');
@@ -246,9 +277,15 @@ router.post('/department/advertisement/addType', async function(req, res) {
     const isExist = await Advertisement.findOne({name: req.body.name});
 
     if(isExist){
-      res.status(400).json({ message: 'This type already exists' });
+      const types = await Advertisement.find({});
+      res.render("department/advertisement/viewAllType", {
+        announce: 'exist',
+        types: types,
+        username: res.locals.user ? res.locals.user.username : null,
+        role: res.locals.user ? res.locals.user.role : null,
+      })
     } else {
-      const type = await Advertisement.create(req.body);
+      await Advertisement.create(req.body);
       const types = await Advertisement.find({});
 
       res.render("department/advertisement/viewAllType", {
@@ -281,18 +318,25 @@ router.post('/department/advertisement/editType/:_id', async function(req, res) 
       const id = req.params._id;
       const type = await Advertisement.findOne({_id: id});
       const name = req.body.name;
-      
+      const isExist = Advertisement.findOne({name: name});
 
-      if(type){
-          await Advertisement.findByIdAndUpdate(type._id, {name: name});
-
-          const types = await Advertisement.find({});
-          res.render("department/advertisement/viewAllType", {
-            announce: 'edit',
-            types: types,
-            username: res.locals.user ? res.locals.user.username : null,
-            role: res.locals.user ? res.locals.user.role : null,
-          })
+      if(isExist){
+        const types = await Advertisement.find({});
+        res.render("department/advertisement/viewAllType", {
+          announce: 'exist',
+          types: types,
+          username: res.locals.user ? res.locals.user.username : null,
+          role: res.locals.user ? res.locals.user.role : null,
+        })
+      } else {
+        await Advertisement.findByIdAndUpdate(type._id, {name: name});
+        const types = await Advertisement.find({});
+        res.render("department/advertisement/viewAllType", {
+          announce: 'edit',
+          types: types,
+          username: res.locals.user ? res.locals.user.username : null,
+          role: res.locals.user ? res.locals.user.role : null,
+        })
       }
   } catch (error) {
       res.status(500).json({message: error.message})
@@ -326,9 +370,15 @@ router.post('/department/report/addType', async function(req, res) {
     const isExist = await ReportType.findOne({name: req.body.name});
 
     if(isExist){
-      res.status(400).json({ message: 'This type already exists' });
+      const types = await ReportType.find({});
+      res.render("department/reportType", {
+        announce: 'exist',
+        types: types,
+        username: res.locals.user ? res.locals.user.username : null,
+        role: res.locals.user ? res.locals.user.role : null,
+      })
     } else {
-      const type = await ReportType.create(req.body);
+      await ReportType.create(req.body);
       const types = await ReportType.find({});
 
       res.render("department/reportType", {
@@ -360,13 +410,20 @@ router.post('/department/report/editType/:_id', async function(req, res) {
       const id = req.params._id;
       const type = await ReportType.findOne({_id: id});
       const name = req.body.name;
-      
+      const isExist = await ReportType.findOne({name: name});
 
-      if(type){
-          await ReportType.findByIdAndUpdate(type._id, {name: name});
-
-          const types = await ReportType.find({});
-          res.render("department/reportType", {
+      if(isExist){
+        const types = await ReportType.find({});
+        res.render("department/reportType", {
+          announce: 'exist',
+          types: types,
+          username: res.locals.user ? res.locals.user.username : null,
+          role: res.locals.user ? res.locals.user.role : null,
+        })
+      } else {
+        await ReportType.findByIdAndUpdate(type._id, {name: name});
+        const types = await ReportType.find({});
+        res.render("department/reportType", {
             announce: 'edit',
             types: types,
             username: res.locals.user ? res.locals.user.username : null,

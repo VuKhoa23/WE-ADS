@@ -139,6 +139,15 @@
                 timer: 1500
             });
         </script>
+    <% } else if (announce === 'exist') { %>
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Tên quận đã tồn tại',
+                showCancelButton: false,
+                timer: 1500
+            });
+        </script>
     <% } %>
     
     
