@@ -25,7 +25,7 @@
           <td class="text-center"><%= places[i].ward %></td>
           <td class="text-center"><%= places[i].district %></td>
           <td class="text-center"><%= places[i].adPlanned %></td>
-          <td><button class="btn btn-primary ">Xin cấp phép quảng cáo</button></td>
+          <td><a class="btn btn-primary" href="/weads/license-request/create/<%- places[i]._id %>">Xin cấp phép quảng cáo</a></td>
         </tr>
         <% } %>
         <% } else { %>

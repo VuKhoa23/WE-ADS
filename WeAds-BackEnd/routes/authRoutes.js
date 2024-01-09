@@ -27,9 +27,10 @@ router.post("/process-login", async (req, res)=>{
     const officer = await Officer.login(email, password);
     const token = createToken(officer._id);
     res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 });
-    res.send("OK")
+    // res.send("OK")
+    res.redirect("/weads/home");
   } catch (err) {
-    if (err.message == "incorrect password") {
+    if (err.message == "incorrect password" || err.message == "incorrect email") {
       res.cookie("loginErr", "Email hoặc mật khẩu không chính xác", { maxAge: 60 * 60 * 1000 });
       res.redirect("/weads/login");
       return;
