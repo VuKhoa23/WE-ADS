@@ -16,6 +16,12 @@ const place = new Schema({
     district:{
       type: String
     },
+    locationType: [{
+      type: String
+    }],
+    adType: {
+      type: String
+    },
     adPlanned:{
       type: Number
     }
