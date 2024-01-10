@@ -132,7 +132,7 @@ Router.get('/view-all/created', async (req, res) => {
     return;
   }
   try {
-    const requests = await Ad.find({ licensed: false, createdBy: new ObjectId(id) }).populate('place');
+    const requests = await Ad.find({ licensed: false, createBy: new ObjectId(id) }).populate('place');
     let username = null
     createMessage = null
 
