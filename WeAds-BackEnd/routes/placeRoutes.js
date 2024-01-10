@@ -129,7 +129,7 @@ router.get("/view-by-ward", async (req, res)=>{
 
 
 router.get('/allAdPlacement', async function(req, res) {
-  const adPlacements = Place.find({});
+  const adPlacements = await Place.find({});
   res.render("department/adPlacement", {
     announce: null,
     adPlacements: adPlacements,
@@ -138,6 +138,92 @@ router.get('/allAdPlacement', async function(req, res) {
   })
 })
 
+router.get('/addAdPlacementForm', async function(req, res) {
 
+  res.render("department/createAdPlacement", {
+    lat: req.query.lat,
+    lng: req.query.lng,
+    ward: req.query.ward,
+    district: req.query.district,
+    username: res.locals.user ? res.locals.user.username : null,
+    role: res.locals.user ? res.locals.user.role : null,
+  })
+
+})
+
+
+router.post('/addAdPlacement', async function(req, res) {
+  try {
+    const coordinates  = req.body.coordinates;
+    const coordinatesArray = coordinates.split(',').map(coord => parseFloat(coord.trim()));
+    const isExist = await Place.findOne({ coordinates: coordinatesArray });
+
+    if (isExist) {
+      const adPlacements = await Place.find({});
+      res.render("department/adPlacement", {
+        announce: 'exist',
+        adPlacements: adPlacements,
+        username: res.locals.user ? res.locals.user.username : null,
+        role: res.locals.user ? res.locals.user.role : null,
+      });
+    } else {
+      await Place.create({ ...req.body, coordinates: coordinatesArray });
+      const adPlacements = await Place.find({});
+      res.render("department/adPlacement", {
+        announce: 'create',
+        adPlacements: adPlacements,
+        username: res.locals.user ? res.locals.user.username : null,
+        role: res.locals.user ? res.locals.user.role : null,
+      });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+router.get('/deleteAdPlacement/:_id', async function(req, res) {
+  try {
+    await Place.findByIdAndDelete({_id: req.params._id});
+    const adPlacements = await Place.find({});
+    res.render("department/adPlacement", {
+      announce: 'delete',
+      adPlacements: adPlacements,
+      username: res.locals.user ? res.locals.user.username : null,
+      role: res.locals.user ? res.locals.user.role : null,
+    });
+  } catch (error) {
+    res.status(500).json({message: error.message})
+  } 
+});
+
+router.get('/editAdPlacementForm/:_id', async function(req, res) {
+  const adPlacement = await Place.findOne({_id: req.params._id});
+
+  res.render("department/editAdPlacementForm", {
+    adPlacement: adPlacement,
+    username: res.locals.user ? res.locals.user.username : null,
+    role: res.locals.user ? res.locals.user.role : null,
+  })
+
+})
+
+router.post('/editAdPlacement/:_id', async function(req, res) {
+  const id = req.params._id;
+  const adPlacement = await Place.findOne({_id: id});
+
+  adPlacement.locationType = req.body.locationType;
+  adPlacement.adType = req.body.adType;
+  adPlacement.adPlanned = req.body.adPlanned;
+
+  await adPlacement.save();
+
+  const adPlacements = await Place.find({});
+  res.render("department/adPlacement", {
+    announce: 'edit',
+    adPlacements: adPlacements,
+    username: res.locals.user ? res.locals.user.username : null,
+    role: res.locals.user ? res.locals.user.role : null,
+  })
+})
 
 module.exports = router

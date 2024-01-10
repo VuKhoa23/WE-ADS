@@ -1,0 +1,71 @@
+<%- include('./partials/header') %>
+
+<style>
+    /* Add your custom CSS styles here */
+    .container {
+        max-width: 600px;
+        margin-top: 50px;
+        background-color: #f8f9fa; /* Set background color to a light shade */
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+
+    label {
+        font-weight: bold;
+    }
+
+    /* Custom style for input fields */
+    .form-control {
+        border: 1px solid #000; /* Set border color to black */
+    }
+
+</style>
+
+<div class="container mt-5">
+    <h1 class="mb-4">Chỉnh sửa Điểm đặt quảng cáo </h1>
+
+    <form action="/weads/place/editAdPlacement/<%= adPlacement._id %>" method="post">
+        <div class="mb-3 form-group">
+            <label for="coordinates" class="form-label">Tọa độ (Latitude, Longitude):</label>
+            <input type="text" class="form-control" id="coordinates" name="coordinates" value="<%= adPlacement.coordinates[0] %>, <%= adPlacement.coordinates[1] %>" readonly>
+        </div>
+
+        <div class="mb-3 form-group">
+            <label for="district" class="form-label">Quận:</label>
+            <input type="text" class="form-control" id="district" name="district" value="<%= adPlacement.district %>" readonly>
+        </div>
+
+        <div class="mb-3 form-group">
+            <label for="ward" class="form-label">Phường:</label>
+            <input type="text" class="form-control" id="ward" name="ward" value="<%= adPlacement.ward %>" readonly>
+        </div>
+
+        <div class="mb-3 form-group">
+            <label for="locationType" class="form-label">Loại vị trí:</label>
+            <input type="text" class="form-control" id="locationType" name="locationType" placeholder="Ví dụ: Đất công, Công viên,..." required>
+        </div>
+
+        <div class="mb-3 form-group">
+            <label for="adType" class="form-label">Hình thức quảng cáo:</label>
+            <input type="text" class="form-control" id="adType" name="adType" placeholder="Ví dụ: Cổ động chính trị, Quảng cáo thương mại,..." required>
+        </div>
+
+        <div class="mb-3 form-group">
+            <label for="adPlanned" class="form-label">Quy hoạch (1: Đã quy hoạch, 0: Chưa quy hoạch):</label>
+            <input type="number" class="form-control" id="adPlanned" name="adPlanned" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Cập nhật Điểm đặt</button>
+    </form>
+
+    <a href="/weads/place/allAdPlacement">
+        <button class="btn btn-secondary mt-3">
+            <i class="bi bi-arrow-left-circle-fill"></i>
+            Trở về
+        </button>
+    </a>
+</div>
+
+<%- include('./partials/footer') %>

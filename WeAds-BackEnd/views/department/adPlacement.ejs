@@ -27,45 +27,23 @@
                         </td>
                         <td><%= adPlacements[i].district %></td>
                         <td><%= adPlacements[i].ward %></td>
-                        <!-- <td><%= adPlacements[i].locationType %></td> -->
+                        <td><%= adPlacements[i].locationType.join('/ ') %></td>
                         <td><%= adPlacements[i].adType %></td>
-                        <td><%= adPlacements[i].adPlanned %></td>
                         <td>
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editDistrictModal<%= i %>">
-                                <i class="bi bi-pencil-square"></i>
-                            </button>
-                
-                            <!-- Modal edit District -->
-                            <div class="modal fade" id="editDistrictModal<%= i %>" tabindex="-1" aria-labelledby="editDistrictModalLabel<%= i %>" aria-hidden="true">
-                                <form action="/weads/department/places/editDistrict/<%= districts[i]._id %>/" method="post">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLabel<%= i %>">ĐỔI TÊN QUẬN</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div class="form-group">
-                                                    <label for="ex-name<%= i %>">Tên quận cũ: </label>
-                                                    <br>
-                                                    <input type="text" class="form-control" id="ex-name<%= i %>" name="ex-name" value="<%= districts[i].name %>" readonly>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="name">Nhập tên quận mới (vd: Quận 1, Quận Bình Thạnh): </label>
-                                                    <br>
-                                                    <input type="text" class="form-control" id="name" name="name" required>
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="submit" class="btn btn-primary">Cập nhật</button>
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
+                            <% if (adPlacements[i].adPlanned === 1) { %>
+                                Đã quy hoạch
+                            <% } else { %>
+                                Chưa quy hoạch
+                            <% } %>
+                        </td>
+                        <td>
+                            <a href="/weads/place/editAdPlacementForm/<%= adPlacements[i]._id %>">
+                                <button type="button" class="btn btn-primary" onclick="">
+                                    <i class="bi bi-pencil-square"></i>
+                                </button>
+                            </a>
 
-                            <button class="btn btn-danger" onclick="showDeleteConfirmation('<%= districts[i]._id %>')">
+                            <button class="btn btn-danger" onclick="showDeleteConfirmation('<%= adPlacements[i]._id %>')">
                                 <i class="bi bi-trash"></i>
                             </button>
                 
@@ -86,35 +64,12 @@
         </button>
     </a>
 
-    <!-- Button add Distric -->
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addDistrictModal">
+    <!-- Button add AdPlacement -->
+    <button class="btn btn-primary" onclick="showInstructionCreateAdPlacement()">
+        <i class="bi bi-plus-circle-fill"></i>
         Thêm Điểm đặt
     </button>
-    
-  <!-- Modal add District -->
-  <div class="modal fade" id="addDistrictModal" tabindex="-1" aria-labelledby="addDistrictModalLabel" aria-hidden="true">
-    <form action="/weads/department/places/addDistrict" method="post">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">THÊM QUẬN</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <div class="form-group">
-                <label for="name">Tên quận (vd: Quận 1, Quận Bình Thạnh): </label>
-                <br>
-                <input type="text" class="form-control" id="name" name="name" required>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button type="submit" class="btn btn-primary">Thêm</button>
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-        </div>
-      </div>
-    </div>
-    </form>
-  </div>
+
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -131,7 +86,7 @@
         <script>
             Swal.fire({
                 icon: 'success',
-                title: 'Thêm quận thành công',
+                title: 'Thêm điểm đặt mới thành công',
                 showCancelButton: false,
                 timer: 1500
             });
@@ -140,7 +95,7 @@
         <script>
             Swal.fire({
                 icon: 'success',
-                title: 'Đổi tên thành công',
+                title: 'cập nhật điểm đặt thành công',
                 showCancelButton: false,
                 timer: 1500
             });
@@ -149,7 +104,7 @@
         <script>
             Swal.fire({
                 icon: 'error',
-                title: 'Tên quận đã tồn tại',
+                title: 'Điểm đặt đã tồn tại',
                 showCancelButton: false,
                 timer: 1500
             });
@@ -158,10 +113,10 @@
     
     
     <script>
-        function showDeleteConfirmation(districtId) {
+        function showDeleteConfirmation(adPlacementId) {
             Swal.fire({
                 title: 'Xác nhận xóa',
-                text: 'Bạn có chắc muốn xóa quận này?',
+                text: 'Bạn có chắc muốn xóa điểm đặt này?',
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#d33',
@@ -170,10 +125,24 @@
                 cancelButtonText: 'Hủy'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location.href = '/weads/department/places/deleteDistrict/' + districtId;
+                    window.location.href = '/weads/place/deleteAdPlacement/' + adPlacementId;
                 }
             });
         }
+
+        function showInstructionCreateAdPlacement(){
+            Swal.fire({
+                title: 'Tạo điểm đặt mới',
+                text: 'Chọn vào 1 điểm trên bản đồ để tạo điểm đặt mới',
+                icon: 'info',
+                showCancelButton: false,
+                timer: 3000
+            }).then(() => {
+                // Redirect to the "/weads/home" page after the message is closed
+                window.location.href = '/weads/home';
+            });
+        }
+
     </script>
 
 </div>
