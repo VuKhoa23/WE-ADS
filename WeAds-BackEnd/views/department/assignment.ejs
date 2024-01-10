@@ -1,0 +1,9 @@
+<%- include('./partials/header') %>
+
+<div class="list-group">
+  <% officers.forEach(function(officer){ %>
+    <a href="#" class="list-group-item list-group-item-action"><%= officer.username %></a>
+  <% }) %>
+</div>
+
+<%- include('./partials/footer') %>
