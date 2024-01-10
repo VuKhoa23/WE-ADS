@@ -54,4 +54,26 @@ router.get("/ward/:val", async (req, res) => {
   });
 });
 
+router.get("/department/:option", async (req, res) => {
+  const option = req.params.option;
+  console.log('option ', option)
+  let reports = null;
+  if(parseInt(option) === 0){
+    reports = await Report.find({state: 0});
+  }
+  if(parseInt(option) === 1){
+    reports = await Report.find({state: 1});
+  }
+  if(parseInt(option) === 2){
+    reports = await Report.find({state: 2});
+  }
+  console.log(reports);
+
+  res.render("department/viewReport", { 
+    reports: reports, 
+    role: res.locals.user.role,
+    username: res.locals.user.username
+  });
+});
+
 module.exports = router;

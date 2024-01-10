@@ -7,8 +7,18 @@
     <% wards.forEach(function(ward){ %>
       <option value="<%= ward.name %>"><%= ward.name %></option>
     <% }); %>
+    <option value="all">Chọn tất cả</option>
   </select>
   <% } %>
+  <% if(role === 'Department'){ %>
+    <select id="report-select" class="form-control w-25 bg-primary text-center m-3" name="ward-select">
+      <option selected value="all">Chọn loại báo cáo</option>
+      <option value="0">Chưa xử lý</option>
+      <option value="1">Đang xử lý</option>
+      <option value="2">Đã xử lý</option>
+      <option value="all">Chọn tất cả</option>
+    </select>
+    <% } %>
   <div class="col-12 col-md-11 col-lg-10">
     <table style="border-right: 1px solid #dee2e6; border-left: 1px solid #dee2e6;" class="table table-hover">
       <thead>
@@ -16,7 +26,8 @@
           <th class="text-center" style="background-color: #2b2929; color: white; border-top-left-radius: 5px;" scope="col">Họ tên người gửi</th>
           <th class="text-center" style="background-color: #2b2929; color: white;" scope="col">Địa chỉ bị báo cáo</th>
           <th class="text-center" style="background-color: #2b2929; color: white;" scope="col">Hình thức báo cáo</th>
-          <th class="text-center" style="background-color: #2b2929; color: white; border-top-right-radius: 5px;" scope="col">Nội dung báo cáo</th>
+          <th class="text-center" style="background-color: #2b2929; color: white;" scope="col">Nội dung báo cáo</th>
+          <th class="text-center" style="background-color: #2b2929; color: white; border-top-right-radius: 5px;" scope="col">Cách thức xử lý</th>
         </tr>
       </thead>
       <tbody>
@@ -25,10 +36,19 @@
         <tr>
           <td class="text-center"><%= reports[i].name %></td>
           <td class="text-center"><%= reports[i].address %></td>
-          <td class="text-center"><%= reports[i].reportType %></td>
+          <% if(reports[i].reportType == 0){ %>
+            <td class="text-center">Tố giác sai phạm</td>
+          <% }else if(reports[i].reportType == 1){ %>
+            <td class="text-center">Đăng ký nội dung</td>
+          <% }else if(reports[i].reportType == 2){ %>
+            <td class="text-center">Đóng góp ý kiến</td>
+          <% }else{ %>
+            <td class="text-center">Giải đáp thắc mắc</td>
+          <% } %>
           <td class="text-center">
             <a class="btn btn-success" href="/weads/report/details/<%= reports[i]._id %>">Xem chi tiết</a>
           </td>
+          <td class="text-center"><%= reports[i].information %></td>
         </tr>
         <% } %>
         <% } else { %>
@@ -49,6 +69,14 @@
         window.location.href = "/weads/report/ward/" + $(this).val()
       }
     })
+
+    $("#report-select").change(function () {
+      if ($(this).val() === 'all') {
+        window.location.href = "/weads/report";
+      } else {
+        window.location.href = "/weads/report/department/" + $(this).val();
+      }
+    });
   })
 </script>
 <%- include('./partials/footer') %>

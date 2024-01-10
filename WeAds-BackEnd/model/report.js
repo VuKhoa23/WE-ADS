@@ -38,6 +38,7 @@ const reportSchema = mongoose.Schema(
     },
     information: {
       type: String,
+      default: null,
     },
     placeId: {
       type: String
