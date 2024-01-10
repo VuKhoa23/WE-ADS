@@ -68,6 +68,15 @@
       async function getData() {
         const response = await fetch("http://localhost:3000/weads/place/geojson")
         geojson = await response.json()
+        for (place of geojson.features) {
+          place.properties.isReport = 0
+          place.properties.isPersisted = 1;
+          if (place.properties.ads.length == 0) {
+            place.properties.noAds = 1;
+          } else {
+            place.properties.noAds = 0;
+          }
+        }
       }
 
 
@@ -155,24 +164,6 @@
             clusterRadius: 50 // Radius of each cluster when clustering points (defaults to 50)
           });
 
-
-          // add style as symbol
-
-          map.addLayer({
-            id: 'point',
-            type: 'circle',
-            source: 'data',
-            "paint": {
-              "circle-radius": 10,
-              'circle-color': [
-                'match',
-                ['to-number', ['get', 'adPlanned']],
-                1, '#11780a', // if planned is true, set color to green
-                '#ba0606' // if planned is false, set color to red
-              ],
-            },
-          })
-
           const filterElem = document.getElementById('typeFilter');
 
           filterElem.onchange = () => {
@@ -193,6 +184,49 @@
             }
           };
 
+          map.addLayer({
+            id: 'unclustered-point',
+            type: 'circle',
+            source: 'data',
+            layout: {
+              "visibility": "visible",
+            },
+            "paint": {
+              "circle-radius": 10,
+              'circle-color': [
+                'case',
+                ["==", ['to-number', ['get', 'isReport']], 1],
+                "#ccf502",
+                ["==", ['to-number', ['get', 'adPlanned']], 1],
+                "#11780a",
+                '#ba0606'
+              ],
+            },
+          })
+
+
+          map.addLayer({
+            id: 'unclustered-point-label',
+            type: 'symbol',
+            source: 'data',
+            layout: {
+              "visibility": "visible",
+              "text-field": [
+                'case',
+                ["==", ['to-number', ['get', 'noAds']], 1],
+                "",
+                "QC",
+              ],
+              "text-size": 10
+            },
+            "paint": {
+              "text-color": "#000000"
+            },
+          })
+
+          // green
+          // red 
+
           // markers layer
           map.addLayer({
             id: 'clusters',
@@ -209,18 +243,18 @@
                 'step',
                 ['get', 'point_count'],
                 '#51bbd6',
-                100,
+                5,
                 '#f1f075',
-                750,
+                10,
                 '#f28cb1'
               ],
               'circle-radius': [
                 'step',
                 ['get', 'point_count'],
                 20,
-                100,
+                5,
                 30,
-                750,
+                10,
                 40
               ]
             }
@@ -235,19 +269,6 @@
               'text-field': ['get', 'point_count_abbreviated'],
               'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
               'text-size': 12
-            }
-          });
-
-          map.addLayer({
-            id: 'unclustered-point',
-            type: 'circle',
-            source: 'data',
-            filter: ['!', ['has', 'point_count']],
-            paint: {
-              'circle-color': '#11b4da',
-              'circle-radius': 4,
-              'circle-stroke-width': 1,
-              'circle-stroke-color': '#fff'
             }
           });
           // ----------------------------
@@ -393,7 +414,10 @@
         let address = result.features[0].place_name;
         address = address.replace(name + ", ", "")
 
-        if (geojson.features[index].properties.ads.length > 1) {
+        if (geojson.features[index].properties.ads.length == 0) {
+          $("#no-ads-modal").modal("show")
+        }
+        else if (geojson.features[index].properties.ads.length > 1) {
           $("#next-ad-btn").css("display", "block")
           $("#next-ad-btn").off("click")
           $("#next-ad-btn").on("click", function () {
