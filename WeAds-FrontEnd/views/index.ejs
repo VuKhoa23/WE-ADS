@@ -161,14 +161,17 @@
           }
           else {
             let isReported = 0
+            let reportId = null
             for (report of reports.reports) {
               if (report.adId === null) {
                 if (place.properties.placeId === report.placeId) {
                   isReported = 1
+                  reportId = report.reportId
+                  console.log(reportId)
                 }
               }
             }
-            div.innerHTML = infoAlert(name, address, index, place.properties.placeId, isReported)
+            div.innerHTML = infoAlert(name, address, index, place.properties.placeId, isReported, reportId)
             notiContainer.prepend(div);
           }
         }, false);
@@ -393,10 +396,12 @@
     let notiContainer = document.getElementById("notification-container");
     function populateDataToModal(place, address, index, adNum, planned) {
       let isReported = 0
+      let reportId = null
       for (report of reports.reports) {
         if (report.adId !== null) {
           if (geojson.features[index].properties.ads[adNum].adId === report.adId) {
             isReported = 1
+            reportId = report.reportId
           }
         }
       }
@@ -407,8 +412,7 @@
         $("#view-link").css("display", "none")
         $("#report-link").css("display", "block")
       } else {
-        $("#view-link").attr("href", "/weads/view-report/" + geojson.features[index].properties.placeId + "/"
-          + geojson.features[index].properties.ads[adNum].adId)
+        $("#view-link").attr("href", "/weads/view-report/" + reportId)
         $("#report-link").css("display", "none")
         $("#view-link").css("display", "block")
       }
@@ -435,7 +439,7 @@
       `
       }
 
-      $("#modal-header").html(place.adName + " - QC số " + adNum)
+      $("#modal-header").html(place.adName + " - QC số " + (adNum + 1))
       $("#modal-address").html("Địa chỉ: " + address)
       $("#modal-scale").html("Kích thước: " + place.adScale)
       $("#modal-type").html("Loại: " + place.adType)

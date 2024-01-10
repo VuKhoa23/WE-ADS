@@ -1,4 +1,4 @@
-function infoAlert(name, address, index, id, isReported) {
+function infoAlert(name, address, index, id, isReported, reportId) {
   if(!isReported){
     return `
     <div class="alert alert-success alert-dismissible fade show m-auto mb-2 mt-1 row" role="alert" style="font-size: 13px; width: 90%">
@@ -35,7 +35,7 @@ function infoAlert(name, address, index, id, isReported) {
         <button class="btn" onclick="showModal(${index})">
           <i class="fa-solid fa-circle-info"></i>
         </button>
-        <a class="link-secondary w-50" target="_blank" href="/weads/view-report/${id}"><button class="btn btn-primary" style="font-size: 12px">Xem lại báo cáo</button></a>
+        <a class="link-secondary w-50" target="_blank" href="/weads/view-report/${reportId}"><button class="btn btn-primary" style="font-size: 12px">Xem lại báo cáo</button></a>
       </div>
     </div>
   `;

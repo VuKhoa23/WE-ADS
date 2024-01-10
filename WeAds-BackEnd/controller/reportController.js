@@ -38,6 +38,17 @@ module.exports.createReport = async (req, res, next) => {
   }
 };
 
+//create new report
+module.exports.getReport = async (req, res, next) => {
+  try {
+    const report = await Report.findById(req.params.id);
+    res.status(201).json(report);
+  } catch (err) {
+    console.error(err.message);
+    res.status(400).json({ success: false, message: err.message});
+  }
+};
+
 module.exports.getAllReports = async (req, res, next) => {
   const reports = await Report.find({});
 
