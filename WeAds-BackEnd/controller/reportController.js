@@ -8,7 +8,7 @@ module.exports.getReportById = async (id) => {
 
 //create new report
 module.exports.createReport = async (req, res, next) => {
-  let { name, reportType, email, phone, content, address, ward, district, placeId, adId} = req.body;
+  let { name, reportType, email, phone, content, address, ward, district, placeId, adId, reportCode, coordinates} = req.body;
   let state = "Waiting";
   if(adId === ""){
     adId = null

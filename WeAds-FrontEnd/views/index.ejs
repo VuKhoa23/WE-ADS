@@ -63,7 +63,7 @@
       }))
     }
     const reports = JSON.parse(window.localStorage.getItem('reports'))
-
+    console.log(reports)
     let geojson = null
     async function getData() {
       const response = await fetch("http://localhost:3000/weads/place/geojson")
