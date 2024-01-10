@@ -24,7 +24,7 @@ const reportSchema = mongoose.Schema(
       type: String,
     },
     state: {
-      type: Boolean,
+      type: String,
     },
     information: {
       type: String,
