@@ -54,8 +54,12 @@
     </div>
     <div class="card-footer">
       <div class="d-flex justify-content-center">
-        <button type="submit" id="accept-btn" class="btn btn-success mx-2">Chấp thuận <i class="bi bi-check2"></i></button>
-        <button type="submit" id="decline-btn" class="btn btn-danger">Từ chối <i class="bi bi-x"></i></button>
+        <% if (role == 'Department') { %>
+          <button type="submit" id="accept-btn" class="btn btn-success mx-2">Chấp thuận <i class="bi bi-check2"></i></button>
+          <button type="submit" id="decline-btn" class="btn btn-danger">Từ chối <i class="bi bi-x"></i></button>
+        <% } else { %>
+          <button type="submit" id="decline-btn" class="btn btn-danger">Xoá yêu cầu</button>
+        <% } %>
       </div>
     </div>
   </div>
@@ -75,7 +79,11 @@
   <div class="overlay">
     <div class="custom-modal">
       <i style="color: black" class="bi bi-check-circle"></i>
-      <h3 class="modal-text">Đã từ chối quảng cáo</h3>
+      <% if (role == 'Department') { %>
+        <h3 class="modal-text">Đã từ chối quảng cáo</h3>
+      <% } else { %>
+        <h3 class="modal-text">Đã xoá yêu cầu</h3>
+      <% } %>
       <a class="btn btn-primary" href="/weads/license-request/view-all">Ok</a>
     </div>
   </div>
@@ -96,38 +104,61 @@
    $(".fail-modal").toggleClass("d-none");
  });
 </script>
-<script>
-  $("#accept-btn").click(async function() {
-    const response = await fetch(window.location.pathname + '/accept', {
-        method: 'POST',
-        headers: {
-          "Content-Type": "application/json",
+
+<% if (role == 'Department') { %>
+  <script>
+    $("#accept-btn").click(async function() {
+      const response = await fetch(window.location.pathname + '/accept', {
+          method: 'POST',
+          headers: {
+            "Content-Type": "application/json",
+          }
+        })
+        .then (function(result) {
+          return result.json();
+        })
+        if (response.success)
+          $('.accept-modal').toggleClass('d-none');
+        else {
+          $('.fail-modal').toggleClass('d-none');
         }
-      })
-      .then (function(result) {
-        return result.json();
-      })
-      if (response.success)
-        $('.accept-modal').toggleClass('d-none');
-      else {
-        $('.fail-modal').toggleClass('d-none');
-      }
-  });
-  $("#decline-btn").click(async function() {
-    const response = await fetch(window.location.pathname + '/decline', {
-        method: 'POST',
-        headers: {
-          "Content-Type": "application/json",
+    });
+    $("#decline-btn").click(async function() {
+      const response = await fetch(window.location.pathname + '/decline', {
+          method: 'POST',
+          headers: {
+            "Content-Type": "application/json",
+          }
+        })
+        .then (function(result) {
+          return result.json();
+        })
+        if (response.success)
+          $('.decline-modal').toggleClass('d-none');
+        else {
+          $('.fail-modal').toggleClass('d-none');
         }
-      })
-      .then (function(result) {
-        return result.json();
-      })
-      if (response.success)
-        $('.decline-modal').toggleClass('d-none');
-      else {
-        $('.fail-modal').toggleClass('d-none');
-      }
-  });
-</script>
+    });
+  </script>
+<% } else { %>
+  <script>
+    $("#decline-btn").click(async function() {
+      const response = await fetch(window.location.pathname + '/decline', {
+          method: 'POST',
+          headers: {
+            "Content-Type": "application/json",
+          }
+        })
+        .then (function(result) {
+          return result.json();
+        })
+        if (response.success)
+          $('.decline-modal').toggleClass('d-none');
+        else {
+          $('.fail-modal').toggleClass('d-none');
+        }
+    });
+  </script>
+<% } %>
+
 <%- include('./partials/footer') %>

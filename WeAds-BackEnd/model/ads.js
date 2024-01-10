@@ -30,6 +30,10 @@ const ad = new Schema({
   endDate: {
     type: Date
   },
+  createBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "officer",
+  },
   licensed: {
     type: Boolean
   },

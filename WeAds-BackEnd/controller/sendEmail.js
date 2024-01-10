@@ -1,6 +1,7 @@
 const NodeMailer = require('nodemailer');
 const passwordTemplate = require('../template/forgetPassword.json');
 const resultTemplate = require('../template/reportResult.json');
+const announceTemplate = require('../template/announce.json');
 require('dotenv').config();
 
 
@@ -73,6 +74,39 @@ module.exports.sendReportResult = (req, res, next) => {
     subject: resultTemplate.subject,
     html: populateResultEmail(resultTemplate.body, req.name, req.address, req.result)
     //name: reporter name; address: address of the billboard; result: result of the report
+  };
+  
+  transporter.sendMail(mailOptions, function(error, info){
+    if (error) {
+      console.log(error);
+      res.status(500).json({ success: false, error: error.message});
+    } else {
+      res.status(200).json({ success: true });
+    }
+  });
+};
+
+module.exports.sendReportState = (req, res, next) => {
+  if (!req.receiver || !req.name || !req.address) {
+    res.status(500).json({ success: false, error: "Missing information"});
+    return;
+  }
+  let transporter = NodeMailer.createTransport({
+    host: process.env.EMAIL_HOST,
+    port: process.env.EMAIL_PORT,
+    secure: process.env.EMAIL_PORT === 465 ? true : false,
+    auth: {
+      user: process.env.EMAIL_ADDRESS,
+      pass: process.env.EMAIL_PASSWORD
+    }
+  });
+  
+  let mailOptions = {
+    from: process.env.EMAIL_ADDRESS,
+    to: req.receiver,//destination email
+    subject: announceTemplate.subject,
+    html: populateResultEmail(announceTemplate.body, req.name, req.address, "")
+    //name: reporter name; address: address of the billboard
   };
   
   transporter.sendMail(mailOptions, function(error, info){

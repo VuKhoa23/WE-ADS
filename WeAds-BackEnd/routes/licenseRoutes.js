@@ -1,6 +1,7 @@
 const express = require('express');
 const Place = require("../model/places");
 const Ad = require("../model/ads");
+const Officer = require("../model/officer");
 const { ObjectId } = require('mongodb');
 const Router = express.Router();
 
@@ -52,6 +53,15 @@ Router.post('/create/:id', async (req, res) => {
   console.log(req.body);
   const adScale = width + "m x " + height + "m";
 
+  let officerId = null;
+  if(res.locals.user){
+    officerId = res.locals.user._id;
+  }
+  if (!officerId) {
+    res.status(400).json({ success: false, error: "Missing officer id" });
+    return;
+  }
+
   if (!adType || !width || !height || !adName || !adImages || !companyName || !companyPhone || !companyEmail || !startDate || !endDate) {
     res.status(400).json({ success: false, error: "Missing information" });
     return;
@@ -62,12 +72,17 @@ Router.post('/create/:id', async (req, res) => {
   }
   try {
     const place = await Place.findById(id);
+    const officer = await Officer.findById(officerId);
+    if (!officer) {
+      res.status(400).json({ success: false, error: "Officer not found" });
+      return;
+    }
     if (!place) {
       res.status(400).json({ success: false, error: "Place not found" });
       return;
     }
 
-    const ads = await Ad.create({ adType, adScale, adName, adImages, companyName, companyPhone, companyEmail, startDate, endDate, licensed: false, place: place._id });
+    const ads = await Ad.create({ adType, adScale, adName, adImages, companyName, companyPhone, companyEmail, startDate, endDate, licensed: false, place: place._id, createBy: officerId });
     res.status(201).json({ success: true });
   }
   catch (err) {
@@ -80,6 +95,44 @@ Router.post('/create/:id', async (req, res) => {
 Router.get('/view-all', async (req, res) => {
   try {
     const requests = await Ad.find({ licensed: false }).populate('place');
+    let username = null
+    createMessage = null
+
+    if(req.query.createSuccess){
+      createMessage = "Account created"
+    }
+    if(res.locals.user){
+      username = res.locals.user.username
+    }
+
+    let role = null
+    if(res.locals.user){
+      role = res.locals.user.role
+    }
+    res.render('department/viewLicenseReq', {
+      requests,
+      role,
+      username,
+      createMessage
+    });
+  }
+  catch (err) {
+    console.log(err.message);
+    res.status(400).send("Some error occurred");
+  }
+});
+
+Router.get('/view-all/created', async (req, res) => {
+  let id = null;
+  if(res.locals.user){
+    id = res.locals.user._id;
+  }
+  if (!id) {
+    res.redirect('/weads/home');
+    return;
+  }
+  try {
+    const requests = await Ad.find({ licensed: false, createBy: new ObjectId(id) }).populate('place');
     let username = null
     createMessage = null
 

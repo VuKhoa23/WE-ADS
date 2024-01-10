@@ -150,18 +150,26 @@
         <div id="editor">
         </div>
       </div>
-      <div class="report-solution">
-        <h3 class="row-name">Cách thức xử lí:</h3>
-        <% if (report.state) { %>
-          <textarea placeholder="Nhập cách thức xử lí cho vấn đề này" class="solution"><%- report.information %></textarea>
-        <% } else { %>
-          <textarea placeholder="Nhập cách thức xử lí cho vấn đề này" class="solution"></textarea>
-        <% } %>
-      </div>
+      <% if (report.state != 'Waiting') { %>
+        <div class="report-solution">
+          <h3 class="row-name">Cách thức xử lí:</h3>
+            <% if (report.state == 'Done') { %>
+              <textarea placeholder="Nhập cách thức xử lí cho vấn đề này" class="solution" disabled><%- report.information %></textarea>
+            <% } %>
+            <% if (report.state == 'Processing') { %>
+              <textarea placeholder="Nhập cách thức xử lí cho vấn đề này" class="solution"></textarea>
+            <% } %>
+        </div>
+      <% } %>
     </div>
-    <div class="card-footer">
+    <div style="min-height: 50px;" class="card-footer">
       <form class="d-flex justify-content-center" id="resolve-form">
+        <% if (report.state == 'Processing') { %>
         <button type="submit" class="resolve-submit btn btn-success">Đã gải quyết <i class="bi bi-check2"></i></button>
+        <% } %>
+        <% if (report.state == 'Waiting') { %>
+          <button type="submit" id="change-state-btn" class="btn btn-primary">Đang giải quyết <i class="bi bi-arrow-clockwise"></i></button>
+        <% } %>
       </form>
     </div>
   </div>
@@ -215,6 +223,32 @@
         $('.resolve-submit').prop("disabled", false);
         $('.fail-modal').toggleClass('d-none');
       }
+    });
+
+    $(document).ready(function() {
+      $('#change-state-btn').click(async function(event) {
+        event.preventDefault();
+        $('#change-state-btn').prop("disabled", true);
+        const response = await fetch('/weads/change-state', {
+          method: 'POST',
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ 
+            reportId: '<%- report._id %>'
+          })
+        })
+        .then (function(result) {
+          return result.json();
+        })
+        if (response.success) {
+          location.reload();
+        }
+        else {
+          $('#change-state-btn').prop("disabled", false);
+          $('.fail-modal').toggleClass('d-none');
+        }
+      });
     });
 
     $(".close-modal").click(function(){
