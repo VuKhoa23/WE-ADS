@@ -241,7 +241,6 @@ router.get('/department/assignment', async function(req, res){
     wards = await Ward.find({district: district._id}, null, {lean: true});
     district.wards = wards;
   }
-  console.log(districts[1].wards)
 
   res.render("department/assignment", {
     officers: officers,

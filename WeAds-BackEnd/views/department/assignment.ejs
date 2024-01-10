@@ -27,19 +27,35 @@
               <form action="/weads/department/assignment/<%= officers[i]._id %>" method="post">
                 <div class="row">
                   <div class="col">
-                    <select class="form-select" aria-label="Default select example" name="district">
-                      <option selected>Open this select menu</option>
+                    <select id="district" class="form-select district-select" aria-label="Default select example" name="district">
                       <% districts.forEach(function(district){ %>
-                        <option value="<%= district.name %>"><%= district.name %></option>
+                        <% if(district.name == officers[i].district){ %>
+                          <option value="<%= district.name %>"><%= district.name %></option>
+                        <% } %>
+                      <% }) %>
+
+                      <% districts.forEach(function(district){ %>
+                        <% if(district.name != officers[i].district){ %>
+                          <option value="<%= district.name %>"><%= district.name %></option>
+                        <% } %>
                       <% }) %>
                     </select>
 
-                    <select class="form-select" aria-label="Default select example" name="ward">
-                      <option selected>Open this select menu</option>
+                    <select id="ward" class="form-select ward-select" aria-label="Default select example" name="ward">
                       <% districts.forEach(function(district){ %>
                         <% district.wards.forEach(function(ward){ %>
-                          <option value="<%= ward.name %>"><%= ward.name %></option>
-                        <% }); %>
+                          <% if(ward.name == officers[i].ward){ %>
+                            <option value="<%= ward.name %>"><%= ward.name %></option>
+                          <% } %>
+                        <% }) %>
+                      <% }) %>
+
+                      <% districts.forEach(function(district){ %>
+                        <% district.wards.forEach(function(ward){ %>
+                          <% if(ward.name != officers[i].ward){ %>
+                            <option value="<%= ward.name %>"><%= ward.name %></option>
+                          <% } %>
+                        <% }) %>
                       <% }) %>
                     </select>
                   </div>
@@ -65,49 +81,55 @@
 <script>
   var districtsString = '<%- JSON.stringify(districts) %>';
   var districts = JSON.parse(districtsString);
+  var officersString = '<%- JSON.stringify(officers) %>';
+  var officers = JSON.parse(officersString);
 
   document.addEventListener("DOMContentLoaded", function () {
-    // Get all district and ward select elements
-    var districtSelects = document.querySelectorAll('[name="district"]');
-    var wardSelects = document.querySelectorAll('[name="ward"]');
-  
-    // Add change event listener to each district select
-    districtSelects.forEach(function (districtSelect, index) {
-      districtSelect.addEventListener("change", function () {
-        updateWards(index);
-      });
+  // Get all district and ward select elements
+  var districtSelects = document.querySelectorAll('[name="district"]');
+  var wardSelects = document.querySelectorAll('[name="ward"]');
+
+  // Add change event listener to each district select
+  districtSelects.forEach(function (districtSelect, index) {
+    districtSelect.addEventListener("change", function () {
+      updateWards(index);
     });
-  
-    // Function to update wards based on the selected district
-    function updateWards(index) {
-      var districtSelect = districtSelects[index];
-      var wardSelect = wardSelects[index];
-  
-      // Clear existing options
-      wardSelect.innerHTML = '<option selected>Open this select menu</option>';
-  
-      // Get the selected district
-      var selectedDistrict = districtSelect.value;
-  
-      // Find the matching district in your data
-      var district = districts.find(function (d) {
-        return d.name === selectedDistrict;
-      });
-  
-      // Populate the wards based on the selected district
-      if (district) {
-        district.wards.forEach(function (ward) {
-          var option = document.createElement('option');
-          option.value = ward.name;
-          option.textContent = ward.name;
-          wardSelect.appendChild(option);
-          console.log('child ', ward.name);
-        });
-      }else{
-        console.log('fuck')
-      }
-    }
+
+    // Trigger updateWards for the current officer row initially
+    updateWards(index);
+
+    // Set the initially selected ward to officers[i].ward
+    wardSelects[index].value = officers[index].ward;
   });
-  </script>
+
+  // Function to update wards based on the selected district
+  function updateWards(index) {
+    var districtSelect = districtSelects[index];
+    var wardSelect = wardSelects[index];
+
+    // Clear existing options
+    wardSelect.innerHTML = '';
+
+    // Get the selected district
+    var selectedDistrict = districtSelect.value;
+
+    // Find the matching district in your data
+    var district = districts.find(function (d) {
+      return d.name === selectedDistrict;
+    });
+
+    // Populate the wards based on the selected district
+    if (district) {
+      district.wards.forEach(function (ward) {
+        var option = document.createElement('option');
+        option.value = ward.name;
+        option.textContent = ward.name;
+        wardSelect.appendChild(option);
+      });
+    }
+  }
+});
+
+</script>
 
 <%- include('./partials/footer') %>
