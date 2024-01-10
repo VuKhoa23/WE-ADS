@@ -233,12 +233,21 @@ router.get('/department/places/deleteWard/:_id', async function(req, res) {
 })
 
 router.get('/department/assignment', async function(req, res){
-  const officers = await Officer.find({ role: { $ne: 'department' } });
+  const officers = await Officer.find({ role: { $ne: 'Department' } });
   res.render("department/assignment", {
     officers: officers,
     username: res.locals.user ? res.locals.user.username : null,
     role: res.locals.user ? res.locals.user.role : null,
   })
+})
+
+router.post('/department/assignment/:_id', async function(req, res){
+  const id = req.params._id;
+  const role = req.body.role;
+  console.log('body', req.body);
+
+  const officer = await Officer.findByIdAndUpdate(id, {role: role});
+  res.redirect('/weads/department/assignment');
 })
 
 module.exports = router
