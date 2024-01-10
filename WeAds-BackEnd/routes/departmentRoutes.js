@@ -256,6 +256,8 @@ router.post('/department/assignment/:_id', async function(req, res){
   const district = req.body.district;
   const ward = req.body.ward;
 
+  console.log(req.body);
+
   const officer = await Officer.findByIdAndUpdate(id, {district: district, ward: ward});
   res.redirect('/weads/department/assignment');
 })
