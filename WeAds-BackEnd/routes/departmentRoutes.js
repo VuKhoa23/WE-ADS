@@ -234,8 +234,18 @@ router.get('/department/places/deleteWard/:_id', async function(req, res) {
 
 router.get('/department/assignment', async function(req, res){
   const officers = await Officer.find({ role: { $ne: 'Department' } });
+  const districts = await District.find({}, null, {lean: true});
+
+  let wards = null;
+  for(let district of districts){
+    wards = await Ward.find({district: district._id}, null, {lean: true});
+    district.wards = wards;
+  }
+  console.log(districts[1].wards)
+
   res.render("department/assignment", {
     officers: officers,
+    districts: districts,
     username: res.locals.user ? res.locals.user.username : null,
     role: res.locals.user ? res.locals.user.role : null,
   })
@@ -243,10 +253,10 @@ router.get('/department/assignment', async function(req, res){
 
 router.post('/department/assignment/:_id', async function(req, res){
   const id = req.params._id;
-  const role = req.body.role;
-  console.log('body', req.body);
+  const district = req.body.district;
+  const ward = req.body.ward;
 
-  const officer = await Officer.findByIdAndUpdate(id, {role: role});
+  const officer = await Officer.findByIdAndUpdate(id, {district: district, ward: ward});
   res.redirect('/weads/department/assignment');
 })
 
