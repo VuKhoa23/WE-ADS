@@ -59,4 +59,13 @@ router.get("/report", async function (req, res, next) {
   });
 });
 
+router.get("/view-report/:id", async function (req, res, next) {
+  const response = await fetch("http://127.0.0.1:3000/api/weads-admin/report/" + req.params.id)
+  const result = await response.json()
+  console.log(result)
+  res.render("reportDetails", {
+    report: result
+  });
+});
+
 module.exports = router;
