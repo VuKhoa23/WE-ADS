@@ -1,29 +1,35 @@
-<%- include('../partials/header') %>
+<%- include('./partials/header') %>
 
 <div class="container mt-5">
-    <h1>Danh sách Quận</h1>
+    <h1>Danh sách các Điểm đặt quảng cáo</h1>
 
-    <% if (districts.length > 0) { %>
+    <% if (adPlacements.length > 0) { %>
         <table class="table table-bordered">
             <thead>
                 <tr>
                     <th>STT</th>
-                    <th>Tên</th>
-                    <th>Danh sách Phường</th>
+                    <th>Địa chỉ</th>
+                    <th>Quận</th>
+                    <th>Phường</th>
+                    <th>Loại vị trí</th>
+                    <th>Hình thức quảng cáo</th>
+                    <th>Quy hoạch</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
-                <% for (let i = 0; i < districts.length; i++) { %>
+                <% for (let i = 0; i < adPlacements.length; i++) { %>
                     <tr>
                         <td><%= i + 1 %></td>
-                        <td><%= districts[i].name %></td>
                         <td>
-                            <a href="/weads/department/places/allWard/<%= districts[i]._id %>">
-                                <i class="bi bi-arrow-right-circle-fill"></i>
-                                Xem danh sách phường
-                            </a>
+                            <%= adPlacements[i].coordinates[0] %> <br>
+                            <%= adPlacements[i].coordinates[1] %>
                         </td>
+                        <td><%= adPlacements[i].district %></td>
+                        <td><%= adPlacements[i].ward %></td>
+                        <!-- <td><%= adPlacements[i].locationType %></td> -->
+                        <td><%= adPlacements[i].adType %></td>
+                        <td><%= adPlacements[i].adPlanned %></td>
                         <td>
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editDistrictModal<%= i %>">
                                 <i class="bi bi-pencil-square"></i>
@@ -70,7 +76,7 @@
             </tbody>
         </table>
     <% } else { %>
-        <p>Không có quận nào trong danh sách.</p>
+        <p>Không có điểm đặt quảng cáo nào trong danh sách.</p>
     <% } %>
 
     <a href="/weads/home">
@@ -82,7 +88,7 @@
 
     <!-- Button add Distric -->
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addDistrictModal">
-        Thêm Quận
+        Thêm Điểm đặt
     </button>
     
   <!-- Modal add District -->
@@ -172,4 +178,4 @@
 
 </div>
 
-<%- include('../partials/footer') %>
+<%- include('./partials/footer') %>

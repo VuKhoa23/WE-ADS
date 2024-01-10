@@ -19,7 +19,7 @@ router.get("/report/:placeId", async function (req, res, next) {
     placeId: result.place._id,
     adId: null,
     API_KEY: process.env.MAP_KEY,
-    reportType: 0
+    reportCode: 0
   });
 });
 
@@ -37,7 +37,7 @@ router.get("/report/:placeId/:adId", async function (req, res, next) {
     district: placeResult.place.district,
     placeId: placeResult.place._id,
     API_KEY: process.env.MAP_KEY,
-    reportType: 1,
+    reportCode: 1,
     adId: adResult.ad._id
   });
 });
@@ -54,8 +54,17 @@ router.get("/report", async function (req, res, next) {
     district: req.query.district,
     placeId: null,
     API_KEY: process.env.MAP_KEY,
-    reportType: 2,
+    reportCode: 2,
     adId: null
+  });
+});
+
+router.get("/view-report/:id", async function (req, res, next) {
+  const response = await fetch("http://127.0.0.1:3000/api/weads-admin/report/" + req.params.id)
+  const result = await response.json()
+  console.log(result)
+  res.render("reportDetails", {
+    report: result
   });
 });
 

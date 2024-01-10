@@ -128,4 +128,16 @@ router.get("/view-by-ward", async (req, res)=>{
 
 
 
+router.get('/allAdPlacement', async function(req, res) {
+  const adPlacements = Place.find({});
+  res.render("department/adPlacement", {
+    announce: null,
+    adPlacements: adPlacements,
+    username: res.locals.user ? res.locals.user.username : null,
+    role: res.locals.user ? res.locals.user.role : null,
+  })
+})
+
+
+
 module.exports = router
