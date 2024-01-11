@@ -59,13 +59,13 @@ router.get("/department/:option", async (req, res) => {
   console.log('option ', option)
   let reports = null;
   if(parseInt(option) === 0){
-    reports = await Report.find({state: 0});
+    reports = await Report.find({state: 'Waiting'});
   }
   if(parseInt(option) === 1){
-    reports = await Report.find({state: 1});
+    reports = await Report.find({state: 'Processing'});
   }
   if(parseInt(option) === 2){
-    reports = await Report.find({state: 2});
+    reports = await Report.find({state: 'Done'});
   }
   console.log(reports);
 
