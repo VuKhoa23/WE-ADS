@@ -367,11 +367,14 @@
           e.clickOnLayer = true;
         });
 
+        var marker = new mapboxgl.Marker();
         map.on("click", async function (e) {
           if (e.clickOnLayer) {
             return;
           }
           const coordinates = e.lngLat;
+
+          marker.setLngLat(coordinates).addTo(map);
 
           const response = await fetch(
             `https://api.mapbox.com/geocoding/v5/mapbox.places/${coordinates.lng},${coordinates.lat}.json?country=vn&access_token=${mapboxgl.accessToken}`
