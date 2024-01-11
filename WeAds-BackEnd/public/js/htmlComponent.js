@@ -59,7 +59,7 @@ function warnAlert(name, address, role, coordinates, ward, district) {
       <br>
       <div class="d-flex justify-content-end mt-3">
 
-        <a href="/weads/create-place?lat=${coordinates.lat}&lng=${coordinates.lng}&ward=${ward}&district=${district}" class="link-secondary w-50" target="_blank"><button class="btn btn-primary" style="font-size: 12px">Tạo điểm đặt mới</button></a>
+        <a href="/weads/place/addAdPlacementForm?lat=${coordinates.lat}&lng=${coordinates.lng}&ward=${ward}&district=${district}" class="link-secondary w-50" ><button class="btn btn-primary" style="font-size: 12px">Tạo điểm đặt mới</button></a>
       </div>
     </div>
   `;

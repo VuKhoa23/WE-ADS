@@ -1,0 +1,74 @@
+<%- include('./partials/header') %>
+  <div class="container-fluid d-flex justify-content-center">
+    <div class="row justify-content-center col-12 col-sm-11 col-md-10 col-lg-8">
+      <form class="license-form" method="post" action="/weads/ad/createAd/<%= adPlacement._id %>">
+        <div class="license-form-header">
+          <a href="/weads/ad/allAds/<%= adPlacement._id %>" class="btn btn-outline-success back-btn">Trở lại</a>
+          <h3 class="license-form-title">Tạo bảng quảng cáo</h3>
+        </div>
+        <div class="license-form-row">
+          <h3 class="row-label">Địa điểm đặt quảng cáo:</h3>
+          <input type="text" class="place-input" value="<%= adPlacement.ward %>, <%= adPlacement.district %>" readonly>
+        </div>
+        <div class="license-form-row">
+          <h3 class="row-label">Tên quảng cáo:</h3>
+          <input type="text" class="license-form-input" id="adName" required name="adName">
+        </div>
+        <div class="license-form-row">
+          <h3 class="row-label">Loại bảng quảng cáo:</h3>
+          <input type="text" class="license-form-input" id="adType" required name="adType">
+        </div>
+        <div class="license-form-row">
+          <div class="size-row">
+            <h3 class="row-label">Kích thước:</h3>
+            <input type="text" class="ads-size" id="width" required name="width">m
+             x 
+            <input type="text" class="ads-size" id="height" required name="height">m
+          </div>
+        </div>
+        <div class="license-form-row" id="ads-images">
+          <div class="ads-images-label">
+            <h3 class="row-label">Hình ảnh quảng cáo:</h3>
+            <input type="text" class="license-form-input" id="ads-images-url" required name="ads-images-url">
+          </div>
+        </div>
+        <span class="separate"></span>
+        <div class="license-form-row">
+          <h3 class="row-label">Tên công ty đặt quảng cáo:</h3>
+          <input type="text" class="license-form-input" id="companyName" required name="companyName">
+        </div>
+        <div class="license-form-row">
+          <h3 class="row-label">Thông tin liên lạc công ty:</h3>
+          <div class="row d-flex align-items-center justify-content-between">
+            <div class="company-info-row col-12 col-md-4">
+                <h4 class="company-info-label">SĐT:</h4>         
+                <input type="text" class="company-info-input" id="companyPhone" required name="companyPhone">
+            </div>
+            <div class="company-info-row col-12 col-md-7">
+                <h4 class="company-info-label">Email:</h4>       
+                <input type="email" class="company-info-input" id="companyEmail" required name="companyEmail">
+            </div>
+          </div>
+        </div>
+
+        <div class="license-form-row">
+          <h3 class="row-label">Thời hạn quảng cáo:</h3>
+          <div class="row d-flex align-items-center justify-content-around">
+            <div class="company-info-row col-8 col-md-4">
+                <h4 class="company-info-label">Bắt đầu:</h4>         
+                <input type="date" class="company-info-input" id="startDate" required name="startDate">
+            </div>
+            <div class="company-info-row col-8 col-md-4">
+                <h4 class="company-info-label">Kết thúc:</h4>       
+                <input type="date" class="company-info-input" id="endDate" required name="endDate">
+            </div>
+          </div>
+        </div>
+        <span class="seperate"></span>
+        <span class="d-flex justify-content-center">
+          <button id="license-form-submit" class="btn btn-success">Tạo bảng</button>
+        </span>
+      </form>
+    </div>
+  </div>
+<%- include('./partials/footer') %>
