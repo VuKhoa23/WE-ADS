@@ -55,14 +55,20 @@ Router.get('/create/:id', checkDirectory, async (req, res) => {
 
 Router.post('/create/:id', uploadAds.fields([
   {
-    name: "adImages",
+    name: "theAdImages",
     maxCount: 5,
   },
 ]) ,async (req, res) => {
   const id = req.params.id;
-  const { adType, width, height, adName, adImages, companyName, companyPhone, companyEmail, startDate, endDate } = req.body;
+  const { adType, width, height, adName, companyName, companyPhone, companyEmail, startDate, endDate } = req.body;
   const adScale = width + "m x " + height + "m";
-  console.log(req.body);
+  const data = req.files;
+  const images = Object.values(data)[0]
+  let adImages = []
+  for(let image of images){
+    adImages.push('/adImages/' + image.filename)
+  }
+
   let officerId = null;
   if(res.locals.user){
     officerId = res.locals.user._id;
