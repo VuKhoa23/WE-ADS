@@ -301,7 +301,7 @@ router.post('/department/assignment/:_id', async function(req, res){
 
   const officer = await Officer.findByIdAndUpdate(id, {district: district, ward: ward});
   res.redirect('/weads/department/assignment');
-
+})
 
 router.post('/department/advertisement/addType', async function(req, res) {
   try {
