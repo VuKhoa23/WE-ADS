@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Place = require("../model/places")
 const Ad = require("../model/ads")
+const Officer = require("../model/officer");
 
 // router.get('/create-demo', async (req, res) => {
 //   const place = await Place.findOne({district: "Quận Bình Thạnh"})
@@ -73,31 +74,38 @@ router.get("/details/:placeId", async (req, res)=>{
 })
 
 router.get("/view-all", async (req, res)=>{
-  const places = await Place.find({})
-
-  let username = null
-  createMessage = null
-  if(req.query.createSuccess){
-    createMessage = "Account created"
-  }
+  let id = null;
   if(res.locals.user){
-    username = res.locals.user.username
+    id = res.locals.user._id;
   }
-
-  let role = null
-  if(res.locals.user){
-    role = res.locals.user.role
+  if (!id) {
+    res.redirect('/weads/home');
+    return;
   }
-
-  res.render("viewPlaces", {
-    places: places,
-    role: role,
-    username: username,
-    createMessage: createMessage,
-    ward: res.locals.user ? res.locals.user.ward : null,
-    district: res.locals.user ? res.locals.user.district : null
-  })
-})
+  try {
+    const officer = await Officer.findById(id);
+    let places = null;
+    if (officer.role == 'Ward') {
+      places = await Place.find({ ward: officer.ward, district: officer.district });
+    }
+    else if (officer.role == 'District') {
+      places = await Place.find({ district: officer.district });
+    }
+    else {
+      places = await Place.find({});
+    }
+    res.render("department/adPlacement", {
+      announce: null,
+      adPlacements: places,
+      username: res.locals.user ? res.locals.user.username : null,
+      role: res.locals.user ? res.locals.user.role : null,
+    })
+  }
+  catch (err) {
+    console.log(err.message);
+    res.status(400).send("Some error occurred");
+  }
+});
 
 router.get("/view-by-ward", async (req, res)=>{
   const places = await Place.find({ward: res.locals.user.ward})

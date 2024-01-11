@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const Place = require("../model/places")
-const Ad = require("../model/ads")
+const Place = require("../model/places");
+const Ad = require("../model/ads");
 
 // router.get('/create-demo', async (req, res) => {
 //   const place = await Place.findOne({district: "Quận Bình Thạnh"})
@@ -17,6 +17,61 @@ const Ad = require("../model/ads")
 //   res.send("OK")
 // });
 
+// router.get('/view-all', async (req, res) => {
+//   let id = null;
+//   if(res.locals.user){
+//     id = res.locals.user._id;
+//   }
+//   if (!id) {
+//     res.redirect('/weads/home');
+//     return;
+//   }
+//   try {
+//     const officer = await Officer.findById(id);
+//     let ads = null;
+//     if (officer.role == 'Ward') {
+//       ads = Ad.find({ licensed: false }).populate({
+//         path: 'place',
+//         match: { ward: officer.ward, district: officer.district }
+//       });
+//     }
+//     else if (officer.role == 'District') {
+//       ads = Ad.find({ licensed: false }).populate({
+//         path: 'place',
+//         match: { district: officer.district }
+//       });
+//     }
+//     else {
+//       ads = await Ad.find({ licensed: false}).populate('place');
+//     }
+//     let username = null
+//     createMessage = null
+//     if(req.query.createSuccess){
+//       createMessage = "Account created"
+//     }
+//     if(res.locals.user){
+//       username = res.locals.user.username
+//     }
+
+//     let role = null
+//     if(res.locals.user){
+//       role = res.locals.user.role
+//     }
+
+//     res.render("viewAllAds", {
+//       ads,
+//       role: role,
+//       username: username,
+//       createMessage: createMessage,
+//       ward: res.locals.user ? res.locals.user.ward : null,
+//       district: res.locals.user ? res.locals.user.district : null
+//     })
+//   }
+//   catch (err) {
+//     console.log(err.message);
+//     res.status(400).send("Some error occurred");
+//   }
+// });
 
 router.get("/details/:adId", async (req, res)=>{
   const ad = await Ad.findById(req.params.adId)
@@ -48,21 +103,12 @@ router.get("/addAdsForm/:_id", async function(req, res) {
   });
 })
 
-router.post('/createAd/:adPlacementId', async (req, res) => {
+router.get('/createAd/:adPlacementId', async (req, res) => {
   const adPlacementId = req.params.adPlacementId;
   const adPlacement = await Place.findOne({_id: adPlacementId});
   const adData = {
-      adType: req.body.adType,
-      adName: req.body.adName,
-      adScale: `${req.body.width}m x ${req.body.height}m`,
-      adImages: [req.body['ads-images-url']],
-      companyName: req.body.companyName,
-      companyPhone: req.body.companyPhone,
-      companyEmail: req.body.companyEmail,
-      startDate: req.body.startDate,
-      endDate: req.body.endDate,
-      licensed: false, 
-      place: adPlacementId,
+    place: adPlacementId,
+    licensed: false
   };
 
   try {

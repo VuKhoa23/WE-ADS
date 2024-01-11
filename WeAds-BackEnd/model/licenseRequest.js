@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const Place = require("../model/places")
+const Place = require("../model/places");
+const Ads = require("../model/ads");
 
-const ad = new Schema({
+const licenseRequest = new Schema({
   adType: {
     type: String
   },
@@ -24,14 +25,19 @@ const ad = new Schema({
   companyEmail: {
     type: String
   },
-  licensed: {
-    type: Boolean
-  },
   startDate: {
     type: Date
   },
   endDate: {
     type: Date
+  },
+  adId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "ad", 
+  },
+  createBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "officer",
   },
   place: {
     type: mongoose.Schema.Types.ObjectId,
@@ -39,6 +45,6 @@ const ad = new Schema({
   }
 })
 
-const Ad = mongoose.model('ad', ad);
+const LicenseRequest = mongoose.model('licenseRequest', licenseRequest);
 
-module.exports = Ad;
+module.exports = LicenseRequest;

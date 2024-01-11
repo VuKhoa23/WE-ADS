@@ -44,15 +44,20 @@
                             </a>
                         </td>
                         <td>
-                            <a href="/weads/place/editAdPlacementForm/<%= adPlacements[i]._id %>">
-                                <button type="button" class="btn btn-primary" onclick="">
-                                    <i class="bi bi-pencil-square"></i>
-                                </button>
-                            </a>
+                            
+                            <% if (role == 'Department') { %>
+                                <a href="/weads/place/editAdPlacementForm/<%= adPlacements[i]._id %>">
+                                    <button type="button" class="btn btn-primary" onclick="">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </button>
+                                </a>
 
-                            <button class="btn btn-danger" onclick="showDeleteConfirmation('<%= adPlacements[i]._id %>')">
-                                <i class="bi bi-trash"></i>
-                            </button>
+                                <button class="btn btn-danger" onclick="showDeleteConfirmation('<%= adPlacements[i]._id %>')">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            <% } else { %>
+                                <button class="btn btn-success">Yêu cầu chỉnh sửa</button>
+                            <% } %>
                         </td>
                     </tr>
                 <% } %>
@@ -71,10 +76,12 @@
     </a>
 
     <!-- Button add AdPlacement -->
-    <button class="btn btn-primary" onclick="showInstructionCreateAdPlacement()">
-        <i class="bi bi-plus-circle-fill"></i>
-        Thêm Điểm đặt
-    </button>
+    <% if (role == 'Department') { %>
+        <button class="btn btn-primary" onclick="showInstructionCreateAdPlacement()">
+            <i class="bi bi-plus-circle-fill"></i>
+            Thêm Điểm đặt
+        </button>
+    <% } %>
 
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

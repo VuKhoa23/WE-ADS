@@ -3,6 +3,7 @@
   padding: 10px;
   border: 1px solid #000;
   border-radius: 5px;
+  background-color: #fff;
 }
 
 .license-form-header {
@@ -263,6 +264,12 @@
 .back-btn {
   position: absolute;
   left: 5px;
+  top: -5px;
+}
+
+.close-btn {
+  position: absolute;
+  right: 5px;
   top: -5px;
 }
 
