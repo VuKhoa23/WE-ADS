@@ -1,56 +1,43 @@
 <%- include('./partials/header') %>
 
 <div class="container mt-5">
-    <h1>Danh sách các Điểm đặt quảng cáo</h1>
+    <h1>Danh sách các bảng quảng cáo</h1>
 
-    <% if (adPlacements.length > 0) { %>
+    <% if (ads.length > 0) { %>
         <table class="table table-bordered">
             <thead>
                 <tr>
                     <th>STT</th>
-                    <th>Địa chỉ</th>
-                    <th>Quận</th>
-                    <th>Phường</th>
-                    <th>Loại vị trí</th>
-                    <th>Hình thức quảng cáo</th>
-                    <th>Quy hoạch</th>
-                    <th>Danh sách bảng quảng cáo</th>
+                    <th>Tên quảng cáo</th>
+                    <th>Loại bảng quảng cáo</th>
+                    <th>Kích thước</th>
+                    <th>Thông tin công ty đặt quảng cáo</th>
+                    <th>Thời hạn quảng cáo</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
-                <% for (let i = 0; i < adPlacements.length; i++) { %>
+                <% for (let i = 0; i < ads.length; i++) { %>
                     <tr>
                         <td><%= i + 1 %></td>
-                        <td>
-                            <%= adPlacements[i].coordinates[0] %> <br>
-                            <%= adPlacements[i].coordinates[1] %>
+                        <td><%= ads[i].adName %> </td>
+                        <td><%= ads[i].adType %> </td>
+                        <td><%= ads[i].adScale %> </td>
+                        <td>Tên: <%= ads[i].companyName %> <br>
+                            SĐT: <%= ads[i].companyPhone %> <br>
+                            Email: <%= ads[i].companyEmail %>
                         </td>
-                        <td><%= adPlacements[i].district %></td>
-                        <td><%= adPlacements[i].ward %></td>
-                        <td><%= adPlacements[i].locationType.join('/ ') %></td>
-                        <td><%= adPlacements[i].adType %></td>
-                        <td>
-                            <% if (adPlacements[i].adPlanned === 1) { %>
-                                Đã quy hoạch
-                            <% } else { %>
-                                Chưa quy hoạch
-                            <% } %>
+                        <td>Từ: <%= new Date(ads[i].startDate).toLocaleDateString('vi-VN') %> <br>
+                            Đến: <%= new Date(ads[i].endDate).toLocaleDateString('vi-VN') %>
                         </td>
                         <td>
-                            <a href="/weads/ad/allAds/<%= adPlacements[i]._id %>">
-                                <i class="bi bi-arrow-right-circle-fill"></i>
-                                Xem danh sách bảng quảng cáo
-                            </a>
-                        </td>
-                        <td>
-                            <a href="/weads/place/editAdPlacementForm/<%= adPlacements[i]._id %>">
+                            <a href="/weads/ad/editAdForm/<%= ads[i]._id %>">
                                 <button type="button" class="btn btn-primary" onclick="">
                                     <i class="bi bi-pencil-square"></i>
                                 </button>
                             </a>
 
-                            <button class="btn btn-danger" onclick="showDeleteConfirmation('<%= adPlacements[i]._id %>')">
+                            <button class="btn btn-danger" onclick="showDeleteConfirmation('<%= ads[i]._id %>')">
                                 <i class="bi bi-trash"></i>
                             </button>
                         </td>
@@ -60,20 +47,20 @@
             </tbody>
         </table>
     <% } else { %>
-        <p>Không có điểm đặt quảng cáo nào trong danh sách.</p>
+        <p>Không có bảng quảng cáo nào trong danh sách.</p>
     <% } %>
 
-    <a href="/weads/home">
+    <a href="/weads/place/allAdPlacement">
         <button class="btn btn-secondary">
             <i class="bi bi-arrow-left-circle-fill"></i>
             Trở về
         </button>
     </a>
 
-    <!-- Button add AdPlacement -->
-    <button class="btn btn-primary" onclick="showInstructionCreateAdPlacement()">
+    <!-- Button add Ads -->
+    <button class="btn btn-primary" onclick="addAdsForm('<%= adPlacement._id %>')">
         <i class="bi bi-plus-circle-fill"></i>
-        Thêm Điểm đặt
+        Thêm Bảng quảng cáo
     </button>
 
 
@@ -119,7 +106,7 @@
     
     
     <script>
-        function showDeleteConfirmation(adPlacementId) {
+        function showDeleteConfirmation(adId) {
             Swal.fire({
                 title: 'Xác nhận xóa',
                 text: 'Bạn có chắc muốn xóa điểm đặt này?',
@@ -131,22 +118,13 @@
                 cancelButtonText: 'Hủy'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location.href = '/weads/place/deleteAdPlacement/' + adPlacementId;
+                    window.location.href = '/weads/ad/deleteAd/' + adId;
                 }
             });
         }
 
-        function showInstructionCreateAdPlacement(){
-            Swal.fire({
-                title: 'Tạo điểm đặt mới',
-                text: 'Chọn vào 1 điểm trên bản đồ để tạo điểm đặt mới',
-                icon: 'info',
-                showCancelButton: false,
-                timer: 3000
-            }).then(() => {
-                // Redirect to the "/weads/home" page after the message is closed
-                window.location.href = '/weads/home';
-            });
+        function addAdsForm(adPlacementId) {
+            window.location.href = '/weads/ad/addAdsForm/' + adPlacementId;
         }
 
     </script>
