@@ -20,27 +20,54 @@
                 <% for (let i = 0; i < ads.length; i++) { %>
                     <tr>
                         <td><%= i + 1 %></td>
-                        <td><%= ads[i].adName %> </td>
-                        <td><%= ads[i].adType %> </td>
-                        <td><%= ads[i].adScale %> </td>
-                        <td>Tên: <%= ads[i].companyName %> <br>
-                            SĐT: <%= ads[i].companyPhone %> <br>
-                            Email: <%= ads[i].companyEmail %>
-                        </td>
-                        <td>Từ: <%= new Date(ads[i].startDate).toLocaleDateString('vi-VN') %> <br>
-                            Đến: <%= new Date(ads[i].endDate).toLocaleDateString('vi-VN') %>
-                        </td>
-                        <td>
-                            <a href="/weads/ad/editAdForm/<%= ads[i]._id %>">
-                                <button type="button" class="btn btn-primary" onclick="">
-                                    <i class="bi bi-pencil-square"></i>
-                                </button>
-                            </a>
-
-                            <button class="btn btn-danger" onclick="showDeleteConfirmation('<%= ads[i]._id %>')">
-                                <i class="bi bi-trash"></i>
-                            </button>
-                        </td>
+                        <% if (ads[i].adName != undefined) { %>
+                            <td><%= ads[i].adName %> </td>
+                            <td><%= ads[i].adType %> </td>
+                            <td><%= ads[i].adScale %> </td>
+                            <td>Tên: <%= ads[i].companyName %> <br>
+                                SĐT: <%= ads[i].companyPhone %> <br>
+                                Email: <%= ads[i].companyEmail %>
+                            </td>
+                            <td>Từ: <%= new Date(ads[i].startDate).toLocaleDateString('vi-VN') %> <br>
+                                Đến: <%= new Date(ads[i].endDate).toLocaleDateString('vi-VN') %>
+                            </td>
+                            <td>
+                                <% if (role == 'Department') { %>
+                                    <span class="w-100 d-flex justify-content-center">
+                                        <a class="mx-1" href="/weads/ad/editAdForm/<%= ads[i]._id %>">
+                                            <button type="button" class="btn btn-primary" onclick="">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </button>
+                                        </a>
+            
+                                        <button class="btn btn-danger" onclick="showDeleteConfirmation('<%= ads[i]._id %>')">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </span>
+                                <% } else { %>
+                                    <% if (ads[i].licensed) { %>
+                                        <span class="d-flex justify-content-center">
+                                            <button class="btn btn-success">Yêu cầu chỉnh sửa</button>
+                                        </span>
+                                    <% } %>
+                                <% } %>
+                            </td>
+                        <% } else { %>
+                            <td style="text-align: center;" colspan="5">Biển quảng cáo trống</td>
+                            <td>
+                                <% if (role == 'Department') { %>
+                                        <span class="d-flex justify-content-center">
+                                            <button class="btn btn-danger" onclick="showDeleteConfirmation('<%= ads[i]._id %>')">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </span>
+                                <% } else { %>
+                                    <span class="d-flex justify-content-center">
+                                        <a href="/weads/license-request/create/<%- ads[i]._id %>" class="btn btn-success">Yêu cầu cấp phép</a>
+                                    </span>
+                                <% } %>
+                            </td>
+                        <% } %>
                     </tr>
                 <% } %>
                 
@@ -58,10 +85,12 @@
     </a>
 
     <!-- Button add Ads -->
-    <button class="btn btn-primary" onclick="addAdsForm('<%= adPlacement._id %>')">
-        <i class="bi bi-plus-circle-fill"></i>
-        Thêm Bảng quảng cáo
-    </button>
+    <% if (role == 'Department') { %>
+        <a class="btn btn-primary" href="/weads/ad/createAd/<%= adPlacement._id %>">
+            <i class="bi bi-plus-circle-fill"></i>
+            Thêm Bảng quảng cáo
+        </a>
+    <% } %>
 
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -122,11 +151,6 @@
                 }
             });
         }
-
-        function addAdsForm(adPlacementId) {
-            window.location.href = '/weads/ad/addAdsForm/' + adPlacementId;
-        }
-
     </script>
 
 </div>

@@ -1,6 +1,7 @@
 const express = require('express');
 const Place = require("../model/places");
 const Ad = require("../model/ads");
+const LicenseRequest = require("../model/licenseRequest");
 const Officer = require("../model/officer");
 const { ObjectId } = require('mongodb');
 const Router = express.Router();
@@ -12,8 +13,8 @@ Router.get('/create/:id', async (req, res) => {
     return;
   }
   try {
-    const place = await Place.findById(id);
-    if (!place) {
+    const ad = await Ad.findById(id).populate('place');
+    if (!ad) {
       res.redirect('/weads/place/view-all');
       return;
     }
@@ -36,8 +37,9 @@ Router.get('/create/:id', async (req, res) => {
     username,
     createMessage,
     licenseRequest: true,
-    ward: place.ward,
-    district: place.district
+    adId: ad._id,
+    ward: ad.place.ward,
+    district: ad.place.district
   });
   }
   catch (err) {
@@ -50,9 +52,8 @@ Router.get('/create/:id', async (req, res) => {
 Router.post('/create/:id', async (req, res) => {
   const id = req.params.id;
   const { adType, width, height, adName, adImages, companyName, companyPhone, companyEmail, startDate, endDate } = req.body;
-  console.log(req.body);
   const adScale = width + "m x " + height + "m";
-
+  console.log(req.body);
   let officerId = null;
   if(res.locals.user){
     officerId = res.locals.user._id;
@@ -71,18 +72,18 @@ Router.post('/create/:id', async (req, res) => {
     return;
   }
   try {
-    const place = await Place.findById(id);
+    const ad = await Ad.findById(id).populate('place');
     const officer = await Officer.findById(officerId);
     if (!officer) {
       res.status(400).json({ success: false, error: "Officer not found" });
       return;
     }
-    if (!place) {
-      res.status(400).json({ success: false, error: "Place not found" });
+    if (!ad) {
+      res.status(400).json({ success: false, error: "ads not found" });
       return;
     }
 
-    const ads = await Ad.create({ adType, adScale, adName, adImages, companyName, companyPhone, companyEmail, startDate, endDate, licensed: false, place: place._id, createBy: officerId });
+    await LicenseRequest.create({ adId: ad._id ,adType, adScale, adName, adImages, companyName, companyPhone, companyEmail, startDate, endDate, place: ad.place._id, createBy: officerId });
     res.status(201).json({ success: true });
   }
   catch (err) {
@@ -94,7 +95,7 @@ Router.post('/create/:id', async (req, res) => {
 
 Router.get('/view-all', async (req, res) => {
   try {
-    const requests = await Ad.find({ licensed: false }).populate('place');
+    const requests = await LicenseRequest.find({}).populate('place');
     let username = null
     createMessage = null
 
@@ -132,7 +133,7 @@ Router.get('/view-all/created', async (req, res) => {
     return;
   }
   try {
-    const requests = await Ad.find({ licensed: false, createBy: new ObjectId(id) }).populate('place');
+    const requests = await LicenseRequest.find({ createBy: new ObjectId(id) }).populate('place');
     let username = null
     createMessage = null
 
@@ -167,7 +168,7 @@ Router.get('/view/:id', async (req, res) => {
     return;
   }
   try {
-    const request = await Ad.findOne({ _id: new ObjectId(id) ,licensed: false }).populate('place');
+    const request = await LicenseRequest.findOne({ _id: new ObjectId(id) }).populate('place');
     if (!request) {
       res.status(404).redirect('/weads/license-request/view-all');
       return;
@@ -212,13 +213,25 @@ Router.post('/view/:id/accept', async function (req, res) {
     return;
   }
   try {
-    const request = await Ad.findOne({ _id: new ObjectId(id) ,licensed: false });
+    const request = await LicenseRequest.findOne({ _id: new ObjectId(id) });
     if (!request) {
       res.status(400).json({ success: false, error: "Request not found" });
       return;
     }
-    request.licensed = true;
-    await request.save();
+    const ad = await Ad.findOneAndUpdate({ _id: new ObjectId(request.adId) }, {
+      adType: request.adType,
+      adScale: request.adScale,
+      adName: request.adName,
+      adImages: request.adImages,
+      companyName: request.companyName,
+      companyPhone: request.companyPhone,
+      companyEmail: request.companyEmail,
+      startDate: request.startDate,
+      endDate: request.endDate,
+      place: request.place,
+      licensed: true
+    });
+    await LicenseRequest.deleteMany({adId: new ObjectId(request.adId)});
     res.status(200).json({ success: true });
   }
   catch (err) {
@@ -234,7 +247,7 @@ Router.post('/view/:id/decline', async function (req, res) {
     return;
   }
   try {
-    const request = await Ad.deleteOne({ _id: new ObjectId(id) ,licensed: false });
+    const request = await LicenseRequest.deleteOne({ _id: new ObjectId(id) });
     res.status(200).json({ success: true });
   }
   catch (err) {
