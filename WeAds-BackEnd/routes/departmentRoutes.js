@@ -274,6 +274,35 @@ router.get('/department/places/deleteWard/:_id', async function(req, res) {
 })
 
 
+router.get('/department/assignment', async function(req, res){
+  const officers = await Officer.find({ role: { $ne: 'Department' } });
+  const districts = await District.find({}, null, {lean: true});
+
+  let wards = null;
+  for(let district of districts){
+    wards = await Ward.find({district: district._id}, null, {lean: true});
+    district.wards = wards;
+  }
+
+  res.render("department/assignment", {
+    officers: officers,
+    districts: districts,
+    username: res.locals.user ? res.locals.user.username : null,
+    role: res.locals.user ? res.locals.user.role : null,
+  })
+})
+
+router.post('/department/assignment/:_id', async function(req, res){
+  const id = req.params._id;
+  const district = req.body.district;
+  const ward = req.body.ward;
+
+  console.log(req.body);
+
+  const officer = await Officer.findByIdAndUpdate(id, {district: district, ward: ward});
+  res.redirect('/weads/department/assignment');
+
+
 router.post('/department/advertisement/addType', async function(req, res) {
   try {
     const isExist = await Advertisement.findOne({name: req.body.name});
