@@ -34,7 +34,7 @@ const reportSchema = mongoose.Schema(
     // 1: dang xu li
     // 2: xu li xong
     state: {
-      type: Number,
+      type: String,
     },
     information: {
       type: String,

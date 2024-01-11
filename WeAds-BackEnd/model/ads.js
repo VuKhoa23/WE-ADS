@@ -15,6 +15,28 @@ const ad = new Schema({
   adImages:[{
     type: String
   }],
+  companyName: {
+    type: String
+  },
+  companyPhone: {
+    type: String
+  },
+  companyEmail: {
+    type: String
+  },
+  startDate: {
+    type: Date
+  },
+  endDate: {
+    type: Date
+  },
+  createBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "officer",
+  },
+  licensed: {
+    type: Boolean
+  },
   place: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "place",

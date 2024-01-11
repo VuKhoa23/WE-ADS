@@ -1,0 +1,164 @@
+<%- include('./partials/header') %>
+<div class="d-flex justify-content-center">
+  <div class="card row col-12 col-sm-11 col-md-10 col-lg-6">
+    <div class="card-header position-relative d-flex justify-content-center align-item-center">
+      <a class="detail-back-btn btn btn-outline-success" href="/weads/license-request/view-all"><i class="bi bi-chevron-left"></i>Trở lại</a>
+      <i class="bi bi-card-checklist title-icon"></i>
+      <h3 class="title">Yêu cầu cấp phép</h3>
+    </div>
+    <div class="card-body">
+      <div class="request-info">
+        <h3 class="row-name centered-row">Thông tin công ty</h3>
+        <div class="info-row">
+          <h3 class="row-name">Tên công ty:</h3>
+          <h3 class="row-data"> <%- request.companyName %></h3>
+        </div>
+        <div class="info-row">
+          <h3 class="row-name">SĐT:</h3>
+          <h3 class="row-data"> <%- request.companyPhone %></h3>
+        </div>
+        <div class="info-row">
+          <h3 class="row-name">Email:</h3>
+          <h3 class="row-data"> <%- request.companyEmail %></h3>
+        </div>
+        <span class="seperate"></span>
+        <h3 class="row-name centered-row">Thông tin quảng cáo</h3>
+        <div class="info-row">
+          <h3 class="row-name">Tên quảng cáo:</h3>
+          <h3 class="row-data"> <%- request.adName %></h3>
+        </div>
+        <div class="info-row">
+          <h3 class="row-name">Thời hạn:</h3>
+          <h3 class="row-data"><%- startDate %> - <%- endDate %></h3>
+        </div>
+        <div class="info-row">
+          <h3 class="row-name">Kích thước:</h3>
+          <h3 class="row-data"> <%- request.adScale %></h3>
+        </div>
+        <div class="info-row">
+          <h3 class="row-name">Địa chỉ điểm đặt:</h3>
+          <h3 class="row-data"> <%- request.place.ward %>, <%- request.place.district %></h3>
+        </div>
+      </div>
+      <span class="seperate"></span>
+      <h3 class="row-name centered-row">Hình ảnh chi tiết</h3>
+      <% if (request.adImages.length > 0) { %>
+        <div class="image-container">
+          <% for(var i = 0; i < request.adImages.length; i++) { %>
+            <img class="ads-image" src="<%- request.adImages[i] %>" alt="hình ảnh quảng cáo">
+          <% } %>
+        </div>
+      <% } else { %>
+        <h3 class="row-name centered-row">Không có hình ảnh</h3>
+      <% } %>
+    </div>
+    <div class="card-footer">
+      <div class="d-flex justify-content-center">
+        <% if (role == 'Department') { %>
+          <button type="submit" id="accept-btn" class="btn btn-success mx-2">Chấp thuận <i class="bi bi-check2"></i></button>
+          <button type="submit" id="decline-btn" class="btn btn-danger">Từ chối <i class="bi bi-x"></i></button>
+        <% } else { %>
+          <button type="submit" id="decline-btn" class="btn btn-danger">Xoá yêu cầu</button>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="success-modal accept-modal d-none">
+  <div class="overlay">
+    <div class="custom-modal">
+      <i style="color: green" class="bi bi-check-circle"></i>
+      <h3 class="modal-text">Đã cấp phép quảng cáo</h3>
+      <a class="btn btn-primary" href="/weads/license-request/view-all">Ok</a>
+    </div>
+  </div>
+</div>
+
+<div class="success-modal decline-modal d-none">
+  <div class="overlay">
+    <div class="custom-modal">
+      <i style="color: black" class="bi bi-check-circle"></i>
+      <% if (role == 'Department') { %>
+        <h3 class="modal-text">Đã từ chối quảng cáo</h3>
+      <% } else { %>
+        <h3 class="modal-text">Đã xoá yêu cầu</h3>
+      <% } %>
+      <a class="btn btn-primary" href="/weads/license-request/view-all">Ok</a>
+    </div>
+  </div>
+</div>
+
+<div class="fail-modal d-none">
+  <div class="overlay">
+    <div class="custom-modal">
+      <i style="color: red" class="bi bi-x-circle"></i>
+      <h3 class="modal-text">Có lỗi xảy ra, vui lòng thử lại</h3>
+      <button class="close-modal btn btn-primary">Ok</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(".close-modal").click(function(){
+   $(".fail-modal").toggleClass("d-none");
+ });
+</script>
+
+<% if (role == 'Department') { %>
+  <script>
+    $("#accept-btn").click(async function() {
+      const response = await fetch(window.location.pathname + '/accept', {
+          method: 'POST',
+          headers: {
+            "Content-Type": "application/json",
+          }
+        })
+        .then (function(result) {
+          return result.json();
+        })
+        if (response.success)
+          $('.accept-modal').toggleClass('d-none');
+        else {
+          $('.fail-modal').toggleClass('d-none');
+        }
+    });
+    $("#decline-btn").click(async function() {
+      const response = await fetch(window.location.pathname + '/decline', {
+          method: 'POST',
+          headers: {
+            "Content-Type": "application/json",
+          }
+        })
+        .then (function(result) {
+          return result.json();
+        })
+        if (response.success)
+          $('.decline-modal').toggleClass('d-none');
+        else {
+          $('.fail-modal').toggleClass('d-none');
+        }
+    });
+  </script>
+<% } else { %>
+  <script>
+    $("#decline-btn").click(async function() {
+      const response = await fetch(window.location.pathname + '/decline', {
+          method: 'POST',
+          headers: {
+            "Content-Type": "application/json",
+          }
+        })
+        .then (function(result) {
+          return result.json();
+        })
+        if (response.success)
+          $('.decline-modal').toggleClass('d-none');
+        else {
+          $('.fail-modal').toggleClass('d-none');
+        }
+    });
+  </script>
+<% } %>
+
+<%- include('./partials/footer') %>

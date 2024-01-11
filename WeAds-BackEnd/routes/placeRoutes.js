@@ -40,7 +40,8 @@ router.get("/geojson", async (req, res)=>{
     }
 
     const ads = await Ad.find({
-      place: place._id
+      place: place._id,
+      licensed: true
     })
 
     ads.forEach((ad)=>{
@@ -122,6 +123,18 @@ router.get("/view-by-ward", async (req, res)=>{
     createMessage: createMessage,
     ward: res.locals.user ? res.locals.user.ward : null,
     district: res.locals.user ? res.locals.user.district : null
+  })
+})
+
+
+
+router.get('/allAdPlacement', async function(req, res) {
+  const adPlacements = Place.find({});
+  res.render("department/adPlacement", {
+    announce: null,
+    adPlacements: adPlacements,
+    username: res.locals.user ? res.locals.user.username : null,
+    role: res.locals.user ? res.locals.user.role : null,
   })
 })
 

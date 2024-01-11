@@ -17,36 +17,43 @@
   <!-- Theme included stylesheets -->
   <link href="//cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
   <link href="//cdn.quilljs.com/1.3.6/quill.bubble.css" rel="stylesheet">
-  
+
   <style>
     .back-btn {
       position: absolute;
       left: 10px;
     }
+
     .title {
       font-size: 20px;
       font-weight: 700;
       margin: 0;
       padding: 8px 0;
     }
+
     .title-icon {
       font-size: 23px;
       margin-right: 4px;
     }
+
     .info-row {
       display: flex;
     }
-    .row-name, 
+
+    .row-name,
     .row-info {
       font-size: 16px;
     }
+
     .row-name {
       min-width: 150px;
     }
+
     .row-info {
       font-weight: normal;
       margin-left: 8px;
     }
+
     .content {
       width: 100%;
       min-height: 100px;
@@ -55,6 +62,7 @@
       border-radius: 10px;
       margin-bottom: 8px;
     }
+
     .solution {
       width: 100%;
       height: 200px;
@@ -65,18 +73,20 @@
       outline: none;
       resize: none;
     }
+
     .overlay {
       position: fixed;
       width: 100vw;
       height: 100vh;
       display: flex;
       align-items: center;
-      justify-content:center;
+      justify-content: center;
       top: 0;
       left: 0;
       background-color: rgba(0, 0, 0, 0.05);
       z-index: 999;
     }
+
     .custom-modal {
       width: 400px;
       height: 200px;
@@ -87,19 +97,21 @@
       align-items: center;
       justify-content: center;
     }
+
     .custom-modal i {
       font-size: 50px;
       margin-bottom: 8px;
     }
+
     .custom-modal h3 {
       font-size: 20px;
       font-weight: 500;
       margin-bottom: 16px;
     }
+
     #editor {
       width: 100%;
-      min-height: 100px;
-      max-height: 300px;
+      height: 50vh;
       margin: 8px 0;
       border: 1px solid #000;
       border-radius: 10px;
@@ -108,6 +120,7 @@
       font-weight: normal;
       overflow-y: scroll;
     }
+
     .ql-toolbar {
       width: 70%;
       margin: auto
@@ -150,111 +163,23 @@
         <div id="editor">
         </div>
       </div>
-      <% if (report.state != 'Waiting') { %>
-        <div class="report-solution">
-          <h3 class="row-name">Cách thức xử lí:</h3>
-            <% if (report.state == 'Done') { %>
-              <textarea placeholder="Nhập cách thức xử lí cho vấn đề này" class="solution" disabled><%- report.information %></textarea>
-            <% } %>
-            <% if (report.state == 'Processing') { %>
-              <textarea placeholder="Nhập cách thức xử lí cho vấn đề này" class="solution"></textarea>
-            <% } %>
-        </div>
-      <% } %>
     </div>
-    <div style="min-height: 50px;" class="card-footer">
-      <form class="d-flex justify-content-center" id="resolve-form">
-        <% if (report.state == 'Processing') { %>
-        <button type="submit" class="resolve-submit btn btn-success">Đã gải quyết <i class="bi bi-check2"></i></button>
-        <% } %>
-        <% if (report.state == 'Waiting') { %>
-          <button type="submit" id="change-state-btn" class="btn btn-primary">Đang giải quyết <i class="bi bi-arrow-clockwise"></i></button>
-        <% } %>
-      </form>
+    <% if (report.state == 0) { %>
+    <div class="card-footer text-center ">
+      <button class="resolve-submit btn btn-danger">Chưa xử lí<i class="bi bi-check2"></i></button>
     </div>
+    <% } else if (report.state == 1) { %>
+    <div class="card-footer text-center">
+      <button class="btn btn-warning ">Đang xử lí<i class="bi bi-check2"></i></button>
+    </div>
+    <% } else {%>
+    <div class="card-footer text-center">
+      <button class="btn btn-success">Đã xử lí xong<i class="bi bi-check2"></i></button>
+    </div>
+    <% } %>
+
   </div>
 
-  <div class="success-modal d-none">
-    <div class="overlay">
-      <div class="custom-modal">
-        <i style="color: green" class="bi bi-check-circle"></i>
-        <h3 class="modal-text">Đã giải quyết báo cáo</h3>
-        <a class="btn btn-primary" href="/weads/report">Ok</a>
-      </div>
-    </div>
-  </div>
-
-  <div class="fail-modal d-none">
-    <div class="overlay">
-      <div class="custom-modal">
-        <i style="color: red" class="bi bi-x-circle"></i>
-        <h3 class="modal-text">Có lỗi xảy ra, vui lòng thử lại</h3>
-        <button class="close-modal btn btn-primary">Ok</button>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    $('#resolve-form').on('submit', async function(event) {
-      event.preventDefault();
-
-      let solution = $.trim($(".solution").val());
-
-      if (solution.length == 0) 
-        return;
-      $('.resolve-submit').prop("disabled", true);
-      
-      const response = await fetch('/weads/send-result', {
-        method: 'POST',
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ 
-          reportId: '<%- report._id %>',
-          reportSolution: solution
-        })
-      })
-      .then (function(result) {
-        return result.json();
-      })
-      if (response.success)
-        $('.success-modal').toggleClass('d-none');
-      else {
-        $('.resolve-submit').prop("disabled", false);
-        $('.fail-modal').toggleClass('d-none');
-      }
-    });
-
-    $(document).ready(function() {
-      $('#change-state-btn').click(async function(event) {
-        event.preventDefault();
-        $('#change-state-btn').prop("disabled", true);
-        const response = await fetch('/weads/change-state', {
-          method: 'POST',
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ 
-            reportId: '<%- report._id %>'
-          })
-        })
-        .then (function(result) {
-          return result.json();
-        })
-        if (response.success) {
-          location.reload();
-        }
-        else {
-          $('#change-state-btn').prop("disabled", false);
-          $('.fail-modal').toggleClass('d-none');
-        }
-      });
-    });
-
-    $(".close-modal").click(function(){
-      $(".fail-modal").toggleClass("d-none");
-    });
-  </script>
   <script>
     $(document).ready(function () {
       var quill = new Quill('#editor', {

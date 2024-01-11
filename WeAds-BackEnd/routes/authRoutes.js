@@ -27,9 +27,9 @@ router.post("/process-login", async (req, res)=>{
     const officer = await Officer.login(email, password);
     const token = createToken(officer._id);
     res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 });
-    res.send("OK")
+    res.redirect("/weads/home");
   } catch (err) {
-    if (err.message == "incorrect password") {
+    if (err.message == "incorrect password" || err.message == "incorrect email") {
       res.cookie("loginErr", "Email hoặc mật khẩu không chính xác", { maxAge: 60 * 60 * 1000 });
       res.redirect("/weads/login");
       return;
@@ -140,9 +140,9 @@ router.post("/forget-password/:id/change-password", async (req, res) => {
 router.post('/send-result', async (req, res, next) => {
   try {
     const { reportId, reportSolution } = req.body;
-    console.log(reportSolution, reportId);
+
     if (!reportSolution || !reportId) {
-      res.status(400).json({ success: false, error: 'Missing information1' });
+      res.status(400).json({ success: false, error: 'Missing information' });
       return;
     }
     const report = await Report.findOne({ _id: new ObjectId(reportId) });
@@ -150,7 +150,7 @@ router.post('/send-result', async (req, res, next) => {
       res.status(400).json({ success: false, error: 'Report not found' });
       return;
     }
-    report.state = true;
+    report.state = "Done";
     report.information = reportSolution;
     await report.save();
     req.receiver = report.email;
@@ -164,5 +164,31 @@ router.post('/send-result', async (req, res, next) => {
     res.status(500).json({ success: false, error: err.message});
   }
 } ,sendMailController.sendReportResult);
+
+router.post('/change-state', async (req, res, next) => {
+  try {
+    const { reportId } = req.body;
+
+    if (!reportId) {
+      res.status(400).json({ success: false, error: 'Missing information' });
+      return;
+    }
+    const report = await Report.findOne({ _id: new ObjectId(reportId) });
+    if (!report) {
+      res.status(400).json({ success: false, error: 'Report not found' });
+      return;
+    }
+    report.state = "Processing";
+    await report.save();
+    req.receiver = report.email;
+    req.name = report.name;
+    req.address = report.address;
+    next();
+  }
+  catch (err) {
+    console.log(err);
+    res.status(500).json({ success: false, error: err.message});
+  }
+}, sendMailController.sendReportState);
 
 module.exports = router;
