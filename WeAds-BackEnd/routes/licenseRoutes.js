@@ -6,7 +6,11 @@ const Officer = require("../model/officer");
 const { ObjectId } = require('mongodb');
 const Router = express.Router();
 
-Router.get('/create/:id', async (req, res) => {
+const {
+  checkDirectory,
+} = require("../middlewares/fileUploadMiddleware");
+
+Router.get('/create/:id', checkDirectory, async (req, res) => {
   const id = req.params.id;
   if (!id) {
     res.redirect('/weads/place/view-all');
