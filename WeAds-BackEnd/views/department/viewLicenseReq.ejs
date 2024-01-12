@@ -8,6 +8,9 @@
           <th class="text-center" style="background-color: #2b2929; color: white;" scope="col">Loại hình quảng cáo</th>
           <th class="text-center" style="background-color: #2b2929; color: white;" scope="col">Kích thước</th>
           <th class="text-center" style="background-color: #2b2929; color: white;" scope="col">Địa chỉ điểm đặt</th>
+          <% if (role != 'Department') { %>
+            <th class="text-center" style="background-color: #2b2929; color: white;" scope="col">Trạng thái</th>
+          <% } %>
           <th class="text-center" style="background-color: #2b2929; color: white; border-top-right-radius: 5px;" scope="col">Nội dung chi tiết</th>
         </tr>
       </thead>
@@ -19,6 +22,15 @@
           <td class="text-center"><%= requests[i].adType %></td>  
           <td class="text-center"><%= requests[i].adScale %></td>
           <td class="text-center"><%= requests[i].place.ward %>, <%= requests[i].place.district %></td>
+          <% if (role != 'Department') { %>
+            <% if (requests[i].state == '1') { %>
+              <td class="text-center text-success">Đã duyệt</td>
+            <% } else if (requests[i].state == '2') { %>
+              <td class="text-center text-danger">Từ chối</td>
+            <% } else { %>
+              <td class="text-center text-primary">Đang chờ</td>
+            <% } %>
+          <% } %>
           <td class="text-center">
             <a class="btn btn-success" href="/weads/license-request/view/<%- requests[i]._id %>">Xem chi tiết</a>
           </td>
