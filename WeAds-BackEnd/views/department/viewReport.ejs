@@ -2,21 +2,22 @@
 <div class="row justify-content-center">
 
   <% if(role === 'District'){ %>
+    <div class="d-flex justify-content-center fw-bold">
+      Chọn phường muốn xem
+    </div>
   <select id="ward-select" class="form-control w-25 bg-primary text-center m-3" name="ward-select">
-    <option selected value="all">Chọn phường muốn xem</option>
+    <option value="all">Chọn tất cả</option>
     <% wards.forEach(function(ward){ %>
       <option value="<%= ward.name %>"><%= ward.name %></option>
     <% }); %>
-    <option value="all">Chọn tất cả</option>
   </select>
   <% } %>
   <% if(role === 'Department'){ %>
-    <select id="report-select" class="form-control w-25 bg-primary text-center m-3" name="ward-select">
-      <option selected value="all">Chọn loại báo cáo</option>
+    <select id="report-select" class="form-control w-25 bg-primary text-center m-3" name="report-select">
+      <option value="all">Chọn tất cả</option>
       <option value="0">Chưa xử lý</option>
       <option value="1">Đang xử lý</option>
       <option value="2">Đã xử lý</option>
-      <option value="all">Chọn tất cả</option>
     </select>
     <% } %>
   <div class="col-12 col-md-11 col-lg-10">
@@ -64,6 +65,24 @@
     </table>
   </div>
 </div>
+
+<script>
+  const optionString = '<%- JSON.stringify(option) %>';
+  const option = JSON.parse(optionString);
+
+  document.addEventListener('DOMContentLoaded', function(){
+    let report = document.getElementById('report-select');
+    if(report){
+      report.value = option;
+    }
+
+    let ward = document.getElementById('ward-select');
+    if(ward){
+      ward.value = option; 
+    }
+  })
+</script>
+
 <script>
   $(document).ready(async function () {
     $("#ward-select").change(function () {
@@ -83,4 +102,6 @@
     });
   })
 </script>
+
+
 <%- include('./partials/footer') %>
