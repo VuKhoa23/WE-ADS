@@ -6,7 +6,11 @@ const Officer = require("../model/officer");
 const { ObjectId } = require('mongodb');
 const Router = express.Router();
 
-Router.get('/create/:id', async (req, res) => {
+const {
+  checkDirectory, uploadAds
+} = require("../middlewares/fileUploadMiddleware");
+
+Router.get('/create/:id', checkDirectory, async (req, res) => {
   const id = req.params.id;
   if (!id) {
     res.redirect('/weads/place/view-all');
@@ -49,7 +53,12 @@ Router.get('/create/:id', async (req, res) => {
   }
 });
 
-Router.post('/create/:id', async (req, res) => {
+Router.post('/create/:id', uploadAds.fields([
+  {
+    name: "adImages",
+    maxCount: 5,
+  },
+]) ,async (req, res) => {
   const id = req.params.id;
   const { adType, width, height, adName, adImages, companyName, companyPhone, companyEmail, startDate, endDate } = req.body;
   const adScale = width + "m x " + height + "m";
