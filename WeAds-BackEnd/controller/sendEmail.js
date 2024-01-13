@@ -1,7 +1,8 @@
 const NodeMailer = require('nodemailer');
 const passwordTemplate = require('../template/forgetPassword.json');
 const resultTemplate = require('../template/reportResult.json');
-const announceTemplate = require('../template/announce.json');
+const announceTemplate = require('../template/reportAnnounce.json');
+const updateTemplate = require('../template/updateReqAnnounce.json');
 require('dotenv').config();
 
 
@@ -23,6 +24,13 @@ const populateResultEmail = (template, name, address, result) => {
   return resultBody;
 };
 
+const populateUpdateEmail = (template, name, type, address) => {
+  let resultBody = template.replace("<name>", name);
+  resultBody = resultBody.replace("<address>", address);
+  resultBody = resultBody.replace("<type>", type);
+  return resultBody;
+};
+
 module.exports.sendCode = (req, res, next) => {
   let transporter = NodeMailer.createTransport({
     host: process.env.EMAIL_HOST,
@@ -38,7 +46,14 @@ module.exports.sendCode = (req, res, next) => {
     from: process.env.EMAIL_ADDRESS,
     to: req.email_to,
     subject: passwordTemplate.subject,
-    html: populatePasswordEmail(passwordTemplate.body, req.user, req.code)
+    html: populatePasswordEmail(passwordTemplate.body, req.user, req.code),
+    attachments: [
+      {
+        filename: 'check.svg',  
+        path: '../public/images/check.svg', 
+        cid: 'successIcon'   
+      }
+    ]
   };
   
   transporter.sendMail(mailOptions, function(error, info){
@@ -106,6 +121,39 @@ module.exports.sendReportState = (req, res, next) => {
     to: req.receiver,//destination email
     subject: announceTemplate.subject,
     html: populateResultEmail(announceTemplate.body, req.name, req.address, "")
+    //name: reporter name; address: address of the billboard
+  };
+  
+  transporter.sendMail(mailOptions, function(error, info){
+    if (error) {
+      console.log(error);
+      res.status(500).json({ success: false, error: error.message});
+    } else {
+      res.status(200).json({ success: true });
+    }
+  });
+};
+
+module.exports.sendUpdateAnnounce = (req, res, next) => {
+  if (!req.receiver || !req.name || !req.address || !req.type) {
+    res.status(500).json({ success: false, error: "Missing information"});
+    return;
+  }
+  let transporter = NodeMailer.createTransport({
+    host: process.env.EMAIL_HOST,
+    port: process.env.EMAIL_PORT,
+    secure: process.env.EMAIL_PORT === 465 ? true : false,
+    auth: {
+      user: process.env.EMAIL_ADDRESS,
+      pass: process.env.EMAIL_PASSWORD
+    }
+  });
+  
+  let mailOptions = {
+    from: process.env.EMAIL_ADDRESS,
+    to: req.receiver,//destination email
+    subject: updateTemplate.subject,
+    html: populateUpdateEmail(updateTemplate.body, req.name, req.type, req.address)
     //name: reporter name; address: address of the billboard
   };
   
