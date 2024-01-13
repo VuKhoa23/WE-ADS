@@ -30,6 +30,7 @@ router.get("/", async (req, res) => {
   res.render("department/viewReport", { 
     reports: reports, 
     wards: wards,
+    option: 'all',
     role: res.locals.user.role,
     username: res.locals.user.username
   });
@@ -49,6 +50,7 @@ router.get("/ward/:val", async (req, res) => {
   res.render("department/viewReport", { 
     reports: reports, 
     wards: wards,
+    option: val,
     role: res.locals.user.role,
     username: res.locals.user.username
   });
@@ -71,6 +73,7 @@ router.get("/department/:option", async (req, res) => {
 
   res.render("department/viewReport", { 
     reports: reports, 
+    option: option,
     role: res.locals.user.role,
     username: res.locals.user.username
   });
