@@ -1,11 +1,12 @@
 <%- include('./partials/header') %>
   <div class="container-fluid d-flex justify-content-center">
     <div class="row justify-content-center col-12 col-sm-11 col-md-10 col-lg-8">
-      <form class="license-form" method="post" action="/weads/ad/editAd/<%= adPlacement._id %>/<%= ad._id %>">
+      <form id="edit-ad-form" method="post">
         <div class="license-form-header">
           <a href="/weads/ad/allAds/<%= adPlacement._id %>" class="btn btn-outline-success back-btn">Trở lại</a>
           <h3 class="license-form-title">Chỉnh sửa bảng quảng cáo</h3>
         </div>
+        <h3 class="row-name centered-row">Thông tin quảng cáo</h3>
         <div class="license-form-row">
           <h3 class="row-label">Địa điểm đặt quảng cáo:</h3>
           <input type="text" class="place-input" value="<%= adPlacement.ward %>, <%= adPlacement.district %>" readonly>
@@ -27,13 +28,26 @@
             <input type="text" class="ads-size" id="height" value="<%= sizes[1].replace('m', '') %>" required name="height">m
           </div>
         </div>
-        <div class="license-form-row" id="ads-images">
-          <div class="ads-images-label">
-            <h3 class="row-label">Hình ảnh quảng cáo:</h3>
-            <input type="text" class="license-form-input" id="ads-images-url" value="<%= ad.adImages.join(', ') %>" required name="ads-image-url">
-          </div>
+        <span class="seperate"></span>
+        <div class="license-form-row license-image-row" id="ads-images">
+          <h3 class="row-name centered-row">Hình ảnh chi tiết</h3>
+          <% if (ad.adImages.length > 0) { %>
+            <div class="image-container">
+              <% for(var i = 0; i < ad.adImages.length; i++) { %>
+                <div class="ad-image-wrapper">
+                  <img class="ads-image" src="<%- ad.adImages[i] %>" alt="hình ảnh quảng cáo">
+                  <div class="delete-img-overlay">
+                    <button onclick="removeElement(this)" class="delete-img-button btn btn-danger">Xóa</button>
+                  </div>
+                </div>
+              <% } %>
+            </div>
+          <% } else { %>
+            <h3 style="font-weight: normal;" class="row-name centered-row">Không có hình ảnh</h3>
+          <% } %>
         </div>
-        <span class="separate"></span>
+        <span class="seperate"></span>
+        <h3 class="row-name centered-row">Thông tin công ty</h3>
         <div class="license-form-row">
           <h3 class="row-label">Tên công ty đặt quảng cáo:</h3>
           <input type="text" class="license-form-input" id="companyName"value="<%= ad.companyName %>" required name="companyName">
@@ -67,9 +81,107 @@
         </div>
         <span class="seperate"></span>
         <span class="d-flex justify-content-center">
-          <button id="license-form-submit" class="btn btn-success">Cập nhật</button>
+          <button id="edit-ad-submit" class="btn btn-success">Cập nhật</button>
         </span>
       </form>
     </div>
   </div>
+
+  <script>
+    function removeElement(button) {
+      var parentElement = button.parentNode;
+      parentElement =parentElement.parentNode;
+      var container = parentElement.parentNode;
+      parentElement.parentNode.removeChild(parentElement);
+      console.log(container.children.length);
+      var noImg = document.createElement('p');
+
+      noImg.textContent = 'Không có hình ảnh';
+      noImg.style='font-weight: normal; text-align: center';
+      if (container.children.length == 0) {
+        container.appendChild(noImg);
+      }
+    }
+
+    function showSuccessModal() {
+      Swal.fire({
+        icon: 'success',
+        title: 'Sửa bảng quảng cáo thành công',
+        showCancelButton: false,
+        timer: null
+      }).then((result) => {
+          if (result.isConfirmed) {
+              window.location.href = '/weads/ad/allAds/' + '<%- placeId %>';
+          }
+      });
+    }
+    function showErrorModal() {
+      Swal.fire({
+        icon: 'error',
+        title: 'Có lỗi xảy ra, vui lòng thử lại',
+        showCancelButton: false,
+        timer: null
+      });
+    }
+
+  $("#edit-ad-form").on("submit", async function (event) {
+    event.preventDefault();
+    const adName = $("#adName").val();
+    const adType = $("#adType").val();
+    const width = $("#width").val();
+    const height = $("#height").val();
+    const companyName = $("#companyName").val();
+    const companyPhone = $("#companyPhone").val();
+    const companyEmail = $("#companyEmail").val();
+    const startDate = $("#startDate").val();
+    const endDate = $("#endDate").val();
+
+    // const formData = new FormData();
+    // formData.append('adName', adName);
+    // formData.append('adType', adType);
+    // formData.append('width', width);
+    // formData.append('height', height);
+    // formData.append('companyName', companyName);
+    // formData.append('companyPhone', companyPhone);
+    // formData.append('companyEmail', companyEmail);
+    // formData.append('startDate', startDate);
+    // formData.append('endDate', endDate);
+
+    let images = $(".ads-image");
+    const imageArray = [];
+
+    images.each(function() {
+      imageArray.push($(this).attr('src'));
+    }); 
+    // formData.append('imageArray', imageArray);
+
+    const response = await fetch(window.location.pathname, {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        adName,
+        adType,
+        width,
+        height,
+        companyName,
+        companyPhone,
+        companyEmail,
+        startDate,
+        endDate,
+        adImages: imageArray
+      })
+    })
+      .then(function (result) {
+        return result.json();
+      });
+    console.log(response);
+    if (response.success)
+      showSuccessModal();
+    else {
+      showErrorModal();
+    }
+  });
+  </script>
 <%- include('./partials/footer') %>

@@ -217,15 +217,15 @@
   margin-bottom: 8px;
 }
 
-.image-container {
-
-}
-
 .ads-image {
   width: 100%;
   background-size: contain;
   border: 1px solid #000;
   margin-bottom: 10px;
+}
+
+.ad-image-wrapper .ads-image {
+  margin-bottom: unset;
 }
 
 /* modal ------------------------------------ */
@@ -279,4 +279,46 @@
     left: 50px;
     top: -72px;
   }
+}
+
+/* editAdForm -------------------------- */
+#edit-ad-form {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #000;
+  border-radius: 5px;
+  background-color: #fff;
+}
+
+.ad-image-wrapper {
+  position: relative;
+}
+
+.ad-image-wrapper + .ad-image-wrapper {
+  margin-top: 10px;
+}
+
+.delete-img-overlay {
+  background: rgba(0, 0, 0, 0.3);
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  display: none;
+}
+
+.ad-image-wrapper:hover .delete-img-overlay {
+  display: block;
+}
+
+.delete-img-button {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+
+.license-image-row {
+  min-height: 30px;
 }
