@@ -1,7 +1,6 @@
 const multer = require("multer");
 const fs = require("fs");
 const path = require("path");
-const Item = require("../models/item");
 
 const checkDirectory = function (req, res, next) {
   const dir = path.resolve(path.join(__dirname, '../public/adImages'));
@@ -13,8 +12,7 @@ const checkDirectory = function (req, res, next) {
 
 const storageAds = multer.diskStorage({
   destination: (req, file, cb) => {
-    checkExist("public/images/items-images");
-    cb(null, "public/images/items-images");
+    cb(null, "public/adImages");
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + file.originalname.replace(/ /g, ""));

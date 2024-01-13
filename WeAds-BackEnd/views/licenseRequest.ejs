@@ -1,169 +1,156 @@
 <%- include('./department/partials/header') %>
-  <div class="container-fluid d-flex justify-content-center">
-    <div class="row justify-content-center col-12 col-sm-11 col-md-10 col-lg-8">
-      <form class="license-form">
-        <div class="license-form-header">
-          <a href="/weads/place/view-all" class="btn btn-outline-success back-btn">Trở lại</a>
-          <h3 class="license-form-title">Cấp phép quảng cáo</h3>
-        </div>
-        <div class="license-form-row">
-          <h3 class="row-label">Địa điểm đặt quảng cáo:</h3>
-          <input type="text" class="place-input" disabled>
-        </div>
-        <div class="license-form-row">
-          <h3 class="row-label">Tên quảng cáo:</h3>
-          <input type="text" class="license-form-input" id="adName" required name="adName">
-        </div>
-        <div class="license-form-row">
-          <h3 class="row-label">Loại bảng quảng cáo:</h3>
-          <input type="text" class="license-form-input" id="adType" required name="adType">
-        </div>
-        <div class="license-form-row">
-          <div class="size-row">
-            <h3 class="row-label">Kích thước:</h3>
-            <input type="text" class="ads-size" id="width" required name="width">m
-             x 
-            <input type="text" class="ads-size" id="height" required name="height">m
-          </div>
-        </div>
-        <div class="license-form-row" id="ads-images">
-          <div class="ads-images-label">
-            <h3 class="row-label">hình ảnh quảng cáo:</h3>
-            <button class="ads-images-add"><span>+</span></button>
-          </div>
-        </div>
-        <span class="seperate"></span>
-        <div class="license-form-row">
-          <h3 class="row-label">Tên công ty đặt quảng cáo:</h3>
-          <input type="text" class="license-form-input" id="companyName" required name="companyName">
-        </div>
-        <div class="license-form-row">
-          <h3 class="row-label">Thông tin liên lạc công ty:</h3>
-          <div class="row d-flex align-items-center justify-content-between">
-            <div class="company-info-row col-12 col-md-4">
-                <h4 class="company-info-label">SĐT:</h4>         
-                <input type="text" class="company-info-input" id="companyPhone" required name="companyPhone">
-            </div>
-            <div class="company-info-row col-12 col-md-7">
-                <h4 class="company-info-label">Email:</h4>       
-                <input type="email" class="company-info-input" id="companyEmail" required name="companyEmail">
-            </div>
-          </div>
-        </div>
-
-        <div class="license-form-row">
-          <h3 class="row-label">Thời hạn quảng cáo:</h3>
-          <div class="row d-flex align-items-center justify-content-around">
-            <div class="company-info-row col-8 col-md-4">
-                <h4 class="company-info-label">Bắt đầu:</h4>         
-                <input type="date" class="company-info-input" id="startDate" required name="startDate">
-            </div>
-            <div class="company-info-row col-8 col-md-4">
-                <h4 class="company-info-label">Kết thúc:</h4>       
-                <input type="date" class="company-info-input" id="endDate" required name="endDate">
-            </div>
-          </div>
-        </div>
-        <span class="seperate"></span>
-        <span class="d-flex justify-content-center">
-          <button id="license-form-submit" class="btn btn-success">Gửi yêu cầu</button>
-        </span>
-      </form>
-    </div>
-  </div>
-
-  <div class="success-modal d-none">
-    <div class="overlay">
-      <div class="custom-modal">
-        <i style="color: green" class="bi bi-check-circle"></i>
-        <h3 class="modal-text">Đã tạo yêu cầu cấp phép</h3>
-        <a class="btn btn-primary" href="/weads/place/view-all">Ok</a>
+<div class="container-fluid d-flex justify-content-center">
+  <div class="row justify-content-center col-12 col-sm-11 col-md-10 col-lg-8">
+    <form class="license-form">
+      <div class="license-form-header">
+        <a href="/weads/place/view-all" class="btn btn-outline-success back-btn">Trở lại</a>
+        <h3 class="license-form-title">Cấp phép quảng cáo</h3>
       </div>
-    </div>
-  </div>
-
-  <div class="fail-modal d-none">
-    <div class="overlay">
-      <div class="custom-modal">
-        <i style="color: red" class="bi bi-x-circle"></i>
-        <h3 class="modal-text">Có lỗi xảy ra, vui lòng thử lại</h3>
-        <button class="close-modal btn btn-primary">Ok</button>
+      <div class="license-form-row">
+        <h3 class="row-label">Địa điểm đặt quảng cáo:</h3>
+        <input type="text" class="place-input" disabled>
       </div>
+      <div class="license-form-row">
+        <h3 class="row-label">Tên quảng cáo:</h3>
+        <input type="text" class="license-form-input" id="adName" required name="adName">
+      </div>
+      <div class="license-form-row">
+        <h3 class="row-label">Loại bảng quảng cáo:</h3>
+        <input type="text" class="license-form-input" id="adType" required name="adType">
+      </div>
+      <div class="license-form-row">
+        <div class="size-row">
+          <h3 class="row-label">Kích thước:</h3>
+          <input type="text" class="ads-size" id="width" required name="width">m
+          x
+          <input type="text" class="ads-size" id="height" required name="height">m
+        </div>
+      </div>
+
+      <div class="mb-3 form-group row">
+        <label for="image" class="form-label col-3">Ảnh uploads</label>
+        <div class="col-9">
+          <input type="file" class="form-control" id="adImages" name="adImages" multiple accept="image/png, image/jpeg" style="font-size: 1.5rem;" required>
+        </div>
+      </div>
+
+      <span class="seperate"></span>
+      <div class="license-form-row">
+        <h3 class="row-label">Tên công ty đặt quảng cáo:</h3>
+        <input type="text" class="license-form-input" id="companyName" required name="companyName">
+      </div>
+      <div class="license-form-row">
+        <h3 class="row-label">Thông tin liên lạc công ty:</h3>
+        <div class="row d-flex align-items-center justify-content-between">
+          <div class="company-info-row col-12 col-md-4">
+            <h4 class="company-info-label">SĐT:</h4>
+            <input type="text" class="company-info-input" id="companyPhone" required name="companyPhone">
+          </div>
+          <div class="company-info-row col-12 col-md-7">
+            <h4 class="company-info-label">Email:</h4>
+            <input type="email" class="company-info-input" id="companyEmail" required name="companyEmail">
+          </div>
+        </div>
+      </div>
+
+      <div class="license-form-row">
+        <h3 class="row-label">Thời hạn quảng cáo:</h3>
+        <div class="row d-flex align-items-center justify-content-around">
+          <div class="company-info-row col-8 col-md-4">
+            <h4 class="company-info-label">Bắt đầu:</h4>
+            <input type="date" class="company-info-input" id="startDate" required name="startDate">
+          </div>
+          <div class="company-info-row col-8 col-md-4">
+            <h4 class="company-info-label">Kết thúc:</h4>
+            <input type="date" class="company-info-input" id="endDate" required name="endDate">
+          </div>
+        </div>
+      </div>
+      <span class="seperate"></span>
+      <span class="d-flex justify-content-center">
+        <button id="license-form-submit" class="btn btn-success">Gửi yêu cầu</button>
+      </span>
+    </form>
+  </div>
+</div>
+
+<div class="success-modal d-none">
+  <div class="overlay">
+    <div class="custom-modal">
+      <i style="color: green" class="bi bi-check-circle"></i>
+      <h3 class="modal-text">Đã tạo yêu cầu cấp phép</h3>
+      <a class="btn btn-primary" href="/weads/place/view-all">Ok</a>
     </div>
   </div>
+</div>
 
-  <script>
-    const place = '<%- ward %>' + ', ' + '<%- district %>'
-    $('.place-input').val(place);
-  </script>
-  <script>
-    $(document).ready(function() {
-      $(".ads-images-add").click(function(event) {
-        event.preventDefault();
-        let newLine = `<div class="ads-images-link">
-            <button onclick="removeElement(this)" class="ads-images-remove"><span>-</span></button>
-            <input type="text" placeholder="Nhập link ảnh" class="ads-images-input" required name="adImage">
-          </div>`;
-        $("#ads-images").append(newLine);
-      });
-    });
-  </script>
-  <script>
-    function removeElement(button) {
+<div class="fail-modal d-none">
+  <div class="overlay">
+    <div class="custom-modal">
+      <i style="color: red" class="bi bi-x-circle"></i>
+      <h3 class="modal-text">Có lỗi xảy ra, vui lòng thử lại</h3>
+      <button class="close-modal btn btn-primary">Ok</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const place = '<%- ward %>' + ', ' + '<%- district %>'
+  $('.place-input').val(place);
+</script>
+<script>
+  function removeElement(button) {
     var parentElement = button.parentNode;
     parentElement.parentNode.removeChild(parentElement);
   }
-  </script>
-  <script>
-    $(".license-form").on("submit" , async function(event) {
-      event.preventDefault();
-      let images = $(".ads-images-input");
-      const imageArray = [];
+</script>
+<script>
+  $(".license-form").on("submit", async function (event) {
+    event.preventDefault();
+    const adName = $("#adName").val();
+    const adType = $("#adType").val();
+    const width = $("#width").val();
+    const height = $("#height").val();
+    const companyName = $("#companyName").val();
+    const companyPhone = $("#companyPhone").val();
+    const companyEmail = $("#companyEmail").val();
+    const startDate = $("#startDate").val();
+    const endDate = $("#endDate").val();
 
-      images.each(function() {
-        imageArray.push($(this).val());
-      });
-      const adName = $("#adName").val();
-      const adType = $("#adType").val();
-      const width = $("#width").val();
-      const height = $("#height").val();
-      const companyName = $("#companyName").val();
-      const companyPhone = $("#companyPhone").val();
-      const companyEmail = $("#companyEmail").val();
-      const startDate = $("#startDate").val();
-      const endDate = $("#endDate").val();
+    const formData = new FormData();
+    formData.append('adName', adName);
+    formData.append('adType', adType);
+    formData.append('width', width);
+    formData.append('height', height);
+    formData.append('companyName', companyName);
+    formData.append('companyPhone', companyPhone);
+    formData.append('companyEmail', companyEmail);
+    formData.append('startDate', startDate);
+    formData.append('endDate', endDate);
 
-      const response = await fetch(window.location.pathname, {
-        method: 'POST',
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ 
-          adName,
-          adType,
-          width,
-          height,
-          companyName,
-          companyPhone,
-          companyEmail,
-          startDate,
-          endDate,
-          adImages: imageArray
-        })
-      })
-      .then (function(result) {
+    var input = document.querySelector('input[type="file"]')
+
+    for (const file of input.files) {
+      formData.append('theAdImages', file, file.name)
+    }
+
+    const response = await fetch(window.location.pathname, {
+      method: 'POST',
+      body: formData
+    })
+      .then(function (result) {
         return result.json();
       })
-      if (response.success)
-        $('.success-modal').toggleClass('d-none');
-      else {
-        $('.fail-modal').toggleClass('d-none');
-      }
-    });
-  </script>
-  <script>
-     $(".close-modal").click(function(){
-      $(".fail-modal").toggleClass("d-none");
-    });
-  </script>
+    if (response.success)
+      $('.success-modal').toggleClass('d-none');
+    else {
+      $('.fail-modal').toggleClass('d-none');
+    }
+  });
+</script>
+<script>
+  $(".close-modal").click(function () {
+    $(".fail-modal").toggleClass("d-none");
+  });
+</script>
 <%- include('./department/partials/footer') %>
