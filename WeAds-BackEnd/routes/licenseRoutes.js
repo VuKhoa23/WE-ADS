@@ -125,6 +125,10 @@ Router.get('/view-all', async (req, res) => {
     if(res.locals.user){
       role = res.locals.user.role
     }
+    if (role != 'Department') {
+      res.redirect('/weads/license-request/view-all/created');
+      return;
+    }
     res.render('department/viewLicenseReq', {
       requests,
       role,

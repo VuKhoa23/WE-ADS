@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Place = require("../model/places");
 const Ad = require("../model/ads");
+const { ObjectId } = require('mongodb');
 
 // router.get('/create-demo', async (req, res) => {
 //   const place = await Place.findOne({district: "Quận Bình Thạnh"})
@@ -128,15 +129,48 @@ router.get('/createAd/:adPlacementId', async (req, res) => {
 
 router.get('/editAdForm/:_id', async function(req, res) {
   const ad = await Ad.findOne({_id: req.params._id});
+  const startDate = new Date(ad.startDate);
+  const endDate = new Date(ad.endDate);
 
   const adPlacement = await Place.findOne({_id: ad.place});
   res.render("department/editAdForm", {
     ad: ad,
+    placeId: ad.place,
+    startDate: `${startDate.getDate()}/${startDate.getMonth()+1}/${startDate.getFullYear()}`,
+    endDate: `${endDate.getDate()}/${endDate.getMonth()+1}/${endDate.getFullYear()}`,
     adPlacement: adPlacement,
     username: res.locals.user ? res.locals.user.username : null,
     role: res.locals.user ? res.locals.user.role : null,
   })
 })
+
+router.post('/editAdForm/:id', async function(req, res) {
+  const id = req.params.id;
+  const { adType, width, height, adName, adImages, companyName, companyPhone, companyEmail, startDate, endDate } = req.body;
+  const adScale = width + "m x " + height + "m";
+  console.log(req.body);
+
+  if (!id) {
+    res.status(400).json({ success: false, error: "Missing id" });
+    return;
+  }
+  
+  try {
+    const ad = await Ad.findById(id).populate('place');
+    if (!ad) {
+      res.status(400).json({ success: false, error: "Ads not found" });
+      return;
+    }
+
+    await Ad.updateOne({ _id: new ObjectId(id)}, { adType, adScale, adName, adImages, companyName, companyPhone, companyEmail, startDate: new Date(startDate), endDate: new Date(endDate) })
+    res.status(201).json({ success: true });
+  }
+  catch (err) {
+    console.log(err.message);
+    res.status(400).json({ success: false, error: err.message });
+    return;
+  }
+});
 
 router.post('/editAd/:adPlacementId/:adId', async function(req, res) {
   try {
