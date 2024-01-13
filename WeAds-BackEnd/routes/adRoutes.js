@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Place = require("../model/places");
 const Ad = require("../model/ads");
+const UpdateRequest = require("../model/updateRequest");
 const { ObjectId } = require('mongodb');
 
 // router.get('/create-demo', async (req, res) => {
@@ -148,8 +149,9 @@ router.post('/editAdForm/:id', async function(req, res) {
   const id = req.params.id;
   const { adType, width, height, adName, adImages, companyName, companyPhone, companyEmail, startDate, endDate } = req.body;
   const adScale = width + "m x " + height + "m";
-  console.log(req.body);
-
+  const role = res.locals.user ? res.locals.user.role : null;
+  const officerId = res.locals.user ? res.locals.user._id : null;
+  
   if (!id) {
     res.status(400).json({ success: false, error: "Missing id" });
     return;
@@ -162,8 +164,14 @@ router.post('/editAdForm/:id', async function(req, res) {
       return;
     }
 
-    await Ad.updateOne({ _id: new ObjectId(id)}, { adType, adScale, adName, adImages, companyName, companyPhone, companyEmail, startDate: new Date(startDate), endDate: new Date(endDate) })
-    res.status(201).json({ success: true });
+    if (role == 'Department') {
+      await Ad.updateOne({ _id: new ObjectId(id)}, { adType, adScale, adName, adImages, companyName, companyPhone, companyEmail, startDate: new Date(startDate), endDate: new Date(endDate) })
+      res.status(201).json({ success: true });
+    }
+    else {
+      await UpdateRequest.create({ createBy: new ObjectId(officerId), updateFor: 'Ad', state: 0, adType, adScale, adName, adImages, companyName, companyPhone, companyEmail, startDate: new Date(startDate), endDate: new Date(endDate) });
+      res.status(200).json({ success: true });
+    }
   }
   catch (err) {
     console.log(err.message);

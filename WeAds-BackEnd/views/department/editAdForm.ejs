@@ -81,11 +81,47 @@
         </div>
         <span class="seperate"></span>
         <span class="d-flex justify-content-center">
-          <button id="edit-ad-submit" class="btn btn-success">Cập nhật</button>
+          <% if (role == 'Department') { %>
+            <button id="edit-ad-submit" class="btn btn-success">Cập nhật</button>
+          <% } else { %>
+            <button id="edit-ad-submit" class="btn btn-success">Tạo yêu cầu</button>
+          <% } %>
         </span>
       </form>
     </div>
   </div>
+
+<% if (role == 'Department') { %>
+  <script>
+      function showSuccessModal() {
+          Swal.fire({
+              icon: 'success',
+              title: 'Cập nhật điểm đặt thành công',
+              showCancelButton: false,
+              timer: null
+          }).then((result) => {
+              if (result.isConfirmed) {
+                window.location.href = '/weads/ad/allAds/' + '<%- placeId %>';
+              }
+          });
+      }
+  </script>
+<% } else { %>
+  <script>
+      function showSuccessModal() {
+          Swal.fire({
+              icon: 'success',
+              title: ' Tạo yêu cầu thành công',
+              showCancelButton: false,
+              timer: null
+          }).then((result) => {
+              if (result.isConfirmed) {
+                window.location.href = '/weads/ad/allAds/' + '<%- placeId %>';
+              }
+          });
+      }
+  </script>
+<% } %>
 
   <script>
     function removeElement(button) {
@@ -103,18 +139,6 @@
       }
     }
 
-    function showSuccessModal() {
-      Swal.fire({
-        icon: 'success',
-        title: 'Sửa bảng quảng cáo thành công',
-        showCancelButton: false,
-        timer: null
-      }).then((result) => {
-          if (result.isConfirmed) {
-              window.location.href = '/weads/ad/allAds/' + '<%- placeId %>';
-          }
-      });
-    }
     function showErrorModal() {
       Swal.fire({
         icon: 'error',
@@ -176,12 +200,11 @@
       .then(function (result) {
         return result.json();
       });
-    console.log(response);
+      
     if (response.success)
       showSuccessModal();
-    else {
+    else 
       showErrorModal();
-    }
   });
   </script>
 <%- include('./partials/footer') %>

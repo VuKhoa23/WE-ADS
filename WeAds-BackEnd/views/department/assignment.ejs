@@ -14,7 +14,7 @@
       <% if (officers.length > 0) { %>
       <% for(var i = 0; i < officers.length; i++) { %>
       <tr>
-        <td class="text-center"><%= officers[i].username %></td>
+        <td class="text-center"><%= officers[i].name %></td>
         <td class="text-center"><%= officers[i].role %></td>
         <% if(officers[i].role === 'District'){ %>
           <td class="text-center"><%= officers[i].district %>, <%= officers[i].ward %></td>
