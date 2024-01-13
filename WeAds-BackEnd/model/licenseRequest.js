@@ -42,6 +42,9 @@ const licenseRequest = new Schema({
   place: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "place",
+  },
+  state: {//0: waiting, 1: accepted, 2: declined
+    type: String
   }
 })
 

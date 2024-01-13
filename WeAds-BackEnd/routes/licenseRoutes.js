@@ -83,7 +83,7 @@ Router.post('/create/:id', async (req, res) => {
       return;
     }
 
-    await LicenseRequest.create({ adId: ad._id ,adType, adScale, adName, adImages, companyName, companyPhone, companyEmail, startDate, endDate, place: ad.place._id, createBy: officerId });
+    await LicenseRequest.create({ adId: ad._id ,adType, adScale, adName, adImages, companyName, companyPhone, companyEmail, startDate, endDate, place: ad.place._id, createBy: officerId, state: '0' });
     res.status(201).json({ success: true });
   }
   catch (err) {
@@ -95,7 +95,7 @@ Router.post('/create/:id', async (req, res) => {
 
 Router.get('/view-all', async (req, res) => {
   try {
-    const requests = await LicenseRequest.find({}).populate('place');
+    const requests = await LicenseRequest.find({ state: '0'}).populate('place');
     let username = null
     createMessage = null
 
@@ -231,7 +231,11 @@ Router.post('/view/:id/accept', async function (req, res) {
       place: request.place,
       licensed: true
     });
-    await LicenseRequest.deleteMany({adId: new ObjectId(request.adId)});
+    await LicenseRequest.updateMany({adId: new ObjectId(request.adId)}, {
+      state: '2'
+    });
+    request.state = '1';
+    await request.save();
     res.status(200).json({ success: true });
   }
   catch (err) {
@@ -247,7 +251,23 @@ Router.post('/view/:id/decline', async function (req, res) {
     return;
   }
   try {
-    const request = await LicenseRequest.deleteOne({ _id: new ObjectId(id) });
+    await LicenseRequest.updateOne({ _id: new ObjectId(id) }, { state: '2' });
+    res.status(200).json({ success: true });
+  }
+  catch (err) {
+    console.log(err.message);
+    res.status(400).send("Some error occurred");
+  }
+});
+
+Router.post('/view/:id/delete', async function (req, res) {
+  const id = req.params.id;
+  if (!id) {
+    res.status(400).json({ success: false, error: "Missing id" });
+    return;
+  }
+  try {
+    await LicenseRequest.deleteOne({ _id: new ObjectId(id) });
     res.status(200).json({ success: true });
   }
   catch (err) {
