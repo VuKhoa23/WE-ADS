@@ -163,7 +163,8 @@ router.get('/addAdPlacementForm', async function(req, res) {
 router.post('/addAdPlacement', async function(req, res) {
   try {
     const coordinates  = req.body.coordinates;
-    const coordinatesArray = coordinates.split(',').map(coord => parseFloat(coord.trim()));
+    let coordinatesArray = coordinates.split(',').map(coord => parseFloat(coord.trim()));
+    coordinatesArray = coordinatesArray.reverse()
     const isExist = await Place.findOne({ coordinates: coordinatesArray });
 
     if (isExist) {
