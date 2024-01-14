@@ -158,6 +158,20 @@
   line-height: 18px;
 }
 
+.adType-select {
+  padding: 2px 4px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+  font-size: 16px;
+  font-weight: normal;
+}
+
+.adType-option {
+  font-size: 16px;
+  font-weight: normal;
+}
+
 /* licenseDetail.ejs ------------------------ */
 .card-header {
   position: relative;
