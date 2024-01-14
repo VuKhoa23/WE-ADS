@@ -147,11 +147,10 @@ router.get('/editAdForm/:_id', async function(req, res) {
 
 router.post('/editAdForm/:id', async function(req, res) {
   const id = req.params.id;
-  const { adType, width, height, adName, adImages, companyName, companyPhone, companyEmail, startDate, endDate } = req.body;
+  const { adType, width, height, adName, adImages, companyName, companyPhone, companyEmail, startDate, endDate, reason } = req.body;
   const adScale = width + "m x " + height + "m";
   const role = res.locals.user ? res.locals.user.role : null;
   const officerId = res.locals.user ? res.locals.user._id : null;
-  
   if (!id) {
     res.status(400).json({ success: false, error: "Missing id" });
     return;
@@ -169,7 +168,7 @@ router.post('/editAdForm/:id', async function(req, res) {
       res.status(201).json({ success: true });
     }
     else {
-      await UpdateRequest.create({ createBy: new ObjectId(officerId), updateFor: 'Ad', state: 0, adType, adScale, adName, adImages, companyName, companyPhone, companyEmail, startDate: new Date(startDate), endDate: new Date(endDate) });
+      await UpdateRequest.create({ targetId: new ObjectId(req.params.id), createBy: new ObjectId(officerId), updateFor: 'Ad', state: 0, ward: ad.place.ward, district: ad.place.district, reason, adType, adScale, adName, adImages, companyName, companyPhone, companyEmail, startDate: new Date(startDate), endDate: new Date(endDate) });
       res.status(200).json({ success: true });
     }
   }

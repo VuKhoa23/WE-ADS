@@ -57,6 +57,11 @@
             <input type="number" min="0" max="1" class="form-control" id="adPlanned" name="adPlanned" required>
         </div>
 
+        <div class="mb-3 form-group">
+            <label for="reason" class="form-label">Lý do chỉnh sửa:</label>
+            <textarea style="resize: none;min-height: 100px;" class="form-control" id="reason" name="reason" required></textarea>
+        </div>
+
         <span class="d-flex justify-content-center">
             <% if (role == 'Department') { %>
                 <button type="submit" class="btn btn-primary">Cập nhật Điểm đặt</button>
@@ -125,7 +130,6 @@
 </script>
 <script>
     $('#edit-place-submit').on('submit', async function(event) {
-        console.log('called');
         event.preventDefault();
         let rawLocationType = $('#locationType').val().split(",");
         const locationType = rawLocationType.map((location) => location.trim()).filter((location) => {
@@ -134,6 +138,7 @@
         });
         const adType = $('#adType').val();
         const adPlanned = $('#adPlanned').val();
+        const reason = $('#reason').val();
 
         const response = await fetch(window.location.pathname, {
             method: 'POST',
@@ -143,7 +148,8 @@
             body: JSON.stringify({
                 locationType,
                 adType,
-                adPlanned
+                adPlanned,
+                reason,
             })
         })
         .then(function (result) {

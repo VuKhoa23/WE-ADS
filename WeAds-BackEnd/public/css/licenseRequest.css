@@ -151,6 +151,13 @@
   border-radius: 5px;
   outline: none;
 }
+
+.request-dropdown-label {
+  margin-right: 4px;
+  font-size: 18px;
+  line-height: 18px;
+}
+
 /* licenseDetail.ejs ------------------------ */
 .card-header {
   position: relative;
@@ -321,4 +328,53 @@
 
 .license-image-row {
   min-height: 30px;
+}
+
+#reason-input {
+  width: 100%;
+  min-height: 100px;
+  padding: 4px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+  resize: none;
+  overflow-y: auto;
+}
+/*  updateDetail------------ */
+.update-data {
+  display: flex;
+  max-height: 100px;
+  overflow: auto;
+  font-size: 16px;
+  font-weight: normal;
+  padding: 2px 4px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.form-group .update-data {
+  padding: 6px;
+  border: 1px solid #000;
+  border-radius: 6px;
+}
+
+.old-data {
+  margin-bottom: 0;
+  margin-right: 4px;
+  text-decoration: line-through;
+  color: rgb(242, 85, 85);
+}
+
+.new-data {
+  margin-bottom: 0;
+  margin-right: 4px;
+  color: rgb(0, 122, 171);
+}
+
+.old-data.not-changed {
+  text-decoration: none;
+  color: #000;
 }

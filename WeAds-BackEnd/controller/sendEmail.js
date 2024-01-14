@@ -24,10 +24,12 @@ const populateResultEmail = (template, name, address, result) => {
   return resultBody;
 };
 
-const populateUpdateEmail = (template, name, type, address) => {
+const populateUpdateEmail = (template, name, type, address, state) => {
   let resultBody = template.replace("<name>", name);
   resultBody = resultBody.replace("<address>", address);
   resultBody = resultBody.replace("<type>", type);
+  resultBody = resultBody.replace("<state>", state);
+  resultBody = resultBody.replace("<state>", state);
   return resultBody;
 };
 
@@ -135,10 +137,11 @@ module.exports.sendReportState = (req, res, next) => {
 };
 
 module.exports.sendUpdateAnnounce = (req, res, next) => {
-  if (!req.receiver || !req.name || !req.address || !req.type) {
+  if (!req.receiver || !req.name || !req.address || !req.type || !req.state) {
     res.status(500).json({ success: false, error: "Missing information"});
     return;
   }
+  console.log(req.receiver, req.name, req.address, req.type, req.state);
   let transporter = NodeMailer.createTransport({
     host: process.env.EMAIL_HOST,
     port: process.env.EMAIL_PORT,
@@ -153,7 +156,7 @@ module.exports.sendUpdateAnnounce = (req, res, next) => {
     from: process.env.EMAIL_ADDRESS,
     to: req.receiver,//destination email
     subject: updateTemplate.subject,
-    html: populateUpdateEmail(updateTemplate.body, req.name, req.type, req.address)
+    html: populateUpdateEmail(updateTemplate.body, req.name, req.type, req.address, req.state)
     //name: reporter name; address: address of the billboard
   };
   

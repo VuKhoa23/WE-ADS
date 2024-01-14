@@ -219,7 +219,7 @@ router.get('/editAdPlacementForm/:_id', async function(req, res) {
 
 router.post('/editAdPlacementForm/:_id', async function(req, res) {
   const adPlacement = await Place.findOne({_id: new ObjectId(req.params._id)});
-  const { adType, locationType, adPlanned } = req.body;
+  const { adType, locationType, adPlanned, reason } = req.body;
   const role = res.locals.user ? res.locals.user.role : null;
   const officerId = res.locals.user ? res.locals.user._id : null;
   
@@ -234,7 +234,7 @@ router.post('/editAdPlacementForm/:_id', async function(req, res) {
       res.status(200).json({ success: true });
     }
     else {
-      await UpdateRequest.create({ createBy: new ObjectId(officerId), updateFor: 'Place', state: 0, adType, locationType, adPlanned });
+      await UpdateRequest.create({ targetId: new ObjectId(req.params._id), createBy: new ObjectId(officerId), updateFor: 'Place', state: 0, reason, ward: adPlacement.ward, district: adPlacement.district, adType, locationType, adPlanned });
       res.status(200).json({ success: true });
     }
   }

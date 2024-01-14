@@ -4,6 +4,9 @@ const updateReqSchema = mongoose.Schema({
     updateFor : {
       type: String
     },
+    targetId : {
+      type: mongoose.Schema.Types.ObjectId,
+    },
     createBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "officer",
@@ -39,6 +42,15 @@ const updateReqSchema = mongoose.Schema({
       type: String
     },
     companyEmail: {
+      type: String
+    },
+    ward: {
+      type: String
+    },
+    district: {
+      type: String
+    },
+    reason: {
       type: String
     },
     startDate: {

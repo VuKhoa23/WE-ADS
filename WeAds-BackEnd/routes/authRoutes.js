@@ -191,13 +191,4 @@ router.post('/change-state', async (req, res, next) => {
   }
 }, sendMailController.sendReportState);
 
-router.post('/test-email', (req, res, next) => {
-  const { receiver, name, address, type } = req.body;
-  req.receiver= receiver;
-  req.name= name;
-  req.address= address;
-  req.type= type;
-  next();
-}, sendMailController.sendUpdateAnnounce);
-
 module.exports = router;

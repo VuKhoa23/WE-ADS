@@ -80,6 +80,9 @@
           </div>
         </div>
         <span class="seperate"></span>
+        <h3 class="row-name centered-row">Lý do chỉnh sửa</h3>
+        <textarea type="text" id="reason-input" required></textarea>
+        <span class="seperate"></span>
         <span class="d-flex justify-content-center">
           <% if (role == 'Department') { %>
             <button id="edit-ad-submit" class="btn btn-success">Cập nhật</button>
@@ -159,6 +162,7 @@
     const companyEmail = $("#companyEmail").val();
     const startDate = $("#startDate").val();
     const endDate = $("#endDate").val();
+    const reason = $("#reason-input").val();
 
     // const formData = new FormData();
     // formData.append('adName', adName);
@@ -170,6 +174,7 @@
     // formData.append('companyEmail', companyEmail);
     // formData.append('startDate', startDate);
     // formData.append('endDate', endDate);
+    // formData.append('reason', reason);
 
     let images = $(".ads-image");
     const imageArray = [];
@@ -194,7 +199,8 @@
         companyEmail,
         startDate,
         endDate,
-        adImages: imageArray
+        adImages: imageArray,
+        reason,
       })
     })
       .then(function (result) {
