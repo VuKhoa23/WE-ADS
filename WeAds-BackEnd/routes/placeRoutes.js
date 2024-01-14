@@ -5,6 +5,7 @@ const Ad = require("../model/ads")
 const Officer = require("../model/officer");
 const UpdateRequest = require("../model/updateRequest");
 const { ObjectId } = require('mongodb');
+const AdType = require("../model/advertisement");
 
 // router.get('/create-demo', async (req, res) => {
 //   const place = await Place.findOne({district: "Quận Bình Thạnh"})
@@ -150,9 +151,11 @@ router.get('/allAdPlacement', async function(req, res) {
 
 router.get('/addAdPlacementForm', async function(req, res) {
 
+  const adTypes = await AdType.find({});
   res.render("department/createAdPlacement", {
     lat: req.query.lat,
     lng: req.query.lng,
+    adTypes: adTypes,
     ward: req.query.ward,
     district: req.query.district,
     username: res.locals.user ? res.locals.user.username : null,
@@ -164,33 +167,39 @@ router.get('/addAdPlacementForm', async function(req, res) {
 
 router.post('/addAdPlacement', async function(req, res) {
   try {
-    const coordinates  = req.body.coordinates;
-    let coordinatesArray = coordinates.split(',').map(coord => parseFloat(coord.trim()));
-    coordinatesArray = coordinatesArray.reverse()
-    const isExist = await Place.findOne({ coordinates: coordinatesArray });
+      const coordinates = req.body.coordinates;
+      let coordinatesArray = coordinates.split(',').map(coord => parseFloat(coord.trim()));
+      coordinatesArray = coordinatesArray.reverse();
 
-    if (isExist) {
-      const adPlacements = await Place.find({});
-      res.render("department/adPlacement", {
-        announce: 'exist',
-        adPlacements: adPlacements,
-        username: res.locals.user ? res.locals.user.username : null,
-        role: res.locals.user ? res.locals.user.role : null,
-      });
-    } else {
-      await Place.create({ ...req.body, coordinates: coordinatesArray });
-      const adPlacements = await Place.find({});
-      res.render("department/adPlacement", {
-        announce: 'create',
-        adPlacements: adPlacements,
-        username: res.locals.user ? res.locals.user.username : null,
-        role: res.locals.user ? res.locals.user.role : null,
-      });
-    }
+      const isExist = await Place.findOne({ coordinates: coordinatesArray });
+
+      if (isExist) {
+          const adPlacements = await Place.find({});
+          res.render("department/adPlacement", {
+              announce: 'exist',
+              adPlacements: adPlacements,
+              username: res.locals.user ? res.locals.user.username : null,
+              role: res.locals.user ? res.locals.user.role : null,
+          });
+      } else {
+          // Adjusted code to handle locationType as an array
+          const locationTypes = Array.isArray(req.body.locationType) ? req.body.locationType : [req.body.locationType];
+          
+          await Place.create({ ...req.body, coordinates: coordinatesArray, locationType: locationTypes });
+
+          const adPlacements = await Place.find({});
+          res.render("department/adPlacement", {
+              announce: 'create',
+              adPlacements: adPlacements,
+              username: res.locals.user ? res.locals.user.username : null,
+              role: res.locals.user ? res.locals.user.role : null,
+          });
+      }
   } catch (error) {
-    res.status(500).json({ message: error.message });
+      res.status(500).json({ message: error.message });
   }
 });
+
 
 router.get('/deleteAdPlacement/:_id', async function(req, res) {
   try {
