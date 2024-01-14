@@ -80,9 +80,11 @@
           </div>
         </div>
         <span class="seperate"></span>
-        <h3 class="row-name centered-row">Lý do chỉnh sửa</h3>
-        <textarea type="text" id="reason-input" required></textarea>
-        <span class="seperate"></span>
+        <% if (role != 'Department') { %>
+          <h3 class="row-name centered-row">Lý do chỉnh sửa</h3>
+          <textarea type="text" id="reason-input" required></textarea>
+          <span class="seperate"></span>
+        <% } %>
         <span class="d-flex justify-content-center">
           <% if (role == 'Department') { %>
             <button id="edit-ad-submit" class="btn btn-success">Cập nhật</button>
