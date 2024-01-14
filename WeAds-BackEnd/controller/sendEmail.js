@@ -137,11 +137,11 @@ module.exports.sendReportState = (req, res, next) => {
 };
 
 module.exports.sendUpdateAnnounce = (req, res, next) => {
+  console.log(req.receiver, req.name, req.address, req.type, req.state);
   if (!req.receiver || !req.name || !req.address || !req.type || !req.state) {
     res.status(500).json({ success: false, error: "Missing information"});
     return;
   }
-  console.log(req.receiver, req.name, req.address, req.type, req.state);
   let transporter = NodeMailer.createTransport({
     host: process.env.EMAIL_HOST,
     port: process.env.EMAIL_PORT,

@@ -1,351 +1,349 @@
 <%- include('./partials/header') %>
 <% if (type == 'Ad') { %>
-  <div class="container-fluid d-flex justify-content-center">
-    <div class="row justify-content-center col-12 col-sm-11 col-md-10 col-lg-8">
-      <form id="edit-ad-form" method="post">
-        <div class="license-form-header">
-          <a href="/weads/update-request/view-all?type=ad" class="btn btn-outline-success back-btn">Trở lại</a>
-          <h3 class="license-form-title">Yêu cầu chỉnh sửa</h3>
-        </div>
-        <h3 class="row-name centered-row">Thông tin yêu cầu</h3>
-        <div class="d-flex align-items-center">
-          <h3 class="row-label">Ngày tạo:</h3>
-          <h3 class="row-data"><%- createDate %></h3>
-        </div>
-        <div class="d-flex flex-column">
-          <h3 class="row-label">Lý do chỉnh sửa:</h3>
-          <textarea id="reason-input" readonly><%- request.reason %></textarea>
-        </div>
-        <span class="seperate"></span>
-        <h3 class="row-name centered-row">Thông tin quảng cáo</h3>
-        <div class="license-form-row">
-          <h3 class="row-label">Địa điểm đặt quảng cáo:</h3>
-          <input type="text" class="place-input" value="<%= request.ward %>, <%= request.district %>" readonly>
-        </div>
-        <div class="license-form-row">
-          <h3 class="row-label">Tên quảng cáo:</h3>
-          <div class="update-data">
-            <% if (oldData.adName != request.adName) { %>
-            <p class="old-data"><%- oldData.adName %></p>
-            <p class="new-data"><%- request.adName %></p>
-            <% } else { %>
-              <p class="old-data not-changed"><%- oldData.adName %></p>
-            <% } %>
-          </div>
-        </div>
-        <div class="license-form-row">
-          <h3 class="row-label">Loại bảng quảng cáo:</h3>
-          <div class="update-data">
-            <% if (oldData.adType != request.adType) { %>
-            <p class="old-data"><%- oldData.adType %></p>
-            <p class="new-data"><%- request.adType %></p>
-            <% } else { %>
-              <p class="old-data not-changed"><%- oldData.adType %></p>
-            <% } %>
-          </div>
-        </div>
-        <div class="license-form-row">
-          <h3 class="row-label">Kích thước:</h3>
-          <div class="update-data">
-            <% if (oldData.adScale != request.adScale) { %>
-            <p class="old-data"><%- oldData.adScale %></p>
-            <p class="new-data"><%- request.adScale %></p>
-            <% } else { %>
-              <p class="old-data not-changed"><%- oldData.adScale %></p>
-            <% } %>
-          </div>
-        </div>
-        <span class="seperate"></span>
-        <div class="license-form-row license-image-row" id="ads-images">
-          <h3 class="row-name centered-row">Hình ảnh chi tiết</h3>
-          <% if (request.adImages.length > 0) { %>
-            <div class="image-container">
-              <% for(var i = 0; i < request.adImages.length; i++) { %>
-                <div class="ad-image-wrapper">
-                  <img class="ads-image" src="<%- request.adImages[i] %>" alt="hình ảnh quảng cáo">
-                </div>
-              <% } %>
-            </div>
+<div class="container-fluid d-flex justify-content-center">
+  <div class="row justify-content-center col-12 col-sm-11 col-md-10 col-lg-8">
+    <form id="edit-ad-form" method="post">
+      <div class="license-form-header">
+        <a href="/weads/update-request/view-all?type=ad" class="btn btn-outline-success back-btn">Trở lại</a>
+        <h3 class="license-form-title">Yêu cầu chỉnh sửa</h3>
+      </div>
+      <h3 class="row-name centered-row">Thông tin yêu cầu</h3>
+      <div class="d-flex align-items-center">
+        <h3 class="row-label">Ngày tạo:</h3>
+        <h3 class="row-data"><%- createDate %></h3>
+      </div>
+      <div class="d-flex flex-column">
+        <h3 class="row-label">Lý do chỉnh sửa:</h3>
+        <textarea id="reason-input" readonly><%- request.reason %></textarea>
+      </div>
+      <span class="seperate"></span>
+      <h3 class="row-name centered-row">Thông tin quảng cáo</h3>
+      <div class="license-form-row">
+        <h3 class="row-label">Địa điểm đặt quảng cáo:</h3>
+        <input type="text" class="place-input" value="<%= request.ward %>, <%= request.district %>" readonly>
+      </div>
+      <div class="license-form-row">
+        <h3 class="row-label">Tên quảng cáo:</h3>
+        <div class="update-data">
+          <% if (oldData.adName != request.adName) { %>
+          <p class="old-data"><%- oldData.adName %></p>
+          <p class="new-data"><%- request.adName %></p>
           <% } else { %>
-            <h3 style="font-weight: normal;" class="row-name centered-row">Không có hình ảnh</h3>
+          <p class="old-data not-changed"><%- oldData.adName %></p>
           <% } %>
         </div>
-        <span class="seperate"></span>
-        <h3 class="row-name centered-row">Thông tin công ty</h3>
-        <div class="license-form-row">
-          <h3 class="row-label">Tên công ty đặt quảng cáo:</h3>
-          <div class="update-data">
-            <% if (oldData.companyName != request.companyName) { %>
-            <p class="old-data"><%- oldData.companyName %></p>
-            <p class="new-data"><%- request.companyName %></p>
-            <% } else { %>
-              <p class="old-data not-changed"><%- oldData.companyName %></p>
-            <% } %>
-          </div>
+      </div>
+      <div class="license-form-row">
+        <h3 class="row-label">Loại bảng quảng cáo:</h3>
+        <div class="update-data">
+          <% if (oldData.adType != request.adType) { %>
+          <p class="old-data"><%- oldData.adType %></p>
+          <p class="new-data"><%- request.adType %></p>
+          <% } else { %>
+          <p class="old-data not-changed"><%- oldData.adType %></p>
+          <% } %>
         </div>
-        <h3 class="row-name centered-row">Thông tin liên lạc công ty:</h3>
-        <div class="license-form-row">
-          <h3 class="row-label">Email liên hệ:</h3>
-          <div class="update-data">
-            <% if (oldData.companyEmail != request.companyEmail) { %>
-            <p class="old-data"><%- oldData.companyEmail %></p>
-            <p class="new-data"><%- request.companyEmail %></p>
-            <% } else { %>
-              <p class="old-data not-changed"><%- oldData.companyEmail %></p>
-            <% } %>
-          </div>
+      </div>
+      <div class="license-form-row">
+        <h3 class="row-label">Kích thước:</h3>
+        <div class="update-data">
+          <% if (oldData.adScale != request.adScale) { %>
+          <p class="old-data"><%- oldData.adScale %></p>
+          <p class="new-data"><%- request.adScale %></p>
+          <% } else { %>
+          <p class="old-data not-changed"><%- oldData.adScale %></p>
+          <% } %>
         </div>
-        <div class="license-form-row">
-          <h3 class="row-label">SĐT liên lạc:</h3>
-          <div class="update-data">
-            <% if (oldData.companyPhone != request.companyPhone) { %>
-            <p class="old-data"><%- oldData.companyPhone %></p>
-            <p class="new-data"><%- request.companyPhone %></p>
-            <% } else { %>
-              <p class="old-data not-changed"><%- oldData.companyPhone %></p>
-            <% } %>
+      </div>
+      <span class="seperate"></span>
+      <div class="license-form-row license-image-row" id="ads-images">
+        <h3 class="row-name centered-row">Hình ảnh chi tiết</h3>
+        <% if (request.adImages.length > 0) { %>
+        <div class="image-container">
+          <% for(var i = 0; i < request.adImages.length; i++) { %>
+          <div class="ad-image-wrapper">
+            <img class="ads-image" src="<%- request.adImages[i] %>" alt="hình ảnh quảng cáo">
           </div>
+          <% } %>
         </div>
-
-        <h3 class="row-name centered-row">Thời hạn quảng cáo:</h3>
-        <div class="license-form-row">
-          <h3 class="row-label">Bắt đầu:</h3>
-          <div class="update-data">
-            <% if (oldStartDate != startDate) { %>
-            <p class="old-data"><%- oldStartDate %></p>
-            <p class="new-data"><%- startDate %></p>
-            <% } else { %>
-              <p class="old-data not-changed"><%- oldStartDate %></p>
-            <% } %>
-          </div>
-        </div>
-        <div class="license-form-row">
-          <h3 class="row-label">Kết thúc:</h3>
-          <div class="update-data">
-            <% if (oldEndDate != endDate) { %>
-            <p class="old-data"><%- oldEndDate %></p>
-            <p class="new-data"><%- endDate %></p>
-            <% } else { %>
-              <p class="old-data not-changed"><%- oldEndDate %></p>
-            <% } %>
-          </div>
-        </div>
-        <% if (role == 'Department') { %>
-          <span class="seperate"></span>
+        <% } else { %>
+        <h3 style="font-weight: normal;" class="row-name centered-row">Không có hình ảnh</h3>
         <% } %>
-        <span class="d-flex justify-content-center">
-          <% if (role == 'Department') { %>
-            <button type="submit" id="update-accept-btn" class="btn btn-success mx-2">Chấp thuận <i class="bi bi-check2"></i></button>
-            <button type="submit" id="update-decline-btn" class="btn btn-danger">Từ chối <i class="bi bi-x"></i></button>
+      </div>
+      <span class="seperate"></span>
+      <h3 class="row-name centered-row">Thông tin công ty</h3>
+      <div class="license-form-row">
+        <h3 class="row-label">Tên công ty đặt quảng cáo:</h3>
+        <div class="update-data">
+          <% if (oldData.companyName != request.companyName) { %>
+          <p class="old-data"><%- oldData.companyName %></p>
+          <p class="new-data"><%- request.companyName %></p>
+          <% } else { %>
+          <p class="old-data not-changed"><%- oldData.companyName %></p>
           <% } %>
-        </span>
-      </form>
-    </div>
+        </div>
+      </div>
+      <h3 class="row-name centered-row">Thông tin liên lạc công ty:</h3>
+      <div class="license-form-row">
+        <h3 class="row-label">Email liên hệ:</h3>
+        <div class="update-data">
+          <% if (oldData.companyEmail != request.companyEmail) { %>
+          <p class="old-data"><%- oldData.companyEmail %></p>
+          <p class="new-data"><%- request.companyEmail %></p>
+          <% } else { %>
+          <p class="old-data not-changed"><%- oldData.companyEmail %></p>
+          <% } %>
+        </div>
+      </div>
+      <div class="license-form-row">
+        <h3 class="row-label">SĐT liên lạc:</h3>
+        <div class="update-data">
+          <% if (oldData.companyPhone != request.companyPhone) { %>
+          <p class="old-data"><%- oldData.companyPhone %></p>
+          <p class="new-data"><%- request.companyPhone %></p>
+          <% } else { %>
+          <p class="old-data not-changed"><%- oldData.companyPhone %></p>
+          <% } %>
+        </div>
+      </div>
+
+      <h3 class="row-name centered-row">Thời hạn quảng cáo:</h3>
+      <div class="license-form-row">
+        <h3 class="row-label">Bắt đầu:</h3>
+        <div class="update-data">
+          <% if (oldStartDate != startDate) { %>
+          <p class="old-data"><%- oldStartDate %></p>
+          <p class="new-data"><%- startDate %></p>
+          <% } else { %>
+          <p class="old-data not-changed"><%- oldStartDate %></p>
+          <% } %>
+        </div>
+      </div>
+      <div class="license-form-row">
+        <h3 class="row-label">Kết thúc:</h3>
+        <div class="update-data">
+          <% if (oldEndDate != endDate) { %>
+          <p class="old-data"><%- oldEndDate %></p>
+          <p class="new-data"><%- endDate %></p>
+          <% } else { %>
+          <p class="old-data not-changed"><%- oldEndDate %></p>
+          <% } %>
+        </div>
+      </div>
+      <% if (role == 'Department') { %>
+      <span class="seperate"></span>
+      <% } %>
+      <span class="d-flex justify-content-center">
+        <% if (role == 'Department') { %>
+        <button type="submit" id="update-accept-btn" class="btn btn-success mx-2">Chấp thuận <i class="bi bi-check2"></i></button>
+        <button type="submit" id="update-decline-btn" class="btn btn-danger">Từ chối <i class="bi bi-x"></i></button>
+        <% } %>
+      </span>
+    </form>
   </div>
+</div>
 <% } else { %>
-  <style>
-    /* Add your custom CSS styles here */
-    .container {
-        max-width: 600px;
-        margin-top: 50px;
-        background-color: #f8f9fa; /* Set background color to a light shade */
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
+<style>
+  /* Add your custom CSS styles here */
+  .container {
+    max-width: 600px;
+    margin-top: 50px;
+    background-color: #f8f9fa;
+    /* Set background color to a light shade */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
 
 
-    label {
-        font-weight: bold;
-    }
+  label {
+    font-weight: bold;
+  }
 
-    /* Custom style for input fields */
-    .form-control {
-        border: 1px solid #000; /* Set border color to black */
-    }
-
+  /* Custom style for input fields */
+  .form-control {
+    border: 1px solid #000;
+    /* Set border color to black */
+  }
 </style>
 
 <div class="container mt-5">
-    <h1 class="mb-4 text-center">Yêu cầu chỉnh sửa</h1>
+  <h1 class="mb-4 text-center">Yêu cầu chỉnh sửa</h1>
 
-    <form id="edit-place-submit" method="post">
-        <div class="mb-3 form-group">
-            <label for="district" class="form-label">Quận:</label>
-            <input type="text" class="form-control" id="district" name="district" value="<%= request.district %>" readonly>
-        </div>
+  <form id="edit-place-submit" method="post">
+    <div class="mb-3 form-group">
+      <label for="district" class="form-label">Quận:</label>
+      <input type="text" class="form-control" id="district" name="district" value="<%= request.district %>" readonly>
+    </div>
 
-        <div class="mb-3 form-group">
-            <label for="ward" class="form-label">Phường:</label>
-            <input type="text" class="form-control" id="ward" name="ward" value="<%= request.ward %>" readonly>
-        </div>
+    <div class="mb-3 form-group">
+      <label for="ward" class="form-label">Phường:</label>
+      <input type="text" class="form-control" id="ward" name="ward" value="<%= request.ward %>" readonly>
+    </div>
 
-        <div class="mb-3 form-group">
-            <label for="locationType" class="form-label">Loại vị trí:</label>
-            <% if (oldData.locationType.join(', ') != request.locationType.join(', ')) { %>
-              <div class="update-data">
-                 <p class="old-data"><%- oldData.locationType.join(', ') %></p>
-                 <p class="new-data"><%- request.locationType.join(', ') %></p>
-              </div>
-             <% } else { %>
-               <div class="update-data">
-                 <p class="old-data not-changed"><%- oldData.locationType.join(', ') %></p>
-              </div>
-             <% } %>
-        </div>
+    <div class="mb-3 form-group">
+      <label for="locationType" class="form-label">Loại vị trí:</label>
+      <% if (oldData.locationType.join(', ') != request.locationType.join(', ')) { %>
+      <div class="update-data">
+        <p class="old-data"><%- oldData.locationType.join(', ') %></p>
+        <p class="new-data"><%- request.locationType.join(', ') %></p>
+      </div>
+      <% } else { %>
+      <div class="update-data">
+        <p class="old-data not-changed"><%- oldData.locationType.join(', ') %></p>
+      </div>
+      <% } %>
+    </div>
 
-        <div class="mb-3 form-group">
-            <label for="adType" class="form-label">Hình thức quảng cáo:</label>
-            <% if (oldData.adType != request.adType) { %>
-              <div class="update-data">
-                 <p class="old-data"><%- oldData.adType %></p>
-                 <p class="new-data"><%- request.adType %></p>
-              </div>
-             <% } else { %>
-               <div class="update-data">
-                 <p class="old-data not-changed"><%- oldData.adType %></p>
-              </div>
-             <% } %>
-        </div>
+    <div class="mb-3 form-group">
+      <label for="adType" class="form-label">Hình thức quảng cáo:</label>
+      <% if (oldData.adType != request.adType) { %>
+      <div class="update-data">
+        <p class="old-data"><%- oldData.adType %></p>
+        <p class="new-data"><%- request.adType %></p>
+      </div>
+      <% } else { %>
+      <div class="update-data">
+        <p class="old-data not-changed"><%- oldData.adType %></p>
+      </div>
+      <% } %>
+    </div>
 
-        <div class="mb-3 form-group">
-          <label for="adPlanned" class="form-label">Quy hoạch:</label>
-          <% if (oldData.adPlanned != request.adPlanned) { %>
-            <div class="update-data">
-              <p class="old-data">
-                <% if (oldData.adPlanned == 1) { %>
-                  Đã quy hoạch
-                <% } else { %>
-                  Chưa quy hoạch
-                <% } %>
-              </p>
-               <p class="new-data">
-                <% if (request.adPlanned == 1) { %>
-                  Đã quy hoạch
-                <% } else { %>
-                  Chưa quy hoạch
-                <% } %>
-               </p>
-            </div>
-           <% } else { %>
-             <div class="update-data">
-               <p class="old-data not-changed">
-                  <% if (oldData.adPlanned == 1) { %>
-                    Đã quy hoạch
-                  <% } else { %>
-                    Chưa quy hoạch
-                  <% } %>
-               </p>
-            </div>
-           <% } %>
-        </div>
+    <div class="mb-3 form-group">
+      <label for="adPlanned" class="form-label">Quy hoạch:</label>
+      <% if (oldData.adPlanned != request.adPlanned) { %>
+      <div class="update-data">
+        <p class="old-data">
+          <% if (oldData.adPlanned == 1) { %>
+          Đã quy hoạch
+          <% } else { %>
+          Chưa quy hoạch
+          <% } %>
+        </p>
+        <p class="new-data">
+          <% if (request.adPlanned == 1) { %>
+          Đã quy hoạch
+          <% } else { %>
+          Chưa quy hoạch
+          <% } %>
+        </p>
+      </div>
+      <% } else { %>
+      <div class="update-data">
+        <p class="old-data not-changed">
+          <% if (oldData.adPlanned == 1) { %>
+          Đã quy hoạch
+          <% } else { %>
+          Chưa quy hoạch
+          <% } %>
+        </p>
+      </div>
+      <% } %>
+    </div>
 
-        <div class="mb-3 form-group">
-          <label for="reason" class="form-label">Ngày tạo:</label>
-          <input type="text" class="form-control" id="adPlanned" value='<%- createDate %> %>' name="adPlanned" readonly>
-        </div>
+    <div class="mb-3 form-group">
+      <label for="reason" class="form-label">Ngày tạo:</label>
+      <input type="text" class="form-control" id="adPlanned" value='<%- createDate %> %>' name="adPlanned" readonly>
+    </div>
 
-        <div class="mb-3 form-group">
-            <label for="reason" class="form-label">Lý do chỉnh sửa:</label>
-            <div style="resize: none;min-height: 100px;overflow: auto;" class="form-control" id="reason" name="reason"><%- request.reason %></div>
-        </div>
+    <div class="mb-3 form-group">
+      <label for="reason" class="form-label">Lý do chỉnh sửa:</label>
+      <div style="resize: none;min-height: 100px;overflow: auto;" class="form-control" id="reason" name="reason"><%- request.reason %></div>
+    </div>
 
-        <span class="d-flex justify-content-center">
-            <% if (role == 'Department') { %>
-                <button id="update-accept-btn" type="submit" class="btn btn-success mx-2">Chấp thuận <i class="bi bi-check2"></i></button>
-                <button id="update-decline-btn" type="submit" class="btn btn-danger">Từ chối <i class="bi bi-x"></i></button>
-            <% } %>
-        </span>
-    </form>
-    <a href="/weads/place/allAdPlacement">
-        <a class="btn btn-secondary mt-3" href="/weads/update-request/view-all?type=place">
-            <i class="bi bi-arrow-left-circle-fill"></i>
-            Trở về
-        </a>
+    <span class="d-flex justify-content-center">
+      <% if (role == 'Department') { %>
+      <button id="update-accept-btn" type="submit" class="btn btn-success mx-2">Chấp thuận <i class="bi bi-check2"></i></button>
+      <button id="update-decline-btn" type="submit" class="btn btn-danger">Từ chối <i class="bi bi-x"></i></button>
+      <% } %>
+    </span>
+  </form>
+  <a href="/weads/place/allAdPlacement">
+    <a class="btn btn-secondary mt-3" href="/weads/update-request/view-all?type=place">
+      <i class="bi bi-arrow-left-circle-fill"></i>
+      Trở về
     </a>
+  </a>
 
 </div>
 <% } %>
 
 
 <% if (role == 'Department') { %>
-  <script>
-      function showSuccessModal() {
-          Swal.fire({
-              icon: 'success',
-              title: 'Cập nhật bảng quảng cáo thành công',
-              showCancelButton: false,
-              timer: null
-          }).then((result) => {
-              if (result.isConfirmed) {
-                window.location.href = `/weads/update-request/view-all?type=<%- request.updateFor.toLowerCase() %>`;
-              }
-          });
-      }
-      function showDeclineModal() {
-          Swal.fire({
-              icon: 'info',
-              title: 'Đã từ chối yêu cầu',
-              showCancelButton: false,
-              timer: null
-          }).then((result) => {
-              if (result.isConfirmed) {
-                window.location.href = '/weads/update-request/view-all?type=ad';
-              }
-          });
-      }
-      function showErrorModal() {
-        Swal.fire({
-          icon: 'error',
-          title: 'Có lỗi xảy ra, vui lòng thử lại',
-          showCancelButton: false,
-          timer: null
-        });
-      }
-    $("#update-accept-btn").on("click", async function (event) {
-      event.preventDefault();
-      $('#update-accept-btn').prop("disabled", true);
-      $('#update-decline-btn').prop("disabled", true);
-      const response = await fetch(window.location.pathname + '/accept', {
-        method: 'POST',
-        headers: {
-          "Content-Type": "application/json",
-        }
-      })
-        .then(function (result) {
-          return result.json();
-        });
-        
-      if (response.success)
-        showSuccessModal();
-      else {
-        $('#update-accept-btn').prop("disabled", false);
-        $('#update-decline-btn').prop("disabled", false);
-        showErrorModal();
+<script>
+  function showSuccessModal() {
+    Swal.fire({
+      icon: 'success',
+      title: 'Cập nhật bảng quảng cáo thành công',
+      showCancelButton: false,
+      timer: null
+    }).then((result) => {
+      if (result.isConfirmed) {
+        window.location.href = `/weads/update-request/view-all?type=<%- request.updateFor.toLowerCase() %>`;
       }
     });
+  }
+  function showDeclineModal() {
+    Swal.fire({
+      icon: 'info',
+      title: 'Đã từ chối yêu cầu',
+      showCancelButton: false,
+      timer: null
+    }).then((result) => {
+      if (result.isConfirmed) {
+        window.location.href = '/weads/update-request/view-all?type=ad';
+      }
+    });
+  }
+  function showErrorModal() {
+    Swal.fire({
+      icon: 'error',
+      title: 'Có lỗi xảy ra, vui lòng thử lại',
+      showCancelButton: false,
+      timer: null
+    });
+  }
+  $("#update-accept-btn").on("click", async function (event) {
+    event.preventDefault();
+    $('#update-accept-btn').prop("disabled", true);
+    $('#update-decline-btn').prop("disabled", true);
+    const response = await fetch(window.location.pathname + '/accept', {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json",
+      }
+    })
+    const result = await response.json()
+    console.log(result)
+    if (result.success)
+      showSuccessModal();
+    else {
+      $('#update-accept-btn').prop("disabled", false);
+      $('#update-decline-btn').prop("disabled", false);
+      showErrorModal();
+    }
+  });
 
-    $("#update-decline-btn").on("click", async function (event) {
-      event.preventDefault();
-      $('#update-accept-btn').prop("disabled", true);
-      $('#update-decline-btn').prop("disabled", true);
-      const response = await fetch(window.location.pathname + '/decline', {
-        method: 'POST',
-        headers: {
-          "Content-Type": "application/json",
-        }
-      })
-        .then(function (result) {
-          return result.json();
-        });
-      if (response.success)
-        showDeclineModal();
-      else {
-        $('#update-accept-btn').prop("disabled", false);
-        $('#update-decline-btn').prop("disabled", false);
-        showErrorModal();
+  $("#update-decline-btn").on("click", async function (event) {
+    event.preventDefault();
+    $('#update-accept-btn').prop("disabled", true);
+    $('#update-decline-btn').prop("disabled", true);
+    const response = await fetch(window.location.pathname + '/decline', {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json",
       }
-    });
-  </script>
+    })
+    const result = await response.json()
+    console.log(result)
+    if (result.success)
+      showDeclineModal();
+    else {
+      $('#update-accept-btn').prop("disabled", false);
+      $('#update-decline-btn').prop("disabled", false);
+      showErrorModal();
+    }
+  });
+</script>
 <% } %>
 <%- include('./partials/footer') %>

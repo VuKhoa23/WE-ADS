@@ -196,7 +196,7 @@ router.post('/view/:id/accept', async function (req, res, next) {
       request.state = '1';
       await request.save();
       req.receiver = request.createBy.email;
-      req.name = request.createBy.name;
+      req.name = request.createBy.username;
       req.state = 'được phê duyệt';
       req.address = request.ward + ', ' + request.district;
       req.type = 'biển quảng cáo'
@@ -207,7 +207,7 @@ router.post('/view/:id/accept', async function (req, res, next) {
       request.state = '1';
       await request.save();
       req.receiver = request.createBy.email;
-      req.name = request.createBy.name;
+      req.name = request.createBy.username;
       req.state = 'được phê duyệt';
       req.address = request.ward + ', ' + request.district;
       req.type = 'điểm quảng cáo'
@@ -229,10 +229,9 @@ router.post('/view/:id/decline', async function (req, res, next) {
   try {
     await UpdateRequest.updateOne({ _id: new ObjectId(id) }, { state: '2' });
     const request = await UpdateRequest.findOne({ _id: new ObjectId(id) }).populate('createBy');
-    
     if (request.updateFor == 'Ad') {
       req.receiver = request.createBy.email;
-      req.name = request.createBy.name;
+      req.name = request.createBy.username;
       req.state = 'bị từ chối';
       req.address = request.ward + ', ' + request.district;
       req.type = 'biển quảng cáo'
@@ -240,7 +239,7 @@ router.post('/view/:id/decline', async function (req, res, next) {
     }
     else {
       req.receiver = request.createBy.email;
-      req.name = request.createBy.name;
+      req.name = request.createBy.username;
       req.state = 'bị từ chối';
       req.address = request.ward + ', ' + request.district;
       req.type = 'điểm quảng cáo'

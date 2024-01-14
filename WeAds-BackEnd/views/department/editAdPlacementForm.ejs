@@ -5,7 +5,8 @@
     .container {
         max-width: 600px;
         margin-top: 50px;
-        background-color: #f8f9fa; /* Set background color to a light shade */
+        background-color: #f8f9fa;
+        /* Set background color to a light shade */
         padding: 20px;
         border-radius: 8px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -18,9 +19,9 @@
 
     /* Custom style for input fields */
     .form-control {
-        border: 1px solid #000; /* Set border color to black */
+        border: 1px solid #000;
+        /* Set border color to black */
     }
-
 </style>
 
 <div class="container mt-5">
@@ -47,23 +48,23 @@
             <div>
                 <% var locationTypes = ["Đất công", "Công viên", "Hành lang an toàn giao thông", "Đất tư nhân", "Trung tâm thương mại", "Chợ"]; %>
                 <% for (var i = 0; i < locationTypes.length; i++) { %>
-                    <div class="form-check form-check-inline">
-                        <% if (adPlacement.locationType.includes(locationTypes[i])) { %>
-                            <input checked class="form-check-input location-type-checkbox" type="checkbox" id="locationType<%= i %>" name="locationType" value="<%= locationTypes[i] %>">
-                        <% } else { %>
-                            <input class="form-check-input location-type-checkbox" type="checkbox" id="locationType<%= i %>" name="locationType" value="<%= locationTypes[i] %>">
-                        <% } %>
-                        <label class="form-check-label" for="locationType<%= i %>"><%= locationTypes[i] %></label>
-                    </div>
+                <div class="form-check form-check-inline">
+                    <% if (adPlacement.locationType.includes(locationTypes[i])) { %>
+                    <input checked class="form-check-input location-type-checkbox" type="checkbox" id="locationType<%= i %>" name="locationType" value="<%= locationTypes[i] %>">
+                    <% } else { %>
+                    <input class="form-check-input location-type-checkbox" type="checkbox" id="locationType<%= i %>" name="locationType" value="<%= locationTypes[i] %>">
+                    <% } %>
+                    <label class="form-check-label" for="locationType<%= i %>"><%= locationTypes[i] %></label>
+                </div>
                 <% } %>
             </div>
         </div>
-        
+
         <div class="mb-3 form-group">
             <label for="adType" class="form-label">Hình thức quảng cáo:</label>
             <select class="place-adType-select" id="adType" name="adType" required>
                 <% adTypes.forEach(function(type) { %>
-                    <option value="<%= type.name %>"><%= type.name %></option>
+                <option value="<%= type.name %>"><%= type.name %></option>
                 <% }); %>
             </select>
         </div>
@@ -74,19 +75,19 @@
         </div>
 
         <% if (role != 'Department') { %>
-            <div class="mb-3 form-group">
-                <label for="reason" class="form-label">Lý do chỉnh sửa:</label>
-                <textarea style="resize: none;min-height: 100px;" class="form-control" id="reason" name="reason" required></textarea>
-            </div>
+        <div class="mb-3 form-group">
+            <label for="reason" class="form-label">Lý do chỉnh sửa:</label>
+            <textarea style="resize: none;min-height: 100px;" class="form-control" id="reason" name="reason" required></textarea>
+        </div>
         <% } %>
 
-        
+
 
         <span class="d-flex justify-content-center">
             <% if (role == 'Department') { %>
-                <button type="submit" class="btn btn-primary">Cập nhật Điểm đặt</button>
+            <button type="submit" class="btn btn-primary">Cập nhật Điểm đặt</button>
             <% } else { %>
-                <button type="submit" class="btn btn-primary">Tạo yêu cầu</button>
+            <button type="submit" class="btn btn-primary">Tạo yêu cầu</button>
             <% } %>
         </span>
     </form>
@@ -100,35 +101,35 @@
 </div>
 
 <% if (role == 'Department') { %>
-    <script>
-        function showSuccessModal() {
-            Swal.fire({
-                icon: 'success',
-                title: 'Cập nhật điểm đặt thành công',
-                showCancelButton: false,
-                timer: null
-            }).then((result) => {
-                if (result.isConfirmed) {
+<script>
+    function showSuccessModal() {
+        Swal.fire({
+            icon: 'success',
+            title: 'Cập nhật điểm đặt thành công',
+            showCancelButton: false,
+            timer: null
+        }).then((result) => {
+            if (result.isConfirmed) {
                 window.location.href = '/weads/place/allAdPlacement';
-                }
-            });
-        }
-    </script>
+            }
+        });
+    }
+</script>
 <% } else { %>
-    <script>
-        function showSuccessModal() {
-            Swal.fire({
-                icon: 'success',
-                title: ' Tạo yêu cầu thành công',
-                showCancelButton: false,
-                timer: null
-            }).then((result) => {
-                if (result.isConfirmed) {
-                  window.location.href = '/weads/place/allAdPlacement';
-                }
-            });
-        }
-    </script>
+<script>
+    function showSuccessModal() {
+        Swal.fire({
+            icon: 'success',
+            title: ' Tạo yêu cầu thành công',
+            showCancelButton: false,
+            timer: null
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = '/weads/place/allAdPlacement';
+            }
+        });
+    }
+</script>
 <% } %>
 <script>
     function showErrorModal() {
@@ -142,14 +143,14 @@
 </script>
 
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
         $('#locationType').val('<%- adPlacement.locationType .join(', ')%>');
         $('#adType').val('<%- adPlacement.adType %>');
         $('#adPlanned').val('<%- adPlacement.adPlanned %>');
     });
 </script>
 <script>
-    $('#edit-place-submit').on('submit', async function(event) {
+    $('#edit-place-submit').on('submit', async function (event) {
         event.preventDefault();
         let locationTypes = $(".location-type-checkbox:checked");
         const adType = $('#adType').find(":selected").val();
@@ -158,8 +159,8 @@
 
         const locationType = [];
 
-        locationTypes.each(function() {
-          locationType.push($(this).val());
+        locationTypes.each(function () {
+            locationType.push($(this).val());
         });
 
         const response = await fetch(window.location.pathname, {
@@ -174,13 +175,11 @@
                 reason,
             })
         })
-        .then(function (result) {
-            return result.json();
-        });
-        console.log(response);
-        if (response.success)
+        const result = await response.json()
+        console.log(result);
+        if (result.success)
             showSuccessModal();
-        else 
+        else
             showErrorModal();
     });
 </script>
