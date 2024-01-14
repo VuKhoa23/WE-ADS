@@ -41,7 +41,7 @@
       <div class="mb-3 form-group row">
         <label for="image" class="form-label col-3">Ảnh uploads</label>
         <div class="col-9">
-          <input type="file" class="form-control" id="adImages" name="adImages" multiple accept="image/png, image/jpeg" style="font-size: 1.5rem;" required>
+          <input type="file" multiple data-browse-on-zone-click="true" accept="image/*" id="adImages" name="adImages" />
         </div>
       </div>
 
@@ -63,6 +63,7 @@
           </div>
         </div>
       </div>
+
 
       <div class="license-form-row">
         <h3 class="row-label">Thời hạn quảng cáo:</h3>
@@ -106,6 +107,8 @@
 </div>
 
 <script>
+  $("#adImages").fileinput({ 'showUpload': true, 'previewFileType': 'image', 'allowedPreviewTypes': ["image"] });
+
   const place = '<%- ward %>' + ', ' + '<%- district %>'
   $('.place-input').val(place);
 </script>
@@ -139,7 +142,7 @@
     formData.append('startDate', startDate);
     formData.append('endDate', endDate);
 
-    var input = document.querySelector('input[type="file"]')
+    var input = document.getElementById('adImages')
 
     for (const file of input.files) {
       formData.append('theAdImages', file, file.name)
