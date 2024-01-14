@@ -154,7 +154,7 @@ router.get('/view/:id', async (req, res) => {
     }
     else {
       res.render('department/updateDetail', {
-        adPlacement: request,
+        request,
         type: request.updateFor,
         oldData: place,
         createDate: `${createDate.getDate()}/${createDate.getMonth()+1}/${createDate.getFullYear()}`,

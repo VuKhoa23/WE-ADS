@@ -172,20 +172,20 @@
     <form id="edit-place-submit" method="post">
         <div class="mb-3 form-group">
             <label for="district" class="form-label">Quận:</label>
-            <input type="text" class="form-control" id="district" name="district" value="<%= adPlacement.district %>" readonly>
+            <input type="text" class="form-control" id="district" name="district" value="<%= request.district %>" readonly>
         </div>
 
         <div class="mb-3 form-group">
             <label for="ward" class="form-label">Phường:</label>
-            <input type="text" class="form-control" id="ward" name="ward" value="<%= adPlacement.ward %>" readonly>
+            <input type="text" class="form-control" id="ward" name="ward" value="<%= request.ward %>" readonly>
         </div>
 
         <div class="mb-3 form-group">
             <label for="locationType" class="form-label">Loại vị trí:</label>
-            <% if (oldData.locationType.join(', ') != adPlacement.locationType.join(', ')) { %>
+            <% if (oldData.locationType.join(', ') != request.locationType.join(', ')) { %>
               <div class="update-data">
                  <p class="old-data"><%- oldData.locationType.join(', ') %></p>
-                 <p class="new-data"><%- adPlacement.locationType.join(', ') %></p>
+                 <p class="new-data"><%- request.locationType.join(', ') %></p>
               </div>
              <% } else { %>
                <div class="update-data">
@@ -196,10 +196,10 @@
 
         <div class="mb-3 form-group">
             <label for="adType" class="form-label">Hình thức quảng cáo:</label>
-            <% if (oldData.adType != adPlacement.adType) { %>
+            <% if (oldData.adType != request.adType) { %>
               <div class="update-data">
                  <p class="old-data"><%- oldData.adType %></p>
-                 <p class="new-data"><%- adPlacement.adType %></p>
+                 <p class="new-data"><%- request.adType %></p>
               </div>
              <% } else { %>
                <div class="update-data">
@@ -210,7 +210,7 @@
 
         <div class="mb-3 form-group">
           <label for="adPlanned" class="form-label">Quy hoạch:</label>
-          <% if (oldData.adPlanned != adPlacement.adPlanned) { %>
+          <% if (oldData.adPlanned != request.adPlanned) { %>
             <div class="update-data">
               <p class="old-data">
                 <% if (oldData.adPlanned == 1) { %>
@@ -220,7 +220,7 @@
                 <% } %>
               </p>
                <p class="new-data">
-                <% if (adPlacement.adPlanned == 1) { %>
+                <% if (request.adPlanned == 1) { %>
                   Đã quy hoạch
                 <% } else { %>
                   Chưa quy hoạch
@@ -247,7 +247,7 @@
 
         <div class="mb-3 form-group">
             <label for="reason" class="form-label">Lý do chỉnh sửa:</label>
-            <div style="resize: none;min-height: 100px;overflow: auto;" class="form-control" id="reason" name="reason"><%- adPlacement.reason %></div>
+            <div style="resize: none;min-height: 100px;overflow: auto;" class="form-control" id="reason" name="reason"><%- request.reason %></div>
         </div>
 
         <span class="d-flex justify-content-center">
@@ -278,7 +278,7 @@
               timer: null
           }).then((result) => {
               if (result.isConfirmed) {
-                window.location.href = '/weads/update-request/view-all?type=ad';
+                window.location.href = `/weads/update-request/view-all?type=<%- request.updateFor.toLowerCase() %>`;
               }
           });
       }
