@@ -3,6 +3,7 @@ const router = express.Router();
 const Place = require("../model/places")
 const Ad = require("../model/ads")
 const Officer = require("../model/officer");
+const AdTypes = require("../model/advertisement");
 const UpdateRequest = require("../model/updateRequest");
 const { ObjectId } = require('mongodb');
 const AdType = require("../model/advertisement");
@@ -218,9 +219,11 @@ router.get('/deleteAdPlacement/:_id', async function(req, res) {
 
 router.get('/editAdPlacementForm/:_id', async function(req, res) {
   const adPlacement = await Place.findOne({_id: req.params._id});
+  const adTypes = await AdTypes.find({});
 
   res.render("department/editAdPlacementForm", {
     adPlacement: adPlacement,
+    adTypes: adTypes,
     username: res.locals.user ? res.locals.user.username : null,
     role: res.locals.user ? res.locals.user.role : null,
   })

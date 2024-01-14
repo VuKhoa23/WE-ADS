@@ -43,13 +43,29 @@
         </div>
 
         <div class="mb-3 form-group">
-            <label for="locationType" class="form-label">Loại vị trí:</label>
-            <input type="text" class="form-control" id="locationType" name="locationType" placeholder="Ví dụ: Đất công, Công viên,..." required>
+            <label class="form-label">Loại vị trí:</label>
+            <div>
+                <% var locationTypes = ["Đất công", "Công viên", "Hành lang an toàn giao thông", "Đất tư nhân", "Trung tâm thương mại", "Chợ"]; %>
+                <% for (var i = 0; i < locationTypes.length; i++) { %>
+                    <div class="form-check form-check-inline">
+                        <% if (adPlacement.locationType.includes(locationTypes[i])) { %>
+                            <input checked class="form-check-input location-type-checkbox" type="checkbox" id="locationType<%= i %>" name="locationType" value="<%= locationTypes[i] %>">
+                        <% } else { %>
+                            <input class="form-check-input location-type-checkbox" type="checkbox" id="locationType<%= i %>" name="locationType" value="<%= locationTypes[i] %>">
+                        <% } %>
+                        <label class="form-check-label" for="locationType<%= i %>"><%= locationTypes[i] %></label>
+                    </div>
+                <% } %>
+            </div>
         </div>
-
+        
         <div class="mb-3 form-group">
             <label for="adType" class="form-label">Hình thức quảng cáo:</label>
-            <input type="text" class="form-control" id="adType" name="adType" placeholder="Ví dụ: Cổ động chính trị, Quảng cáo thương mại,..." required>
+            <select class="place-adType-select" id="adType" name="adType" required>
+                <% adTypes.forEach(function(type) { %>
+                    <option value="<%= type.name %>"><%= type.name %></option>
+                <% }); %>
+            </select>
         </div>
 
         <div class="mb-3 form-group">
@@ -57,10 +73,14 @@
             <input type="number" min="0" max="1" class="form-control" id="adPlanned" name="adPlanned" required>
         </div>
 
-        <div class="mb-3 form-group">
-            <label for="reason" class="form-label">Lý do chỉnh sửa:</label>
-            <textarea style="resize: none;min-height: 100px;" class="form-control" id="reason" name="reason" required></textarea>
-        </div>
+        <% if (role != 'Department') { %>
+            <div class="mb-3 form-group">
+                <label for="reason" class="form-label">Lý do chỉnh sửa:</label>
+                <textarea style="resize: none;min-height: 100px;" class="form-control" id="reason" name="reason" required></textarea>
+            </div>
+        <% } %>
+
+        
 
         <span class="d-flex justify-content-center">
             <% if (role == 'Department') { %>
@@ -131,14 +151,16 @@
 <script>
     $('#edit-place-submit').on('submit', async function(event) {
         event.preventDefault();
-        let rawLocationType = $('#locationType').val().split(",");
-        const locationType = rawLocationType.map((location) => location.trim()).filter((location) => {
-            if (location.length > 0)
-               return location;
-        });
-        const adType = $('#adType').val();
+        let locationTypes = $(".location-type-checkbox:checked");
+        const adType = $('#adType').find(":selected").val();
         const adPlanned = $('#adPlanned').val();
         const reason = $('#reason').val();
+
+        const locationType = [];
+
+        locationTypes.each(function() {
+          locationType.push($(this).val());
+        });
 
         const response = await fetch(window.location.pathname, {
             method: 'POST',

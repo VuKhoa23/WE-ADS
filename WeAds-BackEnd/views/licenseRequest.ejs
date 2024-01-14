@@ -16,7 +16,18 @@
       </div>
       <div class="license-form-row">
         <h3 class="row-label">Loại bảng quảng cáo:</h3>
-        <input type="text" class="license-form-input" id="adType" required name="adType">
+        <select class="adType-select" name="adType" id="adType">
+          <option value="Trụ bảng hiflex" class="adType-option">Trụ bảng hiflex</option>
+          <option value="Trụ màn hình điện tử LED" class="adType-option">Trụ màn hình điện tử LED</option>
+          <option value="Trụ hộp đèn" class="adType-option">Trụ hộp đèn</option>
+          <option value="Bảng hiflex ốp tường" class="adType-option">Bảng hiflex ốp tường</option>
+          <option value="Màn hình điện tử ốp tường" class="adType-option">Màn hình điện tử ốp tường</option>
+          <option value="Trụ treo băng rôn dọc" class="adType-option">Trụ treo băng rôn dọc</option>
+          <option value="Trụ treo băng rôn ngang" class="adType-option">Trụ treo băng rôn ngang</option>
+          <option value="Trụ/Cụm pano" class="adType-option">Trụ/Cụm pano</option>
+          <option value="Cổng chào" class="adType-option">Cổng chào</option>
+          <option value="Trung tâm thương mại" class="adType-option">Trung tâm thương mại</option>
+        </select>
       </div>
       <div class="license-form-row">
         <div class="size-row">
@@ -108,7 +119,7 @@
   $(".license-form").on("submit", async function (event) {
     event.preventDefault();
     const adName = $("#adName").val();
-    const adType = $("#adType").val();
+    const adType = $("#adType").find(":selected").val();
     const width = $("#width").val();
     const height = $("#height").val();
     const companyName = $("#companyName").val();
