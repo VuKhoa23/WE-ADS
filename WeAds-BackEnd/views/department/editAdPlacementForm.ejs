@@ -26,7 +26,7 @@
 <div class="container mt-5">
     <h1 class="mb-4">Chỉnh sửa Điểm đặt quảng cáo </h1>
 
-    <form action="/weads/place/editAdPlacement/<%= adPlacement._id %>" method="post">
+    <form id="edit-place-submit">
         <div class="mb-3 form-group">
             <label for="coordinates" class="form-label">Tọa độ (Latitude, Longitude):</label>
             <input type="text" class="form-control" id="coordinates" name="coordinates" value="<%= adPlacement.coordinates[0] %>, <%= adPlacement.coordinates[1] %>" readonly>
@@ -54,18 +54,112 @@
 
         <div class="mb-3 form-group">
             <label for="adPlanned" class="form-label">Quy hoạch (1: Đã quy hoạch, 0: Chưa quy hoạch):</label>
-            <input type="number" class="form-control" id="adPlanned" name="adPlanned" required>
+            <input type="number" min="0" max="1" class="form-control" id="adPlanned" name="adPlanned" required>
         </div>
 
-        <button type="submit" class="btn btn-primary">Cập nhật Điểm đặt</button>
-    </form>
+        <div class="mb-3 form-group">
+            <label for="reason" class="form-label">Lý do chỉnh sửa:</label>
+            <textarea style="resize: none;min-height: 100px;" class="form-control" id="reason" name="reason" required></textarea>
+        </div>
 
+        <span class="d-flex justify-content-center">
+            <% if (role == 'Department') { %>
+                <button type="submit" class="btn btn-primary">Cập nhật Điểm đặt</button>
+            <% } else { %>
+                <button type="submit" class="btn btn-primary">Tạo yêu cầu</button>
+            <% } %>
+        </span>
+    </form>
     <a href="/weads/place/allAdPlacement">
         <button class="btn btn-secondary mt-3">
             <i class="bi bi-arrow-left-circle-fill"></i>
             Trở về
         </button>
     </a>
+
 </div>
 
+<% if (role == 'Department') { %>
+    <script>
+        function showSuccessModal() {
+            Swal.fire({
+                icon: 'success',
+                title: 'Cập nhật điểm đặt thành công',
+                showCancelButton: false,
+                timer: null
+            }).then((result) => {
+                if (result.isConfirmed) {
+                window.location.href = '/weads/place/allAdPlacement';
+                }
+            });
+        }
+    </script>
+<% } else { %>
+    <script>
+        function showSuccessModal() {
+            Swal.fire({
+                icon: 'success',
+                title: ' Tạo yêu cầu thành công',
+                showCancelButton: false,
+                timer: null
+            }).then((result) => {
+                if (result.isConfirmed) {
+                  window.location.href = '/weads/place/allAdPlacement';
+                }
+            });
+        }
+    </script>
+<% } %>
+<script>
+    function showErrorModal() {
+        Swal.fire({
+            icon: 'error',
+            title: 'Có lỗi xảy ra, vui lòng thử lại',
+            showCancelButton: false,
+            timer: null
+        });
+    }
+</script>
+
+<script>
+    $(document).ready(function() {
+        $('#locationType').val('<%- adPlacement.locationType .join(', ')%>');
+        $('#adType').val('<%- adPlacement.adType %>');
+        $('#adPlanned').val('<%- adPlacement.adPlanned %>');
+    });
+</script>
+<script>
+    $('#edit-place-submit').on('submit', async function(event) {
+        event.preventDefault();
+        let rawLocationType = $('#locationType').val().split(",");
+        const locationType = rawLocationType.map((location) => location.trim()).filter((location) => {
+            if (location.length > 0)
+               return location;
+        });
+        const adType = $('#adType').val();
+        const adPlanned = $('#adPlanned').val();
+        const reason = $('#reason').val();
+
+        const response = await fetch(window.location.pathname, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                locationType,
+                adType,
+                adPlanned,
+                reason,
+            })
+        })
+        .then(function (result) {
+            return result.json();
+        });
+        console.log(response);
+        if (response.success)
+            showSuccessModal();
+        else 
+            showErrorModal();
+    });
+</script>
 <%- include('./partials/footer') %>

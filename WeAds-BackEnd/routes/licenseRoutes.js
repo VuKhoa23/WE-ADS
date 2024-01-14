@@ -1,5 +1,4 @@
 const express = require('express');
-const Place = require("../model/places");
 const Ad = require("../model/ads");
 const LicenseRequest = require("../model/licenseRequest");
 const Officer = require("../model/officer");

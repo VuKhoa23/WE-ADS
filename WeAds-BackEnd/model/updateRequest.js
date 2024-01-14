@@ -1,23 +1,63 @@
 const mongoose = require('mongoose'); 
 
 const updateReqSchema = mongoose.Schema({
-    address: {
-      type: String,
-      required: [true, 'Update information needed']
-    },
-    content: {
+    updateFor : {
       type: String
     },
-    placeIndex:{
-      type: Number
+    targetId : {
+      type: mongoose.Schema.Types.ObjectId,
     },
-    adIndex:{
-      type: Number,
-      default: null
+    createBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "officer",
     },
     state: {
-      type: Number,
-      default: 0
+      type: Number
+    },
+    locationType: [{
+      type: String
+    }],
+    adType: {
+      type: String
+    },
+    adPlanned:{
+      type: Number
+    },
+    adType: {
+      type: String
+    },
+    adScale: {
+      type: String
+    },
+    adName: {
+      type: String
+    },
+    adImages:[{
+      type: String
+    }],
+    companyName: {
+      type: String
+    },
+    companyPhone: {
+      type: String
+    },
+    companyEmail: {
+      type: String
+    },
+    ward: {
+      type: String
+    },
+    district: {
+      type: String
+    },
+    reason: {
+      type: String
+    },
+    startDate: {
+      type: Date
+    },
+    endDate: {
+      type: Date
     }
   },
   {timestamps: true}

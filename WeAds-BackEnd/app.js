@@ -95,7 +95,7 @@ app.get("/", (req, res) => {
 app.use("/weads", userRoutes);
 app.use("/weads", departmentRoutes);
 app.use("/weads", authRoutes)
-app.use("/weads/update", updateRoutes)
+app.use("/weads/update-request", updateRoutes)
 app.use("/weads/report", reportRoutes); 
 app.use("/weads/place", placeRoutes)
 app.use("/weads/ad", adRoutes)

@@ -3,6 +3,8 @@ const router = express.Router();
 const Place = require("../model/places")
 const Ad = require("../model/ads")
 const Officer = require("../model/officer");
+const UpdateRequest = require("../model/updateRequest");
+const { ObjectId } = require('mongodb');
 
 // router.get('/create-demo', async (req, res) => {
 //   const place = await Place.findOne({district: "Quận Bình Thạnh"})
@@ -213,8 +215,34 @@ router.get('/editAdPlacementForm/:_id', async function(req, res) {
     username: res.locals.user ? res.locals.user.username : null,
     role: res.locals.user ? res.locals.user.role : null,
   })
-
 })
+
+router.post('/editAdPlacementForm/:_id', async function(req, res) {
+  const adPlacement = await Place.findOne({_id: new ObjectId(req.params._id)});
+  const { adType, locationType, adPlanned, reason } = req.body;
+  const role = res.locals.user ? res.locals.user.role : null;
+  const officerId = res.locals.user ? res.locals.user._id : null;
+  
+  if (!adPlacement) {
+    res.status(404).json({ success: false, error: 'place not found' });
+    return;
+  }
+  
+  try {
+    if (role == 'Department') {
+      await Place.updateOne({_id: new ObjectId(req.params._id) }, { adType, locationType, adPlanned });
+      res.status(200).json({ success: true });
+    }
+    else {
+      await UpdateRequest.create({ targetId: new ObjectId(req.params._id), createBy: new ObjectId(officerId), updateFor: 'Place', state: 0, reason, ward: adPlacement.ward, district: adPlacement.district, adType, locationType, adPlanned });
+      res.status(200).json({ success: true });
+    }
+  }
+  catch (err) {
+    console.log(err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
 
 router.post('/editAdPlacement/:_id', async function(req, res) {
   const id = req.params._id;

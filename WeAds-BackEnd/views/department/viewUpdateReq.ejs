@@ -1,0 +1,125 @@
+<%- include('./partials/header') %>
+<div class="row d-flex justify-content-center">
+  <div class="col-12 col-md-11 col-lg-10">
+    <div class="d-flex align-items-center">
+      <div class="dropdown d-flex align-items-center mb-2">
+          <h3 class="request-dropdown-label">Loại yêu cầu: </h3>
+          <button style="border:1px solid #000;" type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown">
+            Chỉnh sửa
+          </button>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="/weads/license-request/view-all">Cấp phép</a></li>
+          <li><a class="dropdown-item" href="">Chỉnh sửa</a></li>
+        </ul>
+      </div>
+      <div class="dropdown d-flex align-items-center mx-4 mb-2">
+          <h3 class="request-dropdown-label">Chỉnh sửa cho: </h3>
+          <button style="border:1px solid #000;" type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown">
+            <% if (type == 'place') { %>
+              Điểm quảng cáo
+            <% } else { %>
+              Bảng quảng cáo
+            <% } %>
+          </button>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="/weads/update-request/view-all?type=place">Điểm quảng cáo</a></li>
+          <li><a class="dropdown-item" href="/weads/update-request/view-all?type=ad">Bảng quảng cáo</a></li>
+        </ul>
+      </div>
+    </div>
+    <% if (type == 'ad') { %>
+      <table style="border-right: 1px solid #dee2e6; border-left: 1px solid #dee2e6;" class="table table-hover">
+        <thead>
+          <tr>
+            <th class="text-center" style="background-color: #2b2929; color: white; border-top-left-radius: 5px;" scope="col">Tên công ty</th>
+            <th class="text-center" style="background-color: #2b2929; color: white;" scope="col">Loại hình quảng cáo</th>
+            <th class="text-center" style="background-color: #2b2929; color: white;" scope="col">Kích thước</th>
+            <th class="text-center" style="background-color: #2b2929; color: white;" scope="col">Địa chỉ điểm đặt</th>
+            <% if (role != 'Department') { %>
+              <th class="text-center" style="background-color: #2b2929; color: white;" scope="col">Trạng thái</th>
+            <% } %>
+            <th class="text-center" style="background-color: #2b2929; color: white; border-top-right-radius: 5px;" scope="col">Nội dung chi tiết</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (requests.length > 0) { %>
+          <% for(var i = 0; i < requests.length; i++) { %>
+          <tr>
+            <td class="text-center"><%= requests[i].companyName %></td>
+            <td class="text-center"><%= requests[i].adType %></td>  
+            <td class="text-center"><%= requests[i].adScale %></td>
+            <td class="text-center"><%= requests[i].ward %>, <%= requests[i].district %></td>
+            <% if (role != 'Department') { %>
+              <% if (requests[i].state == '1') { %>
+                <td class="text-center text-success">Đã duyệt</td>
+              <% } else if (requests[i].state == '2') { %>
+                <td class="text-center text-danger">Từ chối</td>
+              <% } else { %>
+                <td class="text-center text-primary">Đang chờ</td>
+              <% } %>
+            <% } %>
+            <td class="text-center">
+              <a class="btn btn-success" href="/weads/update-request/view/<%- requests[i]._id %>">Xem chi tiết</a>
+            </td>
+          </tr>
+          <% } %>
+          <% } else { %>
+          <tr>
+            <td class="text-center" colspan="6">Không có yêu cầu</td>
+          </tr>
+          <% } %>
+        </tbody>
+      </table>
+    <% } else { %>
+      <table style="border-right: 1px solid #dee2e6; border-left: 1px solid #dee2e6;" class="table table-hover">
+        <thead>
+          <tr>
+            <th class="text-center" style="background-color: #2b2929; color: white; border-top-left-radius: 5px;" scope="col">Địa chỉ</th>
+            <th class="text-center" style="background-color: #2b2929; color: white;" scope="col">Loại vị trí</th>
+            <th class="text-center" style="background-color: #2b2929; color: white;" scope="col">Hình thức quảng cáo</th>
+            <th class="text-center" style="background-color: #2b2929; color: white;" scope="col">Quy hoạch</th>
+            <% if (role != 'Department') { %>
+              <th class="text-center" style="background-color: #2b2929; color: white;" scope="col">Trạng thái</th>
+            <% } %>
+            <th class="text-center" style="background-color: #2b2929; color: white; border-top-right-radius: 5px;" scope="col">Nội dung chi tiết</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (requests.length > 0) { %>
+            <% for(var i = 0; i < requests.length; i++) { %>
+            <tr>
+              <td class="text-center"><%= requests[i].ward %>, <%= requests[i].district %></td>
+              <td class="text-center"><%= requests[i].locationType.join('/ ') %></td>
+              <td class="text-center"><%= requests[i].adType %></td>  
+              <td class="text-center">
+                <% if (requests[i].adPlanned === 1) { %>
+                  Đã quy hoạch
+                <% } else { %>
+                    Chưa quy hoạch
+                <% } %>
+              </td>
+              <% if (role != 'Department') { %>
+                <% if (requests[i].state == '1') { %>
+                  <td class="text-center text-success">Đã duyệt</td>
+                <% } else if (requests[i].state == '2') { %>
+                  <td class="text-center text-danger">Từ chối</td>
+                <% } else { %>
+                  <td class="text-center text-primary">Đang chờ</td>
+                <% } %>
+              <% } %>
+              <td class="text-center">
+                <a class="btn btn-success" href="/weads/update-request/view/<%- requests[i]._id %>">Xem chi tiết</a>
+              </td>
+            </tr>
+            <% } %>
+          <% } else { %>
+          <tr>
+            <td class="text-center" colspan="6">Không có yêu cầu</td>
+          </tr>
+          <% } %>
+        </tbody>
+      </table>
+    <% } %>
+  </div>
+</div>
+<%- include('./partials/footer') %>

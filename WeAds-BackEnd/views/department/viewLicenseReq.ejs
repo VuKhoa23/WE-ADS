@@ -1,6 +1,16 @@
 <%- include('./partials/header') %>
 <div class="row d-flex justify-content-center">
   <div class="col-12 col-md-11 col-lg-10">
+    <div class="dropdown d-flex align-items-center mb-2">
+        <h3 class="request-dropdown-label">Loại yêu cầu: </h3>
+        <button style="border:1px solid #000;" type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown">
+          Cấp phép
+        </button>
+      <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="/weads/license-request/view-all">Cấp phép</a></li>
+        <li><a class="dropdown-item" href="/weads/update-request/view-all?type=place">Chỉnh sửa</a></li>
+      </ul>
+    </div>
     <table style="border-right: 1px solid #dee2e6; border-left: 1px solid #dee2e6;" class="table table-hover">
       <thead>
         <tr>
