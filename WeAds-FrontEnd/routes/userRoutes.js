@@ -9,7 +9,7 @@ router.get("/home", function (req, res, next) {
 
 router.get("/report/:placeId", async function (req, res, next) {
   try{
-    const response = await fetch("http://localhost:3000/weads/place/details/" + req.params.placeId)
+    const response = await fetch(process.env.API + req.params.placeId)
     const result = await response.json()
     const coordinates = result.place.coordinates
     console.log(result)
