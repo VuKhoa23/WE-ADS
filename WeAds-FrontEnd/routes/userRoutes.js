@@ -25,21 +25,10 @@ router.get("/report/:placeId", async function (req, res, next) {
 });
 
 router.get("/report/:placeId/:adId", async function (req, res, next) {
-  const placeRes = await fetch("http://localhost:3000/weads/place/details/" + req.params.placeId)
-  const placeResult = await placeRes.json()
-  const coordinates = placeResult.place.coordinates
-
-  const adRes = await fetch("http://localhost:3000/weads/ad/details/" + req.params.adId)
-  const adResult = await adRes.json()
-
   res.render("report", {
-    coordinates: coordinates,
-    ward: placeResult.place.ward,
-    district: placeResult.place.district,
-    placeId: placeResult.place._id,
+    placeId: req.params.placeId,
     API_KEY: process.env.MAP_KEY,
     reportCode: 1,
-    adId: adResult.ad._id
   });
 });
 
