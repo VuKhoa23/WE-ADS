@@ -51,7 +51,9 @@ router.get("/report", async function (req, res, next) {
 });
 
 router.get("/view-report/:id", async function (req, res, next) {
-  res.render("reportDetails");
+  res.render("reportDetails",{
+    id: req.params.id
+  });
 });
 
 module.exports = router;
