@@ -174,27 +174,28 @@
     </div>
   </div>
 
-  <div class="success-modal d-none">
-    <div class="overlay">
-      <div class="custom-modal">
-        <i style="color: green" class="bi bi-check-circle"></i>
-        <h3 class="modal-text">Đã giải quyết báo cáo</h3>
-        <a class="btn btn-primary" href="/weads/report">Ok</a>
-      </div>
-    </div>
-  </div>
-
-  <div class="fail-modal d-none">
-    <div class="overlay">
-      <div class="custom-modal">
-        <i style="color: red" class="bi bi-x-circle"></i>
-        <h3 class="modal-text">Có lỗi xảy ra, vui lòng thử lại</h3>
-        <button class="close-modal btn btn-primary">Ok</button>
-      </div>
-    </div>
-  </div>
-
   <script>
+    function showSuccessModal() {
+            Swal.fire({
+                icon: 'success',
+                title: 'Đã cập nhật báo cáo',
+                showCancelButton: false,
+                timer: null
+            }).then((result) => {
+                if (result.isConfirmed) {
+                  window.location.href = '/weads/report';
+                }
+            });
+    }
+    function showErrorModal() {
+        Swal.fire({
+            icon: 'error',
+            title: 'Có lỗi xảy ra, vui lòng thử lại',
+            showCancelButton: false,
+            timer: null
+        });
+    }
+
     $('#resolve-form').on('submit', async function(event) {
       event.preventDefault();
 
@@ -218,10 +219,10 @@
         return result.json();
       })
       if (response.success)
-        $('.success-modal').toggleClass('d-none');
+        showSuccessModal();
       else {
         $('.resolve-submit').prop("disabled", false);
-        $('.fail-modal').toggleClass('d-none');
+        showErrorModal();
       }
     });
 
@@ -246,7 +247,7 @@
         }
         else {
           $('#change-state-btn').prop("disabled", false);
-          $('.fail-modal').toggleClass('d-none');
+          showErrorModal();
         }
       });
     });

@@ -17,16 +17,9 @@
       <div class="license-form-row">
         <h3 class="row-label">Loại bảng quảng cáo:</h3>
         <select class="adType-select" name="adType" id="adType">
-          <option value="Trụ bảng hiflex" class="adType-option">Trụ bảng hiflex</option>
-          <option value="Trụ màn hình điện tử LED" class="adType-option">Trụ màn hình điện tử LED</option>
-          <option value="Trụ hộp đèn" class="adType-option">Trụ hộp đèn</option>
-          <option value="Bảng hiflex ốp tường" class="adType-option">Bảng hiflex ốp tường</option>
-          <option value="Màn hình điện tử ốp tường" class="adType-option">Màn hình điện tử ốp tường</option>
-          <option value="Trụ treo băng rôn dọc" class="adType-option">Trụ treo băng rôn dọc</option>
-          <option value="Trụ treo băng rôn ngang" class="adType-option">Trụ treo băng rôn ngang</option>
-          <option value="Trụ/Cụm pano" class="adType-option">Trụ/Cụm pano</option>
-          <option value="Cổng chào" class="adType-option">Cổng chào</option>
-          <option value="Trung tâm thương mại" class="adType-option">Trung tâm thương mại</option>
+          <% for (var i = 0; i < adTypes.length; i++) { %>
+            <option value="<%- adTypes[i].name%>" class="adType-option"><%- adTypes[i].name%></option>
+          <% } %>
         </select>
       </div>
       <div class="license-form-row">
@@ -85,26 +78,6 @@
   </div>
 </div>
 
-<div class="success-modal d-none">
-  <div class="overlay">
-    <div class="custom-modal">
-      <i style="color: green" class="bi bi-check-circle"></i>
-      <h3 class="modal-text">Đã tạo yêu cầu cấp phép</h3>
-      <a class="btn btn-primary" href="/weads/place/view-all">Ok</a>
-    </div>
-  </div>
-</div>
-
-<div class="fail-modal d-none">
-  <div class="overlay">
-    <div class="custom-modal">
-      <i style="color: red" class="bi bi-x-circle"></i>
-      <h3 class="modal-text">Có lỗi xảy ra, vui lòng thử lại</h3>
-      <button class="close-modal btn btn-primary">Ok</button>
-    </div>
-  </div>
-</div>
-
 <script>
   const place = '<%- ward %>' + ', ' + '<%- district %>'
   $('.place-input').val(place);
@@ -116,6 +89,26 @@
   }
 </script>
 <script>
+  function showSuccessModal() {
+            Swal.fire({
+                icon: 'success',
+                title: 'Tạo yêu cầu thành công',
+                showCancelButton: false,
+                timer: null
+            }).then((result) => {
+                if (result.isConfirmed) {
+                  window.location.href = '/weads/place/view-all';
+                }
+            });
+    }
+    function showErrorModal() {
+        Swal.fire({
+            icon: 'error',
+            title: 'Có lỗi xảy ra, vui lòng thử lại',
+            showCancelButton: false,
+            timer: null
+        });
+    }
   $(".license-form").on("submit", async function (event) {
     event.preventDefault();
     const adName = $("#adName").val();
@@ -153,15 +146,10 @@
         return result.json();
       })
     if (response.success)
-      $('.success-modal').toggleClass('d-none');
+      showSuccessModal();
     else {
-      $('.fail-modal').toggleClass('d-none');
+      showErrorModal();
     }
-  });
-</script>
-<script>
-  $(".close-modal").click(function () {
-    $(".fail-modal").toggleClass("d-none");
   });
 </script>
 <%- include('./department/partials/footer') %>
