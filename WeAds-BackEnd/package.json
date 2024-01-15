@@ -15,6 +15,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "authMiddleWare": "file:./middlewares/authMiddleWare.js",
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
     "cookie-parser": "^1.4.6",
@@ -33,7 +34,6 @@
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
     "path": "^0.12.7",
-    "sweetalert2": "^11.10.2",
-    "authMiddleWare": "file:./middlewares/authMiddleWare.js"
+    "sweetalert2": "^11.10.2"
   }
 }
