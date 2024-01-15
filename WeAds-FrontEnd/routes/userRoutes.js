@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+require("dotenv").config();
 
 router.get("/home", function (req, res, next) {
   res.render("index", {
@@ -9,7 +10,7 @@ router.get("/home", function (req, res, next) {
 
 router.get("/report/:placeId", async function (req, res, next) {
   try{
-    const response = await fetch(process.env.API + req.params.placeId)
+    const response = await fetch(process.env.API + "/ " + req.params.placeId)
     const result = await response.json()
     const coordinates = result.place.coordinates
     console.log(result)
