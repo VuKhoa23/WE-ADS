@@ -153,9 +153,11 @@ router.get('/allAdPlacement', async function(req, res) {
 router.get('/addAdPlacementForm', async function(req, res) {
 
   const adTypes = await AdType.find({});
+  const locationTypes = await LocationType.find({});
   res.render("department/createAdPlacement", {
     lat: req.query.lat,
     lng: req.query.lng,
+    locationTypes: locationTypes,
     adTypes: adTypes,
     ward: req.query.ward,
     district: req.query.district,
@@ -220,10 +222,11 @@ router.get('/deleteAdPlacement/:_id', async function(req, res) {
 router.get('/editAdPlacementForm/:_id', async function(req, res) {
   const adPlacement = await Place.findOne({_id: req.params._id});
   const adTypes = await AdTypes.find({});
-
+  const locationTypes = await LocationType.find({});
   res.render("department/editAdPlacementForm", {
     adPlacement: adPlacement,
     adTypes: adTypes,
+    locationTypes: locationTypes,
     username: res.locals.user ? res.locals.user.username : null,
     role: res.locals.user ? res.locals.user.role : null,
   })
