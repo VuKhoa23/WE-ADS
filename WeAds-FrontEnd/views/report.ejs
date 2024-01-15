@@ -152,8 +152,8 @@
       const placeRes = await fetch("http://localhost:3000/weads/place/details/" + '<%- placeId %>')
       const placeResult = await placeRes.json()
       coordinates = placeResult.place.coordinates
-      ward = result.place.ward
-      district = result.place.district
+      ward = placeRes.place.ward
+      district = placeRes.place.district
       if ('<%- reportCode %>' == 1) {
         const adRes = await fetch("http://localhost:3000/weads/ad/details/" + req.params.adId)
         const adResult = await adRes.json()
