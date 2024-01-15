@@ -130,7 +130,7 @@
 
           const marker = new mapboxgl.Marker(el)
             .setLngLat(place.geometry.coordinates)
-            .setPopup(new mapboxgl.Popup().setHTML(popUp(address, place.properties.adType, place.properties.adPlanned)))
+            .setPopup(new mapboxgl.Popup().setHTML(popUp(address, place.properties.locationType.join('/'), place.properties.adPlanned)))
             .addTo(map)
 
           const markerDiv = marker.getElement();

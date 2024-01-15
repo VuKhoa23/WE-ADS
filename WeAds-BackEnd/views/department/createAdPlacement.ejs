@@ -47,11 +47,10 @@
         <div class="mb-3 form-group">
             <label class="form-label">Loại vị trí:</label>
             <div>
-                <% var locationTypes = ["Đất công", "Công viên", "Hành lang an toàn giao thông", "Đất tư nhân", "Trung tâm thương mại", "Chợ"]; %>
                 <% for (var i = 0; i < locationTypes.length; i++) { %>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="checkbox" id="locationType<%= i %>" name="locationType[]" value="<%= locationTypes[i] %>">
-                        <label class="form-check-label" for="locationType<%= i %>"><%= locationTypes[i] %></label>
+                        <input class="form-check-input" type="checkbox" id="locationType<%= i %>" name="locationType[]" value="<%= locationTypes[i].name %>">
+                        <label class="form-check-label" for="locationType<%= i %>"><%= locationTypes[i].name %></label>
                     </div>
                     <% if (i === 2) { %>
                         </div>
@@ -63,7 +62,7 @@
 
         <div class="mb-3 form-group">
             <label for="adType" class="form-label">Hình thức quảng cáo:</label>
-            <select class="form-control" id="adType" name="adType" required>
+            <select class="place-adType-select" id="adType" name="adType" required>
                 <% adTypes.forEach(function(type) { %>
                     <option value="<%= type.name %>"><%= type.name %></option>
                 <% }); %>
@@ -72,10 +71,12 @@
 
         <div class="mb-3 form-group">
             <label for="adPlanned" class="form-label">Quy hoạch (1: Đã quy hoạch, 0: Chưa quy hoạch):</label>
-            <input type="number" class="form-control" id="adPlanned" name="adPlanned" required>
+            <input type="number" min="0" max="1" class="form-control" id="adPlanned" name="adPlanned" required>
         </div>
 
-        <button type="submit" class="btn btn-primary">Thêm Điểm đặt</button>
+        <span class="d-flex justify-content-center">
+            <button type="submit" class="btn btn-primary">Thêm Điểm đặt</button>
+        </span>
     </form>
 
     <a href="/weads/home">

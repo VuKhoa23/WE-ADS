@@ -46,15 +46,14 @@
         <div class="mb-3 form-group">
             <label class="form-label">Loại vị trí:</label>
             <div>
-                <% var locationTypes = ["Đất công", "Công viên", "Hành lang an toàn giao thông", "Đất tư nhân", "Trung tâm thương mại", "Chợ"]; %>
                 <% for (var i = 0; i < locationTypes.length; i++) { %>
                 <div class="form-check form-check-inline">
-                    <% if (adPlacement.locationType.includes(locationTypes[i])) { %>
-                    <input checked class="form-check-input location-type-checkbox" type="checkbox" id="locationType<%= i %>" name="locationType" value="<%= locationTypes[i] %>">
+                    <% if (adPlacement.locationType.includes(locationTypes[i].name)) { %>
+                    <input checked class="form-check-input location-type-checkbox" type="checkbox" id="locationType<%= i %>" name="locationType" value="<%= locationTypes[i].name %>">
                     <% } else { %>
-                    <input class="form-check-input location-type-checkbox" type="checkbox" id="locationType<%= i %>" name="locationType" value="<%= locationTypes[i] %>">
+                    <input class="form-check-input location-type-checkbox" type="checkbox" id="locationType<%= i %>" name="locationType" value="<%= locationTypes[i].name %>">
                     <% } %>
-                    <label class="form-check-label" for="locationType<%= i %>"><%= locationTypes[i] %></label>
+                    <label class="form-check-label" for="locationType<%= i %>"><%= locationTypes[i].name %></label>
                 </div>
                 <% } %>
             </div>

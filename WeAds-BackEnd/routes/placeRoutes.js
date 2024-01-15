@@ -38,6 +38,7 @@ router.get("/geojson", async (req, res)=>{
       properties:{
         ads: [],
         ward: place.ward,
+        locationType: place.locationType,
         district: place.district,
         adPlanned: place.adPlanned,
         placeId: place._id
@@ -153,10 +154,12 @@ router.get('/allAdPlacement', async function(req, res) {
 router.get('/addAdPlacementForm', async function(req, res) {
 
   const adTypes = await AdType.find({});
+  const locationTypes = await LocationType.find({});
   res.render("department/createAdPlacement", {
     lat: req.query.lat,
     lng: req.query.lng,
     adTypes: adTypes,
+    locationTypes: locationTypes,
     ward: req.query.ward,
     district: req.query.district,
     username: res.locals.user ? res.locals.user.username : null,
@@ -220,10 +223,12 @@ router.get('/deleteAdPlacement/:_id', async function(req, res) {
 router.get('/editAdPlacementForm/:_id', async function(req, res) {
   const adPlacement = await Place.findOne({_id: req.params._id});
   const adTypes = await AdTypes.find({});
+  const LocationTypes = await LocationType.find({});
 
   res.render("department/editAdPlacementForm", {
     adPlacement: adPlacement,
     adTypes: adTypes,
+    locationTypes: LocationTypes,
     username: res.locals.user ? res.locals.user.username : null,
     role: res.locals.user ? res.locals.user.role : null,
   })
