@@ -1,0 +1,32 @@
+.create-account-title {
+  font-size: 25px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.create-account-label {
+  font-size: 18px;
+  font-weight: normal;
+}
+
+.create-account-select {
+  width: 100%;
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+  font-size: 18px;
+}
+
+.create-account-select option {
+  font-size: 18px;
+}
+
+.create-account-submit {
+  margin-top: 10px;
+}
+
+.create-account-input {
+  width: 100%;
+  border: 1px solid #ccc;
+}

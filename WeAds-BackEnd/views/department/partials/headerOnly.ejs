@@ -3,73 +3,91 @@
     <aside class="sidebar collapsed position-absolute top-0 start-0 bg-white z-2 col-12 col-sm-4 col-md-3 col-lg-2">
       <div class="h-100">
         <div class="d-flex justify-content-between border-bottom">
-          <% if(username != null){ %>
-          <a class="h3 text-body pt-4" style="font-size: 1rem;" href="/weads/home">Hi <%- username %></a>
-          <% } else { %>
-          <a class="h3 text-body" href="/weads/home">Not login</a>
-          <% } %>
+          <a class="text-body" href="/weads/home">&nbsp;</a>
           <button class="btn close-sidebar"><i class="bi bi-x"></i></button>
         </div>
         <ul class="sidebar-list">
           <% if (username!= null && role === 'Department') { %>
-          <li class="sidebar-item w-100 d-flex align-items-center p-2"><a href="/weads/report/" class="sidebar-link sidebar-link">Xem báo cáo</a></li>
-          <div class="collapse-toggle">
-            <li class="sidebar-item w-100 d-flex align-items-center p-2" data-bs-toggle="collapse" data-bs-target="#collapse-list">Quản lí</li>
-            <i style="width: 16px; height: 16px;" class="collapse-arrow bi bi-caret-left-fill"></i>
-          </div>
-          <div id="collapse-list" class="collapse border-top border-bottom">
-             <li class="sidebar-item w-100 d-flex align-items-center p-2"><a href="/weads/department/places/allDistrict" class="sidebar-link">Quận, phường</a></li>
-             <li class="sidebar-item w-100 d-flex align-items-center p-2"><a href="/weads/department/advertisement/allType" class="sidebar-link">Hình thức quảng cáo</a></li>
-             <li class="sidebar-item w-100 d-flex align-items-center p-2"><a href="/weads/department/report/allType" class="sidebar-link">Hình thức báo cáo</a></li>
-             <li class="sidebar-item w-100 d-flex align-items-center p-2"><a href="/weads/place/allAdPlacement" class="sidebar-link">Điểm đặt quảng cáo</a></li>
-             <li class="sidebar-item w-100 d-flex align-items-center p-2"><a href="/weads/place/viewAllLocationType" class="sidebar-link">Loại vị trí</a></li>
-             <li class="sidebar-item w-100 d-flex align-items-center p-2"><a href="" class="sidebar-link">Bảng quảng cáo</a></li>
-          </div>
-          <li class="sidebar-item w-100 d-flex align-items-center p-2"><a href="/weads/department/create" class="sidebar-link">Tạo tài khoản cán bộ</a></li>
-          <li class="sidebar-item w-100 d-flex align-items-center p-2"><a href="/weads/department/assignment" class="sidebar-link">Phân công khu vực</a></li>
-          <li class="sidebar-item w-100 d-flex align-items-center p-2"><a href="/weads/license-request/view-all" class="sidebar-link">Xét duyệt yêu cầu</a></li>
-          <li class="sidebar-item w-100 d-flex align-items-center p-2">
-            <i style="font-size: 20px;" class="bi bi-box-arrow-right"></i>
-            <a href="/weads/logout" class="sidebar-link mx-2">Đăng xuất</a>
-          </li>
+            <li class="sidebar-item w-100 d-flex align-items-center p-2"><a href="/weads/home" class="sidebar-link sidebar-link">Trang chủ</a></li>
+            <li class="sidebar-item w-100 d-flex align-items-center p-2"><a href="/weads/report/" class="sidebar-link sidebar-link">Xem báo cáo</a></li>
+            <div class="collapse-toggle">
+              <li class="sidebar-item w-100 d-flex align-items-center p-2" data-bs-toggle="collapse" data-bs-target="#collapse-list">Quản lí</li>
+              <i style="width: 16px; height: 16px;" class="collapse-arrow bi bi-caret-left-fill"></i>
+            </div>
+            <div id="collapse-list" class="collapse border-top border-bottom">
+              <li class="sidebar-item w-100 d-flex align-items-center p-2"><a href="/weads/department/places/allDistrict" class="sidebar-link">Quận, phường</a></li>
+              <li class="sidebar-item w-100 d-flex align-items-center p-2"><a href="/weads/department/advertisement/allType" class="sidebar-link">Hình thức quảng cáo</a></li>
+              <li class="sidebar-item w-100 d-flex align-items-center p-2"><a href="/weads/department/report/allType" class="sidebar-link">Hình thức báo cáo</a></li>
+              <li class="sidebar-item w-100 d-flex align-items-center p-2"><a href="/weads/place/allAdPlacement" class="sidebar-link">Điểm đặt quảng cáo</a></li>
+              <li class="sidebar-item w-100 d-flex align-items-center p-2"><a href="/weads/place/viewAllLocationType" class="sidebar-link">Loại vị trí</a></li>
+              <li class="sidebar-item w-100 d-flex align-items-center p-2"><a href="" class="sidebar-link">Bảng quảng cáo</a></li>
+            </div>
+            <li class="sidebar-item w-100 d-flex align-items-center p-2"><a href="/weads/department/create" class="sidebar-link">Tạo tài khoản cán bộ</a></li>
+
+            <li class="sidebar-item w-100 d-flex align-items-center p-2"><a href="/weads/department/assignment" class="sidebar-link">Phân công khu vực</a></li>
+            <li class="sidebar-item w-100 d-flex align-items-center p-2"><a href="/weads/license-request/view-all" class="sidebar-link">Xét duyệt yêu cầu</a></li>
           <% } else if(username!= null && role === 'District') { %>
-          <li class="sidebar-item w-100 d-flex align-items-center p-2"><a href="/weads/report" class="sidebar-link sidebar-link">Xem báo cáo</a></li>
-          <div class="collapse-toggle">
-            <li class="sidebar-item w-100 d-flex align-items-center p-2" data-bs-toggle="collapse" data-bs-target="#collapse-list">Quản lí</li>
-            <i style="width: 16px; height: 16px;" class="collapse-arrow bi bi-caret-left-fill"></i>
-          </div>
-          <div id="collapse-list" class="collapse border-top border-bottom">
-            <li class="sidebar-item w-100 d-flex align-items-center p-2"><a href="" class="sidebar-link">Hình thức quảng cáo</a></li>
-            <li class="sidebar-item w-100 d-flex align-items-center p-2"><a href="" class="sidebar-link">Điểm đặt quảng cáo</a></li>
-            <li class="sidebar-item w-100 d-flex align-items-center p-2"><a href="" class="sidebar-link">Bảng quảng cáo</a></li>
-            <li class="sidebar-item w-100 d-flex align-items-center p-2"><a href="/weads/license-request/view-all/created" class="sidebar-link">Yêu cầu đã tạo</a></li>
-          </div>
-          <li class="sidebar-item w-100 d-flex align-items-center p-2">
-            <i style="font-size: 20px;" class="bi bi-box-arrow-right"></i>
-            <a href="/weads/logout" class="sidebar-link mx-2">Đăng xuất</a>
-          </li>
+            <li class="sidebar-item w-100 d-flex align-items-center p-2"><a href="/weads/home" class="sidebar-link sidebar-link">Trang chủ</a></li>
+            <li class="sidebar-item w-100 d-flex align-items-center p-2"><a href="/weads/report" class="sidebar-link sidebar-link">Xem báo cáo</a></li>
+            <div class="collapse-toggle">
+              <li class="sidebar-item w-100 d-flex align-items-center p-2" data-bs-toggle="collapse" data-bs-target="#collapse-list">Quản lí</li>
+              <i style="width: 16px; height: 16px;" class="collapse-arrow bi bi-caret-left-fill"></i>
+            </div>
+            <div id="collapse-list" class="collapse border-top border-bottom">
+              <li class="sidebar-item w-100 d-flex align-items-center p-2"><a href="" class="sidebar-link">Hình thức quảng cáo</a></li>
+              <li class="sidebar-item w-100 d-flex align-items-center p-2"><a href="" class="sidebar-link">Điểm đặt quảng cáo</a></li>
+              <li class="sidebar-item w-100 d-flex align-items-center p-2"><a href="" class="sidebar-link">Bảng quảng cáo</a></li>
+              <li class="sidebar-item w-100 d-flex align-items-center p-2"><a href="/weads/license-request/view-all/created" class="sidebar-link">Yêu cầu đã tạo</a></li>
+            </div>
           <% } else if(username!= null && role === 'Ward') { %>
-          <li class="sidebar-item w-100 d-flex align-items-center p-2"><a href="/weads/report" class="sidebar-link sidebar-link">Xem báo cáo</a></li>
-          <li class="sidebar-item w-100 d-flex align-items-center p-2"><a href="/weads/place/view-all" class="sidebar-link sidebar-link">Xem các điểm đặt quảng cáo</a></li>
-          <li class="sidebar-item w-100 d-flex align-items-center p-2"><a href="/weads/license-request/view-all/created" class="sidebar-link">Yêu cầu đã tạo</a></li>
-          <li class="sidebar-item w-100 d-flex align-items-center p-2">
-            <i style="font-size: 20px;" class="bi bi-box-arrow-right"></i>
-            <a href="/weads/logout" class="sidebar-link mx-2">Đăng xuất</a>
-          </li>
+            <li class="sidebar-item w-100 d-flex align-items-center p-2"><a href="/weads/home" class="sidebar-link sidebar-link">Trang chủ</a></li>
+            <li class="sidebar-item w-100 d-flex align-items-center p-2"><a href="/weads/report" class="sidebar-link sidebar-link">Xem báo cáo</a></li>
+            <li class="sidebar-item w-100 d-flex align-items-center p-2"><a href="/weads/place/view-all" class="sidebar-link sidebar-link">Xem các điểm đặt quảng cáo</a></li>
+            <li class="sidebar-item w-100 d-flex align-items-center p-2"><a href="/weads/license-request/view-all/created" class="sidebar-link">Yêu cầu đã tạo</a></li>
           <% } else { %>
-          <li class="sidebar-item w-100 d-flex align-items-center p-2">
-            <a href="/weads/login" class="sidebar-link mx-2">Đăng nhập</a>
-          </li>
+            <li class="sidebar-item w-100 d-flex align-items-center p-2">
+              <a href="/weads/login" class="sidebar-link mx-2">Đăng nhập</a>
+            </li>
           <% } %>
         </ul>
       </div>
     </aside>
 
     <div class="main flex-grow-1 col-12 col-sm-8 col-md-9 col-lg-10">
-      <nav class="navbar navbar-expand-sm border-bottom mb-3 px-3">
+      <nav class="navbar navbar-expand-sm border-bottom mb-3 px-3 d-flex justify-content-between">
         <button class="btn sidebar-toggler">
           <span class="navbar-toggler-icon"></span>
         </button>
+
+        <% if(username!= null) { %>
+          <div class="user-section">
+            <span style="position: relative;">
+              <i style="margin-right: 4px;" class="bi bi-person-circle"></i>
+              <%- username %>
+              <i style="margin-left: 4px;position: absolute;top:50%;transform: translateY(-50%);" class="bi bi-caret-down-fill"></i>
+            </span>
+            <ul class="user-section-list">
+              <li class="user-section-item">
+                <a href="/weads/user/edit-profile">
+                  <i style="font-size: 20px; margin-right: 4px;" class="bi bi-pencil-square"></i>
+                  Chỉnh sửa thông tin
+                </a>
+              </li>
+              <li class="user-section-item">
+                <a href="/weads/user/change-password">
+                  <i style="font-size: 20px; margin-right: 4px;" class="bi bi-shield-lock"></i>
+                  Đổi mật khẩu
+                </a>
+              </li>
+              <li class="user-section-item">
+                <a href="/weads/logout">
+                  <i style="font-size: 20px; margin-right: 4px;" class="bi bi-box-arrow-right"></i>
+                  Đăng xuất
+                </a>
+              </li>
+            </ul>
+          </div>
+        <% } %>
       </nav>
     </div>
   </div>

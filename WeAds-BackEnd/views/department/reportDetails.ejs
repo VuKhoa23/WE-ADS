@@ -140,7 +140,17 @@
         </div>
         <div class="info-row">
           <h3 class="row-name">Hình thức báo cáo:</h3>
-          <h3 class="row-info"> <%- report.reportType %></h3>
+          <h3 class="row-info">
+            <% if(report.reportType == 0){ %>
+              Tố giác sai phạm
+            <% }else if(report.reportType == 1){ %>
+              Đăng ký nội dung
+            <% }else if(report.reportType == 2){ %>
+              Đóng góp ý kiến
+            <% }else{ %>
+              Giải đáp thắc mắc
+            <% } %>
+          </h3>
         </div>
         <div class="info-row">
           <h3 class="row-name">Địa chỉ bị báo cáo:</h3>
