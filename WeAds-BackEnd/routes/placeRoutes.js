@@ -7,7 +7,7 @@ const AdTypes = require("../model/advertisement");
 const UpdateRequest = require("../model/updateRequest");
 const { ObjectId } = require('mongodb');
 const AdType = require("../model/advertisement");
-
+const LocationType = require("../model/locationType");
 // router.get('/create-demo', async (req, res) => {
 //   const place = await Place.findOne({district: "Quận Bình Thạnh"})
 //   await Ad.create({
@@ -275,4 +275,97 @@ router.post('/editAdPlacement/:_id', async function(req, res) {
   })
 })
 
+router.get('/viewAllLocationType', async function(req, res) {
+  const types = await LocationType.find({});
+  res.render("department/viewAllLocationType", {
+    announce: null,
+    types: types,
+    username: res.locals.user ? res.locals.user.username : null,
+    role: res.locals.user ? res.locals.user.role : null,
+  })
+})
+
+router.post('/addType', async function(req, res) {
+  try {
+    const isExist = await LocationType.findOne({name: req.body.name});
+
+    if(isExist){
+      const types = await LocationType.find({});
+      res.render("department/viewAllLocationType", {
+        announce: 'exist',
+        types: types,
+        username: res.locals.user ? res.locals.user.username : null,
+        role: res.locals.user ? res.locals.user.role : null,
+      })
+    } else {
+      await LocationType.create(req.body);
+      const types = await LocationType.find({});
+
+      res.render("department/viewAllLocationType", {
+        announce: 'create',
+        types: types,
+        username: res.locals.user ? res.locals.user.username : null,
+        role: res.locals.user ? res.locals.user.role : null,
+      })
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+
+
+router.post('/editType/:_id', async function(req, res) {
+  try {
+
+      const id = req.params._id;
+      const type = await LocationType.findOne({_id: id});
+      const name = req.body.name;
+      const isExist = await LocationType.findOne({name: name});
+      console.log(isExist); 
+
+      if(isExist){
+        const types = await LocationType.find({});
+        res.render("department/viewAllLocationType", {
+          announce: 'exist',
+          types: types,
+          username: res.locals.user ? res.locals.user.username : null,
+          role: res.locals.user ? res.locals.user.role : null,
+        })
+      } else {
+        await LocationType.findByIdAndUpdate(type._id, {name: name});
+        const types = await LocationType.find({});
+        res.render("department/viewAllLocationType", {
+          announce: 'edit',
+          types: types,
+          username: res.locals.user ? res.locals.user.username : null,
+          role: res.locals.user ? res.locals.user.role : null,
+        })
+      }
+  } catch (error) {
+      res.status(500).json({message: error.message})
+  }
+})
+
+router.get('/deleteType/:_id', async function(req, res) {
+  try {
+      const type = await LocationType.findOne({_id: req.params._id});
+      if(!type){
+          return res.status(404).json({message: `cannot find any type with ID ${req.params._id}`})
+      } else {
+          await LocationType.findByIdAndDelete(type._id);
+          const types = await LocationType.find({});
+
+          res.render("department/viewAllLocationType", {
+            announce: 'delete',
+            types: types,
+            username: res.locals.user ? res.locals.user.username : null,
+            role: res.locals.user ? res.locals.user.role : null,
+          })
+      }
+      
+  } catch (error) {
+      res.status(500).json({message: error.message})
+  }
+})
 module.exports = router

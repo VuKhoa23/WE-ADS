@@ -349,7 +349,7 @@ router.post('/department/advertisement/editType/:_id', async function(req, res) 
       const id = req.params._id;
       const type = await Advertisement.findOne({_id: id});
       const name = req.body.name;
-      const isExist = Advertisement.findOne({name: name});
+      const isExist = await Advertisement.findOne({name: name});
 
       if(isExist){
         const types = await Advertisement.find({});
