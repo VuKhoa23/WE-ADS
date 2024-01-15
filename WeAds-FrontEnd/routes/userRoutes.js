@@ -29,6 +29,7 @@ router.get("/report/:placeId/:adId", async function (req, res, next) {
     placeId: req.params.placeId,
     API_KEY: process.env.MAP_KEY,
     reportCode: 1,
+    adId : req.params.adId
   });
 });
 
