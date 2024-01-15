@@ -29,14 +29,14 @@
     <div class="mb-3 form-group row">
       <label for="password" class="form-label col-3">Password</label>
       <div class="col-9">
-        <input type="text" class="form-control" id="password" name="password" required <%if(body){%> value="<%- body.password %>" <% } %>>
+        <input type="password" class="form-control" id="password" name="password" required <%if(body){%> value="<%- body.password %>" <% } %>>
       </div>
     </div>
 
     <div class="mb-3 form-group row">
       <label for="phone" class="form-label col-3">Phone</label>
       <div class="col-9">
-        <input type="text" class="form-control" id="phone" name="phone" required <%if(body){%> value="<%- body.phone %>" <% } %>>
+        <input type="number" class="form-control" id="phone" name="phone" required <%if(body){%> value="<%- body.phone %>" <% } %>>
       </div>
     </div>
 
