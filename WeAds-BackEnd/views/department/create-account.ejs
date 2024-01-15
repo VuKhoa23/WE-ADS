@@ -9,7 +9,7 @@
     <div class="mb-3 form-group row">
       <label for="email" class="form-label col-3">Google Email</label>
       <div class="col-9">
-        <input type="email" class="form-control" id="email" name="email" <%if(body){%> value="<%- body.email %>" <% } %>>
+        <input type="email" class="form-control" id="email" name="email" required <%if(body){%> value="<%- body.email %>" <% } %>>
         <% if(emailMessage) {%>
         <span class="text-danger "><%- emailMessage %></span>
         <% } %>
@@ -19,7 +19,7 @@
     <div class="mb-3 form-group row">
       <label for="username" class="form-label col-3">Username</label>
       <div class="col-9">
-        <input type="text" class="form-control" id="username" name="username" <%if(body){%> value="<%- body.username %>" <% } %>>
+        <input type="text" class="form-control" id="username" name="username" required <%if(body){%> value="<%- body.username %>" <% } %>>
         <% if(usernameMessage) {%>
         <span class="text-danger "><%- usernameMessage %></span>
         <% } %>
@@ -29,21 +29,21 @@
     <div class="mb-3 form-group row">
       <label for="password" class="form-label col-3">Password</label>
       <div class="col-9">
-        <input type="text" class="form-control" id="password" name="password" <%if(body){%> value="<%- body.password %>" <% } %>>
+        <input type="text" class="form-control" id="password" name="password" required <%if(body){%> value="<%- body.password %>" <% } %>>
       </div>
     </div>
 
     <div class="mb-3 form-group row">
       <label for="phone" class="form-label col-3">Phone</label>
       <div class="col-9">
-        <input type="text" class="form-control" id="phone" name="phone" <%if(body){%> value="<%- body.phone %>" <% } %>>
+        <input type="text" class="form-control" id="phone" name="phone" required <%if(body){%> value="<%- body.phone %>" <% } %>>
       </div>
     </div>
 
     <div class="mb-3 form-group row">
       <label for="role" class="form-label col-3">Role</label>
       <div class="col-9">
-        <select class="form-control text-center " name="role" id="role">
+        <select class="form-control text-center " name="role" id="role" required>
           <option value="Ward">Ward</option>
           <option value="District">District</option>
           <option value="Department">Department</option>
@@ -55,14 +55,14 @@
     <div class="mb-3 form-group row">
       <label for="district" class="form-label col-3">District</label>
       <div class="col-9">
-        <input type="text" class="form-control" id="district" name="district" <%if(body){%> value="<%- body.district %>" <% } %>>
+        <input type="text" class="form-control" id="district" name="district" required <%if(body){%> value="<%- body.district %>" <% } %>>
       </div>
     </div>
 
     <div class="mb-3 form-group row">
       <label for="ward" class="form-label col-3">Ward</label>
       <div class="col-9">
-        <input type="text" class="form-control" id="ward" name="ward" <%if(body){%> value="<%- body.ward %>" <% } %>>
+        <input type="text" class="form-control" id="ward" name="ward" required <%if(body){%> value="<%- body.ward %>" <% } %>>
       </div>
 
       <div class="text-center ">
