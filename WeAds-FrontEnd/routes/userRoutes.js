@@ -25,7 +25,7 @@ router.get("/report/:placeId", async function (req, res, next) {
       reportCode: 0
     });
   }catch(e){
-    res.send(e.message + process.env.API + "/weads/place/details/" + req.params.placeId)
+    res.send(e.message +" "+ process.env.API + "/weads/place/details/" + req.params.placeId)
   }
  
 });
