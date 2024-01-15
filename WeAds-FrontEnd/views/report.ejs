@@ -144,8 +144,22 @@
     const reports = JSON.parse(window.localStorage.getItem('reports'))
     const accessToken = "<%= API_KEY %>";
     $(document).ready(async function () {
-      let coordinates = '<%- coordinates %>'
-      coordinates = coordinates.split(",")
+      let coordinates = null
+      let ward = null
+      let district = null
+      let adId = null
+
+      const placeRes = await fetch("http://localhost:3000/weads/place/details/" + req.params.placeId)
+      const placeResult = await placeRes.json()
+      coordinates = placeResult.place.coordinates
+      ward = result.place.ward
+      district = result.place.district
+      if ('<%- reportCode %>' == 1) {
+        const adRes = await fetch("http://localhost:3000/weads/ad/details/" + req.params.adId)
+        const adResult = await adRes.json()
+        adId = adResult.ad._id
+      }
+
       lng = coordinates[0]
       lat = coordinates[1]
       // get address by reverse geocoding

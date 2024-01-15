@@ -10,17 +10,14 @@ router.get("/home", function (req, res, next) {
 
 router.get("/report/:placeId", async function (req, res, next) {
   try{
-    console.log(process.env.API + "/weads/place/details/" + req.params.placeId)
-    const response = await fetch(process.env.API + "/weads/place/details/" + req.params.placeId)
-    const result = await response.json()
-    const coordinates = result.place.coordinates
-    console.log(result)
+    // const response = await fetch(process.env.API + "/weads/place/details/" + req.params.placeId)
+    // const result = await response.json()
+    // const coordinates = result.place.coordinates
     res.render("report", {
-      coordinates: coordinates,
-      ward: result.place.ward,
-      district: result.place.district,
+      // coordinates: coordinates,
+      // ward: result.place.ward,
+      // district: result.place.district,
       placeId: result.place._id,
-      adId: null,
       API_KEY: process.env.MAP_KEY,
       reportCode: 0
     });
