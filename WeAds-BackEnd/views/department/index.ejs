@@ -24,7 +24,7 @@
     body {
       margin: 0;
       padding: 0;
-      font-family: monospace;
+      /* font-family: monospace; */
     }
 
     #map {
@@ -38,7 +38,7 @@
 
 <body>
   <%- include('./partials/headerOnly') %>
-  <select class="form-select m-3 w-25 position-absolute" style="top: 2.85rem" id="typeFilter">
+  <select class="form-select m-3 position-absolute" style="top: 2.85rem; width: 200px;" id="typeFilter">
     <option value="-1" selected>Tất cả</option>
     <option value="0">Chưa quy hoạch</option>
     <option value="1">Đã quy hoạch</option>
