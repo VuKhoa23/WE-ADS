@@ -8,19 +8,24 @@ router.get("/home", function (req, res, next) {
 });
 
 router.get("/report/:placeId", async function (req, res, next) {
-  const response = await fetch("http://localhost:3000/weads/place/details/" + req.params.placeId)
-  const result = await response.json()
-  const coordinates = result.place.coordinates
-  console.log(result)
-  res.render("report", {
-    coordinates: coordinates,
-    ward: result.place.ward,
-    district: result.place.district,
-    placeId: result.place._id,
-    adId: null,
-    API_KEY: process.env.MAP_KEY,
-    reportCode: 0
-  });
+  try{
+    const response = await fetch("http://localhost:3000/weads/place/details/" + req.params.placeId)
+    const result = await response.json()
+    const coordinates = result.place.coordinates
+    console.log(result)
+    res.render("report", {
+      coordinates: coordinates,
+      ward: result.place.ward,
+      district: result.place.district,
+      placeId: result.place._id,
+      adId: null,
+      API_KEY: process.env.MAP_KEY,
+      reportCode: 0
+    });
+  }catch(e){
+    res.send("ERROR")
+  }
+ 
 });
 
 router.get("/report/:placeId/:adId", async function (req, res, next) {
