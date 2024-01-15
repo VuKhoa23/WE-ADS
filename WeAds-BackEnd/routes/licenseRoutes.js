@@ -7,10 +7,10 @@ const { ObjectId } = require('mongodb');
 const Router = express.Router();
 
 const {
-  checkDirectory, uploadAds
+uploadAds
 } = require("../middlewares/fileUploadMiddleware");
 
-Router.get('/create/:id', checkDirectory, async (req, res) => {
+Router.get('/create/:id', async (req, res) => {
   const id = req.params.id;
   const adTypes = await AdTypes.find({});
   if (!id) {
@@ -65,6 +65,7 @@ Router.post('/create/:id', uploadAds.fields([
   const { adType, width, height, adName, companyName, companyPhone, companyEmail, startDate, endDate } = req.body;
   const adScale = width + "m x " + height + "m";
   const data = req.files;
+  console.log(data)
   const images = Object.values(data)[0]
   let adImages = []
   for(let image of images){
