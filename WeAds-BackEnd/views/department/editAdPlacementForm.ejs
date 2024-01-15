@@ -43,15 +43,15 @@
             <input type="text" class="form-control" id="ward" name="ward" value="<%= adPlacement.ward %>" readonly>
         </div>
 
-        <div class="mb-3 form-group">
+        <div class="mb-3 form-group" id="place">
             <label class="form-label">Loại vị trí:</label>
             <div>
                 <% for (var i = 0; i < locationTypes.length; i++) { %>
                 <div class="form-check form-check-inline">
-                    <% if (adPlacement.locationType.includes(locationTypes[i])) { %>
-                    <input checked class="form-check-input location-type-checkbox" type="checkbox" id="locationType<%= i %>" name="locationType" value="<%= locationTypes[i] %>">
+                    <% if (adPlacement.locationType.includes(locationTypes[i].name)) { %>
+                    <input checked class="form-check-input location-type-checkbox" type="checkbox" id="locationType<%= i %>" name="locationType" value="<%= locationTypes[i].name %>">
                     <% } else { %>
-                    <input class="form-check-input location-type-checkbox" type="checkbox" id="locationType<%= i %>" name="locationType" value="<%= locationTypes[i] %>">
+                    <input class="form-check-input location-type-checkbox" type="checkbox" id="locationType<%= i %>" name="locationType" value="<%= locationTypes[i].name %>">
                     <% } %>
                     <label class="form-check-label" for="locationType<%= i %>"><%= locationTypes[i].name %></label>
                 </div>
@@ -73,14 +73,13 @@
             <input type="number" min="0" max="1" class="form-control" id="adPlanned" name="adPlanned" required>
         </div>
 
+
         <% if (role != 'Department') { %>
         <div class="mb-3 form-group">
             <label for="reason" class="form-label">Lý do chỉnh sửa:</label>
             <textarea style="resize: none;min-height: 100px;" class="form-control" id="reason" name="reason" required></textarea>
         </div>
         <% } %>
-
-
 
         <span class="d-flex justify-content-center">
             <% if (role == 'Department') { %>
@@ -146,11 +145,41 @@
         $('#locationType').val('<%- adPlacement.locationType .join(', ')%>');
         $('#adType').val('<%- adPlacement.adType %>');
         $('#adPlanned').val('<%- adPlacement.adPlanned %>');
+
     });
 </script>
+
 <script>
+    function checkPlace(){
+        let count = 0;
+        const inputs = document.querySelectorAll('.form-check-input');
+        inputs.forEach(function(input){
+            if(input.checked){
+                count++;
+            }
+        })
+        if(count === 0){
+            event.preventDefault();
+            inputs.forEach(function(input){
+                input.style.border = 'solid #ff3333';
+            })
+            const place = document.getElementById('place');
+            const alert = document.createElement('small');
+            alert.innerHTML = 'Chọn ít nhất 1 loại vị trí';
+            alert.style.color = '#ff3333';
+            place.appendChild(alert);
+            return false;
+        }
+        return true;
+    }
+
     $('#edit-place-submit').on('submit', async function (event) {
         event.preventDefault();
+
+        if (!checkPlace()) {
+            return; // Stop execution if checkPlace fails
+        }
+
         let locationTypes = $(".location-type-checkbox:checked");
         const adType = $('#adType').find(":selected").val();
         const adPlanned = $('#adPlanned').val();
@@ -182,4 +211,5 @@
             showErrorModal();
     });
 </script>
+
 <%- include('./partials/footer') %>
