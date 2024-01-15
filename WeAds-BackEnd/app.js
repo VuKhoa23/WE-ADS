@@ -18,7 +18,7 @@ const app = express()
 const googleAuth = require("./controller/googleAuth")
 const authRoutes = require("./routes/authRoutes")
 
-app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
+app.use(require('cookie-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
 
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use(express.json({limit: '50mb'}));
