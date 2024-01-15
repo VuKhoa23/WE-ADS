@@ -191,4 +191,67 @@ router.post('/change-state', async (req, res, next) => {
   }
 }, sendMailController.sendReportState);
 
+
+router.get('/user/change-password', async (req, res) => {
+  let username = null
+    createMessage = null
+
+    if(req.query.createSuccess){
+      createMessage = "Account created"
+    }
+    if(res.locals.user){
+      username = res.locals.user.username
+    }
+
+    let role = null
+    if(res.locals.user){
+      role = res.locals.user.role
+    }
+    res.render('changeUserPassword', {
+      role,
+      username,
+      createMessage
+    });
+});
+
+router.post('/user/change-password', async (req, res) => {
+  let id = null;
+  if(res.locals.user){
+    id = res.locals.user._id;
+  }
+  if (!id) {
+    res.status(500).json({ success: false, error: "Id not found" });
+    return;
+  }
+  try {
+    const user = await Officer.findById(id);
+    if (!user) {
+      res.status(500).json({ success: false, error: "Id not found" });
+      return;
+    }
+
+    const { oldPassword, newPassword } = req.body;
+
+    if (!oldPassword || !newPassword) {
+      res.status(500).json({ success: false, error: "Có lỗi xảy ra, vui lòng thử lại" });
+      return;
+    }
+
+    const auth = bcrypt.compare(oldPassword, user.password);
+
+    if (!auth) {
+      res.status(500).json({ success: false, error: "Mật khẩu cũ không chính xác" });
+      return;
+    }
+    
+    user.password = newPassword;
+    await user.save();
+    res.status(200).json({ success: true });
+  }
+  catch (err) {
+    console.log(err.message);
+    res.status(500).json({ success: false, error: err.message })
+  }
+});
+
 module.exports = router;
