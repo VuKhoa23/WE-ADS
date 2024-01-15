@@ -9,7 +9,6 @@ router.get("/home", function (req, res, next) {
 });
 
 router.get("/report/:placeId", async function (req, res, next) {
-  try{
     // const response = await fetch(process.env.API + "/weads/place/details/" + req.params.placeId)
     // const result = await response.json()
     // const coordinates = result.place.coordinates
@@ -17,13 +16,11 @@ router.get("/report/:placeId", async function (req, res, next) {
       // coordinates: coordinates,
       // ward: result.place.ward,
       // district: result.place.district,
-      placeId: result.place._id,
+      placeId: req.params.placeId,
       API_KEY: process.env.MAP_KEY,
       reportCode: 0
     });
-  }catch(e){
-    res.json(e)
-  }
+
  
 });
 
