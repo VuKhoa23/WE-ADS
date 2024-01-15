@@ -2,6 +2,7 @@ const express = require('express');
 const Ad = require("../model/ads");
 const LicenseRequest = require("../model/licenseRequest");
 const Officer = require("../model/officer");
+const AdTypes = require("../model/advertisement");
 const { ObjectId } = require('mongodb');
 const Router = express.Router();
 
@@ -11,6 +12,7 @@ const {
 
 Router.get('/create/:id', checkDirectory, async (req, res) => {
   const id = req.params.id;
+  const adTypes = await AdTypes.find({});
   if (!id) {
     res.redirect('/weads/place/view-all');
     return;
@@ -37,6 +39,7 @@ Router.get('/create/:id', checkDirectory, async (req, res) => {
   }
   res.render('licenseRequest', {
     role,
+    adTypes,
     username,
     createMessage,
     licenseRequest: true,

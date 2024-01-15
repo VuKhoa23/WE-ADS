@@ -51,7 +51,7 @@
   </div>
 
   <div id="notification-parent">
-    <div id="notification-container" class="overflow-y-scroll "></div>
+    <div id="notification-container"></div>
   </div>
 
 
@@ -362,8 +362,7 @@
         if ('<%- role %>' === "Department") {
           $("#update-link").css("display", "none")
         } else {
-          $("#update-link").attr("href", "/weads/update/" + geojson.features[index].properties.placeId + "/"
-            + geojson.features[index].properties.ads[adNum].adId)
+          $("#update-link").attr("href", "/weads/ad/editAdForm/" + geojson.features[index].properties.ads[adNum].adId)
         }
 
         let indicator = document.getElementById("carousel-indicators-id");

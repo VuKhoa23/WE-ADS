@@ -31,7 +31,6 @@
           <th class="text-center" style="background-color: #2b2929; color: white;" scope="col">Địa chỉ bị báo cáo</th>
           <th class="text-center" style="background-color: #2b2929; color: white;" scope="col">Hình thức báo cáo</th>
           <th class="text-center" style="background-color: #2b2929; color: white;" scope="col">Nội dung báo cáo</th>
-          <th class="text-center" style="background-color: #2b2929; color: white; border-top-right-radius: 5px;" scope="col">Cách thức xử lý</th>
         </tr>
       </thead>
       <tbody>
@@ -52,11 +51,6 @@
           <td class="text-center">
             <a class="btn btn-success" href="/weads/report/details/<%= reports[i]._id %>">Xem chi tiết</a>
           </td>
-          <% if(reports[i].information){ %>
-            <td class="text-center"><%= reports[i].information %></td>
-          <% }else{ %>
-            <td class="text-center">Chưa có</td>
-          <% } %>
         </tr>
         <% } %>
         <% } else { %>

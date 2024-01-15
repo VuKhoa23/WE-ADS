@@ -73,48 +73,40 @@
   </div>
 </div>
 
-<div class="success-modal accept-modal d-none">
-  <div class="overlay">
-    <div class="custom-modal">
-      <i style="color: green" class="bi bi-check-circle"></i>
-      <h3 class="modal-text">Đã cấp phép quảng cáo</h3>
-      <a class="btn btn-primary" href="/weads/license-request/view-all">Ok</a>
-    </div>
-  </div>
-</div>
-
-<div class="success-modal decline-modal d-none">
-  <div class="overlay">
-    <div class="custom-modal">
-      <i style="color: black" class="bi bi-check-circle"></i>
-      <% if (role == 'Department') { %>
-        <h3 class="modal-text">Đã từ chối quảng cáo</h3>
-      <% } else { %>
-        <h3 class="modal-text">Đã xoá yêu cầu</h3>
-      <% } %>
-      <a class="btn btn-primary" href="/weads/license-request/view-all">Ok</a>
-    </div>
-  </div>
-</div>
-
-<div class="fail-modal d-none">
-  <div class="overlay">
-    <div class="custom-modal">
-      <i style="color: red" class="bi bi-x-circle"></i>
-      <h3 class="modal-text">Có lỗi xảy ra, vui lòng thử lại</h3>
-      <button class="close-modal btn btn-primary">Ok</button>
-    </div>
-  </div>
-</div>
-
-<script>
-  $(".close-modal").click(function(){
-   $(".fail-modal").toggleClass("d-none");
- });
-</script>
-
 <% if (role == 'Department') { %>
   <script>
+    function showAcceptModal() {
+            Swal.fire({
+                icon: 'success',
+                title: 'Đã cập nhật biển quảng cáo',
+                showCancelButton: false,
+                timer: null
+            }).then((result) => {
+                if (result.isConfirmed) {
+                  window.location.href = '/weads/license-request/view-all';
+                }
+            });
+    }
+    function showDeclineModal() {
+            Swal.fire({
+                icon: 'success',
+                title: 'Đã từ chối yêu cầu',
+                showCancelButton: false,
+                timer: null
+            }).then((result) => {
+                if (result.isConfirmed) {
+                  window.location.href = '/weads/license-request/view-all';
+                }
+            });
+    }
+    function showErrorModal() {
+        Swal.fire({
+            icon: 'error',
+            title: 'Có lỗi xảy ra, vui lòng thử lại',
+            showCancelButton: false,
+            timer: null
+        });
+    }
     $("#accept-btn").click(async function() {
       const response = await fetch(window.location.pathname + '/accept', {
           method: 'POST',
@@ -126,9 +118,9 @@
           return result.json();
         })
         if (response.success)
-          $('.accept-modal').toggleClass('d-none');
+          showAcceptModal();
         else {
-          $('.fail-modal').toggleClass('d-none');
+          showErrorModal();
         }
     });
     $("#decline-btn").click(async function() {
@@ -142,14 +134,26 @@
           return result.json();
         })
         if (response.success)
-          $('.decline-modal').toggleClass('d-none');
+          showDeclineModal();
         else {
-          $('.fail-modal').toggleClass('d-none');
+          showErrorModal();
         }
     });
   </script>
 <% } else { %>
   <script>
+    function showDeleteModal() {
+      Swal.fire({
+          icon: 'success',
+          title: 'Đã xoá yêu cầu',
+          showCancelButton: false,
+          timer: null
+      }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.href = '/weads/license-request/view-all';
+          }
+      });
+    }
     $("#delete-btn").click(async function() {
       const response = await fetch(window.location.pathname + '/delete', {
           method: 'POST',
@@ -161,9 +165,9 @@
           return result.json();
         })
         if (response.success)
-          $('.decline-modal').toggleClass('d-none');
+          showDeleteModal();
         else {
-          $('.fail-modal').toggleClass('d-none');
+          showErrorModal();
         }
     });
   </script>
