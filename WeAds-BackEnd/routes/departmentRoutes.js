@@ -45,18 +45,18 @@ router.post('/department/create', async (req, res) => {
   })
 })
 
-router.get("/create-account", async (req, res)=>{
-  await Officer.create({
-    username: "youngHT",
-    password: "12345678",
-    email: "hohuutam287@gmail.com",
-    phone: "0932715653",
-    role: "Department",
-    district: "12",
-    ward: "12",
-  })
-  res.send("OK")
-})
+// router.get("/create-account", async (req, res)=>{
+//   await Officer.create({
+//     username: "youngHT",
+//     password: "12345678",
+//     email: "hohuutam287@gmail.com",
+//     phone: "0932715653",
+//     role: "Department",
+//     district: "12",
+//     ward: "12",
+//   })
+//   res.send("OK")
+// })
 
 router.post('/department/places/addDistrict', async function(req, res) {
   try {

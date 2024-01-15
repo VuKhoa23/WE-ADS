@@ -4,6 +4,7 @@
   border: 1px solid #000;
   border-radius: 5px;
   background-color: #fff;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
 }
 
 .license-form-header {
@@ -320,6 +321,7 @@
   border: 1px solid #000;
   border-radius: 5px;
   background-color: #fff;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
 }
 
 .ad-image-wrapper {
