@@ -149,7 +149,7 @@
       let district = null
       let adId = null
 
-      const placeRes = await fetch("http://localhost:3000/weads/place/details/" + req.params.placeId)
+      const placeRes = await fetch("http://localhost:3000/weads/place/details/" + '<%- placeId %>')
       const placeResult = await placeRes.json()
       coordinates = placeResult.place.coordinates
       ward = result.place.ward
