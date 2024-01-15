@@ -35,6 +35,14 @@ router.get("/", async (req, res) => {
   }
   else {
     reports = await Report.find({})
+    res.render("department/viewReport", { 
+      reports: reports, 
+      wards: undefined, 
+      option: 'all',
+      role: res.locals.user.role,
+      username: res.locals.user.username
+    });
+    return;
   }
 
   const district = await District.findOne({name: res.locals.user.district});
