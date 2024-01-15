@@ -9,7 +9,7 @@ require("dotenv").config();
 const cors = require("cors");
 const {
   checkUser,
-} = require("./middlewares/authMiddleware");
+} = require("./middlewares/authMiddleWare.js");
 
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
