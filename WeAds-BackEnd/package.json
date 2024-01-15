@@ -33,6 +33,7 @@
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
     "path": "^0.12.7",
-    "sweetalert2": "^11.10.2"
+    "sweetalert2": "^11.10.2",
+    "authMiddleWare": "file:./middlewares/authMiddleWare.js"
   }
 }
