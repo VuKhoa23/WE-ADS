@@ -18,21 +18,40 @@
 }
 
 #notification-container {
-  width: 90%;
+  width: 95%;
   max-height: 95%;
   height: 95%;
   position: absolute;
+  overflow-y: auto;
+}
+
+#notification-container::-webkit-scrollbar {
+  width: 10px;
+}
+
+#notification-container::-webkit-scrollbar-track {
+  background: transparent; 
+}
+ 
+#notification-container::-webkit-scrollbar-thumb {
+  background: #888; 
+  border-radius: 5px;
+}
+
+#notification-container::-webkit-scrollbar-thumb:hover {
+  background: #555; 
 }
 
 #notification-parent {
   width: 25vw;
   max-height: 95vh;
-  height: 90vh;
+  /* height: 90vh; */
   position: absolute;
-  right: 2vw;
-  top: 10vh;
+  right: 10px;
+  top: 70px;
+  bottom: 10px;
   border: 1px solid black;
-  border-radius: 5%;
+  border-radius: 5px;
   display: flex;
   justify-content: center;
   align-items: center;

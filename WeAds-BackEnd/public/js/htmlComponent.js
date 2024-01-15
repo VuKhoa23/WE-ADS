@@ -27,7 +27,7 @@ function infoAlert(name, address, index, placeId, role) {
         Thông tin địa điểm
         <hr>
         <strong>${name}</strong> <br>
-        ${address}
+        Địa chỉ: ${address}.
       </div>
       <button type="button" class="btn-close m-2" data-bs-dismiss="alert" aria-label="Close"></button>
       <br>
@@ -36,7 +36,7 @@ function infoAlert(name, address, index, placeId, role) {
           <i class="fa-solid fa-circle-info"></i>
         </button>
 
-        <a href="/weads/update/${placeId}" class="link-secondary w-50" target="_blank"><button class="btn btn-primary" style="font-size: 12px">Yêu cầu chỉnh sửa</button></a>
+        <a href="/weads/place/editAdPlacementForm/${placeId}" class="link-secondary w-50" target="_blank"><button class="btn btn-primary" style="font-size: 12px">Yêu cầu chỉnh sửa</button></a>
       </div>
     </div>
   `;
