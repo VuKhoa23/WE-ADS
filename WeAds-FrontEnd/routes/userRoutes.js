@@ -23,7 +23,7 @@ router.get("/report/:placeId", async function (req, res, next) {
       reportCode: 0
     });
   }catch(e){
-    res.send("ERROR")
+    res.send(e.message)
   }
  
 });
