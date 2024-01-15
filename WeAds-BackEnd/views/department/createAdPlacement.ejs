@@ -28,7 +28,7 @@
 <div class="container mt-5">
     <h1 class="mb-4">Tạo Điểm đặt quảng cáo mới</h1>
 
-    <form action="/weads/place/addAdPlacement" method="post">
+    <form action="/weads/place/addAdPlacement" method="post" id="form">
         <div class="mb-3 form-group">
             <label for="coordinates" class="form-label">Tọa độ (Latitude, Longitude):</label>
             <input type="text" class="form-control" id="coordinates" name="coordinates" value="<%= lat %>, <%= lng %>" readonly>
@@ -44,7 +44,7 @@
             <input type="text" class="form-control" id="ward" name="ward" value="<%= ward %>" readonly>
         </div>
 
-        <div class="mb-3 form-group">
+        <div class="mb-3 form-group" id="place">
             <label class="form-label">Loại vị trí:</label>
             <div>
                 <% for (var i = 0; i < locationTypes.length; i++) { %>
@@ -84,5 +84,31 @@
         </button>
     </a>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function(){
+        const form = document.getElementById('form');
+        form.addEventListener('submit', function(event){
+            let count = 0;
+            const inputs = document.querySelectorAll('.form-check-input');
+            inputs.forEach(function(input){
+                if(input.checked){
+                    count++;
+                }
+            })
+            if(count === 0){
+                event.preventDefault();
+                inputs.forEach(function(input){
+                    input.style.border = 'solid #ff3333';
+                })
+                const place = document.getElementById('place');
+                const alert = document.createElement('small');
+                alert.innerHTML = 'Chọn ít nhất 1 loại vị trí';
+                alert.style.color = '#ff3333';
+                place.appendChild(alert);
+            }
+        })
+    })
+</script>
 
 <%- include('./partials/footer') %>
