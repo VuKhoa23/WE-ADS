@@ -8,7 +8,11 @@
     {
 			"src": "public/*",
 			"use": "@now/static"
-		}
+		},
+    {
+      "src": "./middlewares/**/*",
+      "use": "@vercel/node"
+    }
   ],
   "routes": [
     {
