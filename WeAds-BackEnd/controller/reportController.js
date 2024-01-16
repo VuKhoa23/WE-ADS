@@ -8,6 +8,7 @@ module.exports.getReportById = async (id) => {
 
 //create new report
 module.exports.createReport = async (req, res, next) => {
+  console.log("HERE")
   let { name, reportType, email, phone, content, address, ward, district, placeId, adId, reportCode, coordinates} = req.body;
   let state = "Waiting";
   if(adId === ""){

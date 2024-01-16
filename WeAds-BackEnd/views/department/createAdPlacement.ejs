@@ -28,7 +28,7 @@
 <div class="container mt-5">
     <h1 class="mb-4">Tạo Điểm đặt quảng cáo mới</h1>
 
-    <form action="/weads/place/addAdPlacement" method="post" id="form">
+    <form id="create-place-form" action="/weads/place/addAdPlacement" method="post">
         <div class="mb-3 form-group">
             <label for="coordinates" class="form-label">Tọa độ (Latitude, Longitude):</label>
             <input type="text" class="form-control" id="coordinates" name="coordinates" value="<%= lat %>, <%= lng %>" readonly>
@@ -49,20 +49,16 @@
             <div>
                 <% for (var i = 0; i < locationTypes.length; i++) { %>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="checkbox" id="locationType<%= i %>" name="locationType[]" value="<%= locationTypes[i].name %>">
+                        <input id="location-checkbox" class="form-check-input" type="checkbox" id="locationType<%= i %>" name="locationType[]" value="<%= locationTypes[i].name %>">
                         <label class="form-check-label" for="locationType<%= i %>"><%= locationTypes[i].name %></label>
                     </div>
-                    <% if (i === 2) { %>
-                        </div>
-                        <div>
-                    <% } %>
                 <% } %>
             </div>
         </div>
 
         <div class="mb-3 form-group">
             <label for="adType" class="form-label">Hình thức quảng cáo:</label>
-            <select class="form-control" id="adType" name="adType" required>
+            <select class="place-adType-select" id="adType" name="adType" required>
                 <% adTypes.forEach(function(type) { %>
                     <option value="<%= type.name %>"><%= type.name %></option>
                 <% }); %>
@@ -74,7 +70,16 @@
             <input type="number" min="0" max="1" class="form-control" id="adPlanned" name="adPlanned" required>
         </div>
 
-        <button type="submit" class="btn btn-primary">Thêm Điểm đặt</button>
+        <div class="mb-3 form-group row d-flex flex-column">
+            <label for="image" class="form-label col-3">Ảnh uploads</label>
+            <div style="align-self: center;" class="col-9">
+                <input type="file" data-browse-on-zone-click="true" accept="image/*" id="adImages" name="adImages" required/>
+            </div>
+        </div>    
+
+        <span class="d-flex justify-content-center">
+            <button id="create-place-submit" type="submit" class="btn btn-primary">Thêm Điểm đặt</button>
+        </span>
     </form>
 
     <a href="/weads/home">
@@ -86,29 +91,99 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function(){
-        const form = document.getElementById('form');
-        form.addEventListener('submit', function(event){
-            let count = 0;
-            const inputs = document.querySelectorAll('.form-check-input');
-            inputs.forEach(function(input){
-                if(input.checked){
-                    count++;
-                }
-            })
-            if(count === 0){
-                event.preventDefault();
-                inputs.forEach(function(input){
-                    input.style.border = 'solid #ff3333';
-                })
-                const place = document.getElementById('place');
-                const alert = document.createElement('small');
-                alert.innerHTML = 'Chọn ít nhất 1 loại vị trí';
-                alert.style.color = '#ff3333';
-                place.appendChild(alert);
-            }
-        })
-    })
-</script>
+    $("#adImages").fileinput({ 'showUpload': true, 'previewFileType': 'image', 'allowedPreviewTypes': ["image"] });
 
+    function showSuccessModal() {
+        Swal.fire({
+        icon: 'success',
+        title: 'Tạo điểm đặt thành công',
+        showCancelButton: false,
+        timer: null
+        }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = '/weads/home';
+        }
+        });
+    }
+    function showErrorModal() {
+        Swal.fire({
+        icon: 'error',
+        title: 'Có lỗi xảy ra, vui lòng thử lại',
+        showCancelButton: false,
+        timer: null
+        });
+    }
+    function showExistModal() {
+        Swal.fire({
+        icon: 'error',
+        title: 'Điểm đặt đã tồn tại',
+        showCancelButton: false,
+        timer: null
+        }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = '/weads/home';
+        }
+        });
+    }
+    function showLimitModal() {
+        Swal.fire({
+        icon: 'info',
+        title: 'Số ảnh minh họa tối đa của mỗi điểm đặt là một',
+        showCancelButton: false,
+        timer: null
+        });
+    }
+    
+
+    $("#create-place-form").on('submit', async function(event) {
+        event.preventDefault();
+        $("#create-place-submit").prop('disabled', true);
+        const district = $("#district").val();
+        const ward = $("#ward").val();
+        const adType = $("#adType").val();
+        const adPlanned = $("#adPlanned").val();
+        const coordinates = $("#coordinates").val();
+        
+        const formData = new FormData();
+        formData.append('district', district);
+        formData.append('ward', ward);
+        formData.append('adType', adType);
+        formData.append('adPlanned', adPlanned);
+        formData.append('coordinates', coordinates);
+        
+        var input = document.getElementById('adImages');
+
+        if (input.files.length > 1) {
+            showLimitModal();
+            $("#create-place-submit").prop('disabled', false);
+            return;
+        }
+
+        for (const file of input.files) {
+            formData.append('thePlaceImages', file, file.name)
+        }
+
+        $('#location-checkbox:checked').map(function() {
+            formData.append('locationType', $(this).val());
+        });
+
+        const response = await fetch('/weads/place/addAdPlacement', {
+            method: 'POST',
+            body: formData
+        })
+        .then(function (result) {
+            return result.json();
+        })
+        if (response.success)
+            showSuccessModal();
+        else if (response.exist) {
+            $("#create-place-submit").prop('disabled', false);
+            showExistModal();
+        }
+        else {
+            $("#create-place-submit").prop('disabled', false);
+            showErrorModal();
+        }
+    });
+</script>
 <%- include('./partials/footer') %>

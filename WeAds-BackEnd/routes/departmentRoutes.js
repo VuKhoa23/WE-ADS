@@ -4,6 +4,7 @@ const Officer = require("../model/officer")
 const District = require("../model/district")
 const Ward = require("../model/ward") 
 const Advertisement = require("../model/advertisement")
+const AdFormat = require("../model/adFormat");
 const ReportType = require("../model/reportType")
 
 router.get('/department/create', (req, res) => {
@@ -45,18 +46,18 @@ router.post('/department/create', async (req, res) => {
   })
 })
 
-router.get("/create-account", async (req, res)=>{
-  await Officer.create({
-    username: "youngHT",
-    password: "12345678",
-    email: "hohuutam287@gmail.com",
-    phone: "0932715653",
-    role: "Department",
-    district: "12",
-    ward: "12",
-  })
-  res.send("OK")
-})
+// router.get("/create-account", async (req, res)=>{
+//   await Officer.create({
+//     username: "youngHT",
+//     password: "12345678",
+//     email: "hohuutam287@gmail.com",
+//     phone: "0932715653",
+//     role: "Department",
+//     district: "12",
+//     ward: "12",
+//   })
+//   res.send("OK")
+// })
 
 router.post('/department/places/addDistrict', async function(req, res) {
   try {
@@ -476,6 +477,98 @@ router.get('/department/report/deleteType/:_id', async function(req, res) {
           const types = await ReportType.find({});
 
           res.render("department/reportType", {
+            announce: 'delete',
+            types: types,
+            username: res.locals.user ? res.locals.user.username : null,
+            role: res.locals.user ? res.locals.user.role : null,
+          })
+      }
+      
+  } catch (error) {
+      res.status(500).json({message: error.message})
+  }
+})
+
+router.get('/department/adFormat/allType', async function (req, res) {
+  const types = await AdFormat.find({});
+
+  res.render("department/viewAllAdFormat", {
+    announce: null,
+    types: types,
+    username: res.locals.user ? res.locals.user.username : null,
+    role: res.locals.user ? res.locals.user.role : null,
+  })
+})
+
+router.post('/department/adFormat/addType', async function(req, res) {
+  try {
+    const isExist = await AdFormat.findOne({name: req.body.name});
+
+    if(isExist){
+      const types = await AdFormat.find({});
+      res.render("department/viewAllAdFormat", {
+        announce: 'exist',
+        types: types,
+        username: res.locals.user ? res.locals.user.username : null,
+        role: res.locals.user ? res.locals.user.role : null,
+      })
+    } else {
+      await AdFormat.create(req.body);
+      const types = await AdFormat.find({});
+
+      res.render("department/viewAllAdFormat", {
+        announce: 'create',
+        types: types,
+        username: res.locals.user ? res.locals.user.username : null,
+        role: res.locals.user ? res.locals.user.role : null,
+      })
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+router.post('/department/adFormat/editType/:_id', async function(req, res) {
+  try {
+
+      const id = req.params._id;
+      const type = await AdFormat.findOne({_id: id});
+      const name = req.body.name;
+      const isExist = await AdFormat.findOne({name: name});
+
+      if(isExist){
+        const types = await AdFormat.find({});
+        res.render("department/viewAllAdFormat", {
+          announce: 'exist',
+          types: types,
+          username: res.locals.user ? res.locals.user.username : null,
+          role: res.locals.user ? res.locals.user.role : null,
+        })
+      } else {
+        await AdFormat.findByIdAndUpdate(type._id, {name: name});
+        const types = await AdFormat.find({});
+        res.render("department/viewAllAdFormat", {
+          announce: 'edit',
+          types: types,
+          username: res.locals.user ? res.locals.user.username : null,
+          role: res.locals.user ? res.locals.user.role : null,
+        })
+      }
+  } catch (error) {
+      res.status(500).json({message: error.message})
+  }
+})
+
+router.get('/department/adFormat/deleteType/:_id', async function(req, res) {
+  try {
+      const type = await AdFormat.findOne({_id: req.params._id});
+      if(!type){
+          return res.status(404).json({message: `cannot find any type with ID ${req.params._id}`})
+      } else {
+          await AdFormat.findByIdAndDelete(type._id);
+          const types = await AdFormat.find({});
+
+          res.render("department/viewAllAdFormat", {
             announce: 'delete',
             types: types,
             username: res.locals.user ? res.locals.user.username : null,

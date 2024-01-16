@@ -39,15 +39,7 @@
         <tr>
           <td class="text-center"><%= reports[i].name %></td>
           <td class="text-center"><%= reports[i].address %></td>
-          <% if(reports[i].reportType == 0){ %>
-            <td class="text-center">Tố giác sai phạm</td>
-          <% }else if(reports[i].reportType == 1){ %>
-            <td class="text-center">Đăng ký nội dung</td>
-          <% }else if(reports[i].reportType == 2){ %>
-            <td class="text-center">Đóng góp ý kiến</td>
-          <% }else{ %>
-            <td class="text-center">Giải đáp thắc mắc</td>
-          <% } %>
+          <td class="text-center"><%- reports[i].reportType %></td>
           <td class="text-center">
             <a class="btn btn-success" href="/weads/report/details/<%= reports[i]._id %>">Xem chi tiết</a>
           </td>

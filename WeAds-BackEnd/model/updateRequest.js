@@ -20,6 +20,9 @@ const updateReqSchema = mongoose.Schema({
     adType: {
       type: String
     },
+    placeImage: {
+      type: String
+    },
     adPlanned:{
       type: Number
     },

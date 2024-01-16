@@ -56,10 +56,9 @@
         <label for="address" class="form-label col-3">Loại báo cáo</label>
         <div class="col-9">
           <select id="reportType" name="reportType" class="form-control">
-            <option value="0">Tố giác sai phạm</option>
-            <option value="1">Đăng ký nội dung</option>
-            <option value="2">Đóng góp ý kiến</option>
-            <option value="3">Giải đáp thắc mắc</option>
+            <% for (var i = 0; i < reportTypes.length; i++) { %>
+              <option value="<%- reportTypes[i] %>"><%- reportTypes[i] %></option>
+            <% } %>
           </select>
         </div>
       </div>
@@ -144,8 +143,32 @@
     const reports = JSON.parse(window.localStorage.getItem('reports'))
     const accessToken = "<%= API_KEY %>";
     $(document).ready(async function () {
-      let coordinates = '<%- coordinates %>'
-      coordinates = coordinates.split(",")
+      let coordinates = null
+      let ward = null
+      let district = null
+      let adId = null
+      if ('<%- reportCode %>' == 2) {
+        coordinates = '<%- coordinates %>'
+        coordinates = coordinates.split(",")
+      } else {
+        const placeRes = await fetch("http://localhost:3000/weads/place/details/" + '<%- placeId %>')
+        const placeResult = await placeRes.json()
+        coordinates = placeResult.place.coordinates
+        ward = placeResult.place.ward
+        district = placeResult.place.district
+      }
+
+      if ('<%- reportCode %>' == 2) {
+        ward = '<%- ward %>'
+        district = '<%- district %>'
+      }
+
+      if ('<%- reportCode %>' == 1) {
+        const adRes = await fetch("http://localhost:3000/weads/ad/details/" + '<%- adId %>')
+        const adResult = await adRes.json()
+        adId = adResult.ad._id
+      }
+
       lng = coordinates[0]
       lat = coordinates[1]
       // get address by reverse geocoding
@@ -189,7 +212,7 @@
           const imgs = doc.querySelectorAll('img');
           if (imgs.length <= 2) {
             $(".ql-editor").attr("contenteditable", false);
-            const response = await fetch("http://127.0.0.1:3000/api/weads-admin/report", {
+            const response = await fetch("http://localhost:3000/api/weads-admin/report", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json; charset=utf-8"
@@ -201,10 +224,10 @@
                 email: $("#email").val(),
                 phone: $("#phone").val(),
                 reportType: $("#reportType").val(),
-                ward: '<%- ward %>',
-                district: '<%- district %>',
+                ward: ward,
+                district: district,
                 placeId: '<%- placeId %>',
-                adId: '<%- adId%>',
+                adId: adId,
                 reportType: $("#reportType").val(),
                 reportCode: '<%- reportCode %>',
                 coordinates: coordinates

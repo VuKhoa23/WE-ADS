@@ -3,24 +3,25 @@ const router = express.Router();
 const Place = require("../model/places")
 const Ad = require("../model/ads")
 const Officer = require("../model/officer");
-const AdTypes = require("../model/advertisement");
 const UpdateRequest = require("../model/updateRequest");
 const { ObjectId } = require('mongodb');
-const AdType = require("../model/advertisement");
 const LocationType = require("../model/locationType");
-// router.get('/create-demo', async (req, res) => {
-//   const place = await Place.findOne({district: "Quận Bình Thạnh"})
-//   await Ad.create({
-//     adType: "Trụ treo băng rôn dọc",
-//     adScale: "2.5m x 5.4m",
-//     adName: "Landmark 81",
-//     adImages: [
-//         "https://brandcom.vn/wp-content/uploads/2020/09/quang-cao-truyen-hinh-1-1080x675.jpg",
-//     ],
-//     place: place._id
-//   })
-//   res.send("OK")
-// });
+const AdFormat = require("../model/adFormat");
+const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
+const { uploadAds } = require("../middlewares/fileUploadMiddleware");
+
+const bucket_name = process.env.BUCKET_NAME
+const bucket_region = process.env.BUCKET_REGION
+const access_key = process.env.ACCESS_KEY
+const secret_access_key = process.env.SECRET_ACCESS_KEY
+
+const s3 = new S3Client({
+  credentials:{
+    accessKeyId: access_key,
+    secretAccessKey: secret_access_key
+  },
+  region: bucket_region
+})
 
 router.get("/geojson", async (req, res)=>{
   const places = await Place.find({})
@@ -37,7 +38,9 @@ router.get("/geojson", async (req, res)=>{
       },
       properties:{
         ads: [],
+        adType: place.adType,
         ward: place.ward,
+        locationType: place.locationType,
         district: place.district,
         adPlanned: place.adPlanned,
         placeId: place._id
@@ -152,13 +155,15 @@ router.get('/allAdPlacement', async function(req, res) {
 
 router.get('/addAdPlacementForm', async function(req, res) {
 
-  const adTypes = await AdType.find({});
+  const adTypes = await AdFormat.find({});
+
   const locationTypes = await LocationType.find({});
   res.render("department/createAdPlacement", {
     lat: req.query.lat,
     lng: req.query.lng,
     locationTypes: locationTypes,
     adTypes: adTypes,
+    locationTypes: locationTypes,
     ward: req.query.ward,
     district: req.query.district,
     username: res.locals.user ? res.locals.user.username : null,
@@ -168,7 +173,12 @@ router.get('/addAdPlacementForm', async function(req, res) {
 })
 
 
-router.post('/addAdPlacement', async function(req, res) {
+router.post('/addAdPlacement', uploadAds.fields([
+  {
+    name: "thePlaceImages",
+    maxCount: 1,
+  },
+]), async function(req, res) {
   try {
       const coordinates = req.body.coordinates;
       let coordinatesArray = coordinates.split(',').map(coord => parseFloat(coord.trim()));
@@ -178,28 +188,37 @@ router.post('/addAdPlacement', async function(req, res) {
 
       if (isExist) {
           const adPlacements = await Place.find({});
-          res.render("department/adPlacement", {
-              announce: 'exist',
-              adPlacements: adPlacements,
-              username: res.locals.user ? res.locals.user.username : null,
-              role: res.locals.user ? res.locals.user.role : null,
-          });
+          res.status(400).json({ success: false, exist: true,error: 'Place is exist' });
       } else {
           // Adjusted code to handle locationType as an array
           const locationTypes = Array.isArray(req.body.locationType) ? req.body.locationType : [req.body.locationType];
+          const { type, adType, adPlanned, ward, district } = req.body;
+          const data = req.files;
+          const images = Object.values(data)[0];
+          let placeImage = undefined;
+          if (images) {
+            for(let image of images){
+              const fileName = Date.now() + image.originalname.replace(/ /g, "");
+              placeImage = "https://weads.s3.ap-southeast-2.amazonaws.com/" + fileName;
+              const params = {
+                Bucket: bucket_name,
+                Key: fileName,
+                Body: image.buffer,
+                ContentType: image.mimetype
+              }
+              const command = new PutObjectCommand(params);
+              await s3.send(command);
+            }
+          }
           
-          await Place.create({ ...req.body, coordinates: coordinatesArray, locationType: locationTypes });
+        await Place.create({ type, adType, adPlanned, ward, district, coordinates: coordinatesArray, placeImage, locationType: locationTypes });
 
-          const adPlacements = await Place.find({});
-          res.render("department/adPlacement", {
-              announce: 'create',
-              adPlacements: adPlacements,
-              username: res.locals.user ? res.locals.user.username : null,
-              role: res.locals.user ? res.locals.user.role : null,
-          });
+        const adPlacements = await Place.find({});
+        res.status(201).json({ success: true });
       }
   } catch (error) {
-      res.status(500).json({ message: error.message });
+    console.log(error.message);
+    res.status(500).json({ success: false ,message: error.message });
   }
 });
 
@@ -221,23 +240,60 @@ router.get('/deleteAdPlacement/:_id', async function(req, res) {
 
 router.get('/editAdPlacementForm/:_id', async function(req, res) {
   const adPlacement = await Place.findOne({_id: req.params._id});
-  const adTypes = await AdTypes.find({});
-  const locationTypes = await LocationType.find({});
+
+  const adTypes = await AdFormat.find({});
+  const LocationTypes = await LocationType.find({});
+
   res.render("department/editAdPlacementForm", {
     adPlacement: adPlacement,
     adTypes: adTypes,
-    locationTypes: locationTypes,
+    locationTypes: LocationTypes,
+
     username: res.locals.user ? res.locals.user.username : null,
     role: res.locals.user ? res.locals.user.role : null,
   })
 })
 
-router.post('/editAdPlacementForm/:_id', async function(req, res) {
+router.post('/editAdPlacementForm/:_id', uploadAds.fields([
+  {
+    name: "thePlaceImages",
+    maxCount: 1,
+  },
+]),async function(req, res) {
   const adPlacement = await Place.findOne({_id: new ObjectId(req.params._id)});
-  const { adType, locationType, adPlanned, reason } = req.body;
+  const { adType, adPlanned, reason } = req.body;
+  const locationType = Array.isArray(req.body.locationType) ? req.body.locationType : [req.body.locationType];
+  console.log(locationType);
+  const oldPlaceImage = req.body.oldPlaceImage;
+  
   const role = res.locals.user ? res.locals.user.role : null;
   const officerId = res.locals.user ? res.locals.user._id : null;
   
+  const data = req.files;
+  const images = Object.values(data)[0];
+  let newPlaceImage = undefined;
+  if (images) {
+    for(let image of images){
+      const fileName = Date.now() + image.originalname.replace(/ /g, "");
+      newPlaceImage = "https://weads.s3.ap-southeast-2.amazonaws.com/" + fileName;
+      const params = {
+        Bucket: bucket_name,
+        Key: fileName,
+        Body: image.buffer,
+        ContentType: image.mimetype
+      }
+      const command = new PutObjectCommand(params);
+      await s3.send(command);
+    }
+  }
+
+  let placeImage = undefined;
+  
+  if (oldPlaceImage !== undefined && oldPlaceImage !== 'undefined')
+    placeImage = oldPlaceImage;
+  else 
+    placeImage = newPlaceImage;
+
   if (!adPlacement) {
     res.status(404).json({ success: false, error: 'place not found' });
     return;
@@ -245,11 +301,11 @@ router.post('/editAdPlacementForm/:_id', async function(req, res) {
   
   try {
     if (role == 'Department') {
-      await Place.updateOne({_id: new ObjectId(req.params._id) }, { adType, locationType, adPlanned });
+      await Place.updateOne({_id: new ObjectId(req.params._id) }, { placeImage, adType, locationType, adPlanned });
       res.status(200).json({ success: true });
     }
     else {
-      await UpdateRequest.create({ targetId: new ObjectId(req.params._id), createBy: new ObjectId(officerId), updateFor: 'Place', state: 0, reason, ward: adPlacement.ward, district: adPlacement.district, adType, locationType, adPlanned });
+      await UpdateRequest.create({ targetId: new ObjectId(req.params._id), createBy: new ObjectId(officerId), updateFor: 'Place', state: 0, reason, placeImage, ward: adPlacement.ward, district: adPlacement.district, adType, locationType, adPlanned });
       res.status(200).json({ success: true });
     }
   }

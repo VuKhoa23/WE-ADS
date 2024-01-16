@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const bcrypt = require('bcrypt');
 
 const place = new Schema({
     type: {
@@ -24,7 +23,10 @@ const place = new Schema({
     },
     adPlanned:{
       type: Number
-    }
+    },
+    placeImage:{
+      type: String
+    },
 })
 
 const Place = mongoose.model('place', place);

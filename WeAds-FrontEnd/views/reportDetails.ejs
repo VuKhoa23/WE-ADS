@@ -131,7 +131,7 @@
 <body>
   <div class="card">
     <div class="card-header d-flex justify-content-center align-item-center">
-      <a class="back-btn btn btn-outline-success" href="/weads/report"><i class="bi bi-chevron-left"></i>Trở lại</a>
+      <a class="back-btn btn btn-outline-success" href="/weads/home"><i class="bi bi-chevron-left"></i>Trở lại</a>
       <i class="bi bi-file-earmark-richtext title-icon"></i>
       <h3 class="title">Chi tiết báo cáo</h3>
     </div>
@@ -139,23 +139,23 @@
       <div class="report-info">
         <div class="info-row">
           <h3 class="row-name">Họ tên người gửi:</h3>
-          <h3 class="row-info"> <%- report.name %></h3>
+          <h3 class="row-info" id="name"></h3>
         </div>
         <div class="info-row">
           <h3 class="row-name">Email:</h3>
-          <h3 class="row-info"> <%- report.email %></h3>
+          <h3 class="row-info" id="email"></h3>
         </div>
         <div class="info-row">
           <h3 class="row-name">Điện thoại liên lạc:</h3>
-          <h3 class="row-info"> <%- report.phone %></h3>
+          <h3 class="row-info" id="phone"></h3>
         </div>
         <div class="info-row">
           <h3 class="row-name">Hình thức báo cáo:</h3>
-          <h3 class="row-info"> <%- report.reportType %></h3>
+          <h3 class="row-info" id="reportType"></h3>
         </div>
         <div class="info-row">
           <h3 class="row-name">Địa chỉ bị báo cáo:</h3>
-          <h3 class="row-info"> <%- report.address %></h3>
+          <h3 class="row-info" id="address"></h3>
         </div>
       </div>
       <div class="report-content">
@@ -164,24 +164,42 @@
         </div>
       </div>
     </div>
-    <% if (report.state == "Waiting") { %>
-    <div class="card-footer text-center ">
+
+    <div class="card-footer text-center" id="waiting">
       <button class="resolve-submit btn btn-danger">Chưa xử lí<i class="bi bi-check2"></i></button>
     </div>
-    <% } else if (report.state == "Processing") { %>
-    <div class="card-footer text-center">
+    <div class="card-footer text-center" id="processing">
       <button class="btn btn-warning ">Đang xử lí<i class="bi bi-check2"></i></button>
     </div>
-    <% } else {%>
-    <div class="card-footer text-center">
+    <div class="card-footer text-center" id="done">
       <button class="btn btn-success">Đã xử lí xong<i class="bi bi-check2"></i></button>
     </div>
-    <% } %>
 
   </div>
 
   <script>
-    $(document).ready(function () {
+    $(document).ready(async function () {
+      const response = await fetch("http://localhost:3000/api/weads-admin/report/" + '<%- id %>')
+      const result = await response.json()
+      console.log(result)
+      $("#name").html(result.name)
+      $("#email").html(result.name)
+      $("#phone").html(result.phone)
+      const reportType = result.reportType
+      $("#reportType").html(reportType)
+
+      $("#address").html(result.address)
+
+      $("#waiting").css("display", "none")
+      $("#processing").css("display", "none")
+      $("#done").css("display", "none")
+      if (result.state === "Waiting") {
+        $("#waiting").css("display", "block")
+      } else if (result.state === "Processing") {
+        $("#processing").css("display", "block")
+      } else {
+        $("#done").css("display", "block")
+      }
       var quill = new Quill('#editor', {
         modules: {
           toolbar: false
@@ -192,7 +210,7 @@
       });
 
       var p = document.querySelector("#editor");
-      p.innerHTML = `<%- report.content %>`
+      p.innerHTML = result.content
     })
   </script>
 </body>

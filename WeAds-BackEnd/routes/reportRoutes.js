@@ -3,7 +3,17 @@ const router = express.Router();
 const Report = require("../model/report");
 const Ward = require("../model/ward");
 const District = require("../model/district");
+const ReportType = require("../model/reportType");
 const controller = require("../controller/reportController");
+
+router.get("/reportTypes", async (req, res) => {
+  const reportTypes = await ReportType.find({});
+  const reportTypeList = [];
+  reportTypes.forEach(reportType => {
+    reportTypeList.push(reportType.name);
+  });
+  res.json({reportTypeList});
+});
 
 router.get("/details/:id", async (req, res) => {
   const id = req.params.id;
@@ -35,6 +45,14 @@ router.get("/", async (req, res) => {
   }
   else {
     reports = await Report.find({})
+    res.render("department/viewReport", { 
+      reports: reports, 
+      wards: undefined, 
+      option: 'all',
+      role: res.locals.user.role,
+      username: res.locals.user.username
+    });
+    return;
   }
 
   const district = await District.findOne({name: res.locals.user.district});

@@ -9,7 +9,7 @@ require("dotenv").config();
 const cors = require("cors");
 const {
   checkUser,
-} = require("./middlewares/authMiddleware");
+} = require("./middlewares/authMiddleWare.js");
 
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
@@ -18,7 +18,7 @@ const app = express()
 const googleAuth = require("./controller/googleAuth")
 const authRoutes = require("./routes/authRoutes")
 
-app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
+app.use(require('cookie-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
 
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use(express.json({limit: '50mb'}));

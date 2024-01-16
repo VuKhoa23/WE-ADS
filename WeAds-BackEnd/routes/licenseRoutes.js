@@ -5,12 +5,26 @@ const Officer = require("../model/officer");
 const AdTypes = require("../model/advertisement");
 const { ObjectId } = require('mongodb');
 const Router = express.Router();
+const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
 
 const {
-  checkDirectory, uploadAds
+uploadAds
 } = require("../middlewares/fileUploadMiddleware");
 
-Router.get('/create/:id', checkDirectory, async (req, res) => {
+const bucket_name = process.env.BUCKET_NAME
+const bucket_region = process.env.BUCKET_REGION
+const access_key = process.env.ACCESS_KEY
+const secret_access_key = process.env.SECRET_ACCESS_KEY
+
+const s3 = new S3Client({
+  credentials:{
+    accessKeyId: access_key,
+    secretAccessKey: secret_access_key
+  },
+  region: bucket_region
+})
+
+Router.get('/create/:id', async (req, res) => {
   const id = req.params.id;
   const adTypes = await AdTypes.find({});
   if (!id) {
@@ -67,8 +81,19 @@ Router.post('/create/:id', uploadAds.fields([
   const data = req.files;
   const images = Object.values(data)[0]
   let adImages = []
-  for(let image of images){
-    adImages.push('/adImages/' + image.filename)
+  if (images) {
+    for(let image of images){
+      const fileName = Date.now() + image.originalname.replace(/ /g, "")
+      adImages.push("https://weads.s3.ap-southeast-2.amazonaws.com/" + fileName)
+      const params = {
+        Bucket: bucket_name,
+        Key: fileName,
+        Body: image.buffer,
+        ContentType: image.mimetype
+      }
+      const command = new PutObjectCommand(params)
+      await s3.send(command)
+    }
   }
 
   let officerId = null;
