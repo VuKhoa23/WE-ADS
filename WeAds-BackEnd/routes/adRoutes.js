@@ -112,6 +112,11 @@ router.post('/editAdForm/:id', uploadAds.fields([
   const images = Object.values(data)[0]
   if (!adImages)
     adImages = [];
+  if (typeof adImages == "string"){
+    imageArray = [];
+    imageArray.push(adImages);
+    adImages = imageArray;
+  }
   if (images) {
     for(let image of images){
       const fileName = Date.now() + image.originalname.replace(/ /g, "")
