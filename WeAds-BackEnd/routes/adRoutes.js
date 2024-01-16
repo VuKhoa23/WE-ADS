@@ -102,7 +102,7 @@ router.post('/editAdForm/:id', uploadAds.fields([
 ]), async function(req, res) {
   const id = req.params.id;
   console.log(req.body);
-  const { adType, width, height, adName, adImages, companyName, companyPhone, companyEmail, startDate, endDate, reason } = req.body;
+  let { adType, width, height, adName, adImages, companyName, companyPhone, companyEmail, startDate, endDate, reason } = req.body;
   const adScale = width + "m x " + height + "m";
   const role = res.locals.user ? res.locals.user.role : null;
   const officerId = res.locals.user ? res.locals.user._id : null;
@@ -110,6 +110,8 @@ router.post('/editAdForm/:id', uploadAds.fields([
   // handle add image
   const data = req.files;
   const images = Object.values(data)[0]
+  if (!adImages)
+    adImages = [];
   if (images) {
     for(let image of images){
       const fileName = Date.now() + image.originalname.replace(/ /g, "")
