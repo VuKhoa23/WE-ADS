@@ -24,7 +24,7 @@
 
                             <!-- Modal edit Ward -->
                             <div class="modal fade" id="editWardModal<%= i %>" tabindex="-1" aria-labelledby="editWardModalLabel<%= i %>" aria-hidden="true">
-                                <form action="/weads/department/places/editWard/<%= wards[i]._id %>" method="post">
+                                <form action="/weads/department/places/editWard/<%= wards[i]._id %>" method="post" onsubmit="return validateEditWardForm()">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
@@ -40,7 +40,7 @@
                                                 <div class="form-group">
                                                     <label for="name">Nhập tên phường mới (vd: Phường 1, Phường Nguyễn Cư Trinh): </label>
                                                     <br>
-                                                    <input type="text" class="form-control" id="name" name="name" required>
+                                                    <input type="text" class="form-control" id="edit-name" name="name" required>
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
@@ -79,7 +79,7 @@
     
   <!-- Modal add Ward -->
   <div class="modal fade" id="addWardModal" tabindex="-1" aria-labelledby="addWardModalLabel" aria-hidden="true">
-    <form action="/weads/department/places/addWard/<%= district_id %>" method="post">
+    <form action="/weads/department/places/addWard/<%= district_id %>" method="post" onsubmit="return validateAddWardForm()">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -88,9 +88,9 @@
         </div>
         <div class="modal-body">
             <div class="form-group">
-                <label for="name">Tên phường (vd: Phường 1, Phường Nguyễn Cư Trinh): </label>
+                <label for="new-name">Tên phường (vd: Phường 1, Phường Nguyễn Cư Trinh): </label>
                 <br>
-                <input type="text" class="form-control" id="name" name="name" required>
+                <input type="text" class="form-control" id="new-name" name="name" required>
             </div>
         </div>
         <div class="modal-footer">
@@ -160,6 +160,34 @@
               }
           });
       }
+
+      function validateAddWardForm() {
+            var districtName = document.getElementById('new-name').value;
+            if (!districtName.startsWith('Phường')) {
+                Swal.fire({
+                    text: 'Tên phường phải bắt đầu bằng "Phường"',
+                    icon: 'error',
+                    showCancelButton: false,
+                    timer: 1500
+                })
+                return false;
+            }
+            return true;
+        }
+
+        function validateEditWardForm() {
+            var districtName = document.getElementById('edit-name').value;
+            if (!districtName.startsWith('Phường')) {
+                Swal.fire({
+                    text: 'Tên phường phải bắt đầu bằng "Phường"',
+                    icon: 'error',
+                    showCancelButton: false,
+                    timer: 1500
+                })
+                return false;
+            }
+            return true;
+        }
   </script>
 
 </div>

@@ -44,7 +44,7 @@
             <input type="text" class="form-control" id="ward" name="ward" value="<%= ward %>" readonly>
         </div>
 
-        <div class="mb-3 form-group">
+        <div class="mb-3 form-group" id="place">
             <label class="form-label">Loại vị trí:</label>
             <div>
                 <% for (var i = 0; i < locationTypes.length; i++) { %>
@@ -89,6 +89,7 @@
         </button>
     </a>
 </div>
+
 <script>
     $("#adImages").fileinput({ 'showUpload': true, 'previewFileType': 'image', 'allowedPreviewTypes': ["image"] });
 

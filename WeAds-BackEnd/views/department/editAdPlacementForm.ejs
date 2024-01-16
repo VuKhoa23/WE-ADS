@@ -43,7 +43,7 @@
             <input type="text" class="form-control" id="ward" name="ward" value="<%= adPlacement.ward %>" readonly>
         </div>
 
-        <div class="mb-3 form-group">
+        <div class="mb-3 form-group" id="place">
             <label class="form-label">Loại vị trí:</label>
             <div>
                 <% for (var i = 0; i < locationTypes.length; i++) { %>
@@ -111,8 +111,6 @@
         </div>
         <% } %>
 
-
-
         <span class="d-flex justify-content-center">
             <% if (role == 'Department') { %>
                 <button id="edit-place-submit-btn" type="submit" class="btn btn-primary">Cập nhật Điểm đặt</button>
@@ -177,8 +175,10 @@
         $('#locationType').val('<%- adPlacement.locationType .join(', ')%>');
         $('#adType').val('<%- adPlacement.adType %>');
         $('#adPlanned').val('<%- adPlacement.adPlanned %>');
+
     });
 </script>
+
 <script>
     $("#adImages").fileinput({ 'showUpload': true, 'previewFileType': 'image', 'allowedPreviewTypes': ["image"] });
 
@@ -256,4 +256,5 @@
         }
     });
 </script>
+
 <%- include('./partials/footer') %>
