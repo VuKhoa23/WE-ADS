@@ -29,8 +29,12 @@ router.get("/report/:placeId", async function (req, res, next) {
 });
 
 router.get("/report/:placeId/:adId", async function (req, res, next) {
+  const response = await fetch('http://localhost:3000/weads/report/reportTypes');
+  const list = await response.json();
+  console.log(list);
   res.render("report", {
     placeId: req.params.placeId,
+    reportTypes: list.reportTypeList,
     API_KEY: process.env.MAP_KEY,
     reportCode: 1,
     adId : req.params.adId,

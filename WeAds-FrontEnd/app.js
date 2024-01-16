@@ -15,8 +15,8 @@ app.set("view engine", "ejs");
 
 const MAP_KEY = process.env.MAP_KEY;
 
-app.listen(process.env.PORT);
-console.log("listening on port: " + process.env.PORT);
+app.listen(80);
+console.log("listening on port: " + 80);
 
 app.get("/", (req, res) => {
   res.redirect("/weads/home");
