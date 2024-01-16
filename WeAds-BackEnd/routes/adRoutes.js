@@ -4,76 +4,25 @@ const Place = require("../model/places");
 const Ad = require("../model/ads");
 const UpdateRequest = require("../model/updateRequest");
 const { ObjectId } = require('mongodb');
+const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
 
-// router.get('/create-demo', async (req, res) => {
-//   const place = await Place.findOne({district: "Quận Bình Thạnh"})
-//   await Ad.create({
-//     adType: "Trụ treo băng rôn dọc",
-//     adScale: "2.5m x 5.4m",
-//     adName: "Landmark 81",
-//     adImages: [
-//         "https://brandcom.vn/wp-content/uploads/2020/09/quang-cao-truyen-hinh-1-1080x675.jpg",
-//     ],
-//     place: place._id
-//   })
-//   res.send("OK")
-// });
 
-// router.get('/view-all', async (req, res) => {
-//   let id = null;
-//   if(res.locals.user){
-//     id = res.locals.user._id;
-//   }
-//   if (!id) {
-//     res.redirect('/weads/home');
-//     return;
-//   }
-//   try {
-//     const officer = await Officer.findById(id);
-//     let ads = null;
-//     if (officer.role == 'Ward') {
-//       ads = Ad.find({ licensed: false }).populate({
-//         path: 'place',
-//         match: { ward: officer.ward, district: officer.district }
-//       });
-//     }
-//     else if (officer.role == 'District') {
-//       ads = Ad.find({ licensed: false }).populate({
-//         path: 'place',
-//         match: { district: officer.district }
-//       });
-//     }
-//     else {
-//       ads = await Ad.find({ licensed: false}).populate('place');
-//     }
-//     let username = null
-//     createMessage = null
-//     if(req.query.createSuccess){
-//       createMessage = "Account created"
-//     }
-//     if(res.locals.user){
-//       username = res.locals.user.username
-//     }
+const {
+  uploadAds
+} = require("../middlewares/fileUploadMiddleware");
 
-//     let role = null
-//     if(res.locals.user){
-//       role = res.locals.user.role
-//     }
+const bucket_name = process.env.BUCKET_NAME
+const bucket_region = process.env.BUCKET_REGION
+const access_key = process.env.ACCESS_KEY
+const secret_access_key = process.env.SECRET_ACCESS_KEY
 
-//     res.render("viewAllAds", {
-//       ads,
-//       role: role,
-//       username: username,
-//       createMessage: createMessage,
-//       ward: res.locals.user ? res.locals.user.ward : null,
-//       district: res.locals.user ? res.locals.user.district : null
-//     })
-//   }
-//   catch (err) {
-//     console.log(err.message);
-//     res.status(400).send("Some error occurred");
-//   }
-// });
+const s3 = new S3Client({
+  credentials:{
+    accessKeyId: access_key,
+    secretAccessKey: secret_access_key
+  },
+  region: bucket_region
+})
 
 router.get("/details/:adId", async (req, res)=>{
   const ad = await Ad.findById(req.params.adId)
@@ -145,12 +94,36 @@ router.get('/editAdForm/:_id', async function(req, res) {
   })
 })
 
-router.post('/editAdForm/:id', async function(req, res) {
+router.post('/editAdForm/:id', uploadAds.fields([
+  {
+    name: "theAdImages",
+    maxCount: 5,
+  }
+]), async function(req, res) {
   const id = req.params.id;
+  console.log(req.body);
   const { adType, width, height, adName, adImages, companyName, companyPhone, companyEmail, startDate, endDate, reason } = req.body;
   const adScale = width + "m x " + height + "m";
   const role = res.locals.user ? res.locals.user.role : null;
   const officerId = res.locals.user ? res.locals.user._id : null;
+
+  // handle add image
+  const data = req.files;
+  const images = Object.values(data)[0]
+  if (images) {
+    for(let image of images){
+      const fileName = Date.now() + image.originalname.replace(/ /g, "")
+      adImages.push("https://weads.s3.ap-southeast-2.amazonaws.com/" + fileName)
+      const params = {
+        Bucket: bucket_name,
+        Key: fileName,
+        Body: image.buffer,
+        ContentType: image.mimetype
+      }
+      const command = new PutObjectCommand(params)
+      await s3.send(command)
+    }
+  }
   if (!id) {
     res.status(400).json({ success: false, error: "Missing id" });
     return;
