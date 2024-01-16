@@ -18,7 +18,7 @@
         <h3 class="row-label">Loại bảng quảng cáo:</h3>
         <select class="adType-select" name="adType" id="adType">
           <% for (var i = 0; i < adTypes.length; i++) { %>
-            <option value="<%- adTypes[i].name%>" class="adType-option"><%- adTypes[i].name%></option>
+          <option value="<%- adTypes[i].name%>" class="adType-option"><%- adTypes[i].name%></option>
           <% } %>
         </select>
       </div>
@@ -93,25 +93,25 @@
 </script>
 <script>
   function showSuccessModal() {
-            Swal.fire({
-                icon: 'success',
-                title: 'Tạo yêu cầu thành công',
-                showCancelButton: false,
-                timer: null
-            }).then((result) => {
-                if (result.isConfirmed) {
-                  window.location.href = '/weads/place/view-all';
-                }
-            });
-    }
-    function showErrorModal() {
-        Swal.fire({
-            icon: 'error',
-            title: 'Có lỗi xảy ra, vui lòng thử lại',
-            showCancelButton: false,
-            timer: null
-        });
-    }
+    Swal.fire({
+      icon: 'success',
+      title: 'Tạo yêu cầu thành công',
+      showCancelButton: false,
+      timer: null
+    }).then((result) => {
+      if (result.isConfirmed) {
+        window.location.href = '/weads/place/view-all';
+      }
+    });
+  }
+  function showErrorModal() {
+    Swal.fire({
+      icon: 'error',
+      title: 'Có lỗi xảy ra, vui lòng thử lại',
+      showCancelButton: false,
+      timer: null
+    });
+  }
   $(".license-form").on("submit", async function (event) {
     event.preventDefault();
     const adName = $("#adName").val();

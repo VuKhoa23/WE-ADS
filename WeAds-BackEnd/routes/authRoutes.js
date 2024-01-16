@@ -7,7 +7,7 @@ const sendMailController = require('../controller/sendEmail');
 const jwt = require('jsonwebtoken');
 const ObjectId = require('mongoose').Types.ObjectId;
 require("dotenv").config();
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 router.get('/logout', (req, res) => {
   res.cookie("jwt", "", { maxAge: 1 });
