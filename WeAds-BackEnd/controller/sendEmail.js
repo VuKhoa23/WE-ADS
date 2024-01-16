@@ -49,13 +49,6 @@ module.exports.sendCode = (req, res, next) => {
     to: req.email_to,
     subject: passwordTemplate.subject,
     html: populatePasswordEmail(passwordTemplate.body, req.user, req.code),
-    attachments: [
-      {
-        filename: 'check.svg',  
-        path: '../public/images/check.svg', 
-        cid: 'successIcon'   
-      }
-    ]
   };
   
   transporter.sendMail(mailOptions, function(error, info){
