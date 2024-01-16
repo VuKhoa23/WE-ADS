@@ -12,7 +12,7 @@
     <% }); %>
   </select>
   <% } %>
-  <% if(role === 'Department'){ %>
+  <!-- <% if(role === 'Department'){ %>
     <div class="d-flex justify-content-center fw-bold fs-5">
       Chọn báo cáo muốn xem
     </div>
@@ -22,7 +22,33 @@
       <option value="1">Đang xử lý</option>
       <option value="2">Đã xử lý</option>
     </select>
+    <% } %> -->
+
+    <% if(role === 'Department'){ %>
+      <div class="form-group form-inline text-center m-3">
+        <label class="mr-2">Chọn loại báo cáo:</label>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input report-select" type="radio" name="report-type" id="report-type-0" value="0" style="border-color: gray;">
+          <label class="form-check-label" for="report-type-0">Chưa xử lý</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input report-select" type="radio" name="report-type" id="report-type-1" value="1" style="border-color: gray;">
+          <label class="form-check-label" for="report-type-1">Đang xử lý</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input report-select" type="radio" name="report-type" id="report-type-2" value="2" style="border-color: gray;">
+          <label class="form-check-label" for="report-type-2">Đã xử lý</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input report-select" type="radio" name="report-type" id="report-type-all" value="all" style="border-color: gray;">
+          <label class="form-check-label" for="report-type-all">Chọn tất cả</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <strong>Số lượng: <%= reports.length %></strong>
+        </div>
+      </div>
     <% } %>
+
   <div class="col-12 col-md-11 col-lg-10">
     <table style="border-right: 1px solid #dee2e6; border-left: 1px solid #dee2e6;" class="table table-hover">
       <thead>
@@ -39,7 +65,15 @@
         <tr>
           <td class="text-center"><%= reports[i].name %></td>
           <td class="text-center"><%= reports[i].address %></td>
-          <td class="text-center"><%- reports[i].reportType %></td>
+          <% if(reports[i].reportType == 0){ %>
+            <td class="text-center">Tố giác sai phạm</td>
+          <% }else if(reports[i].reportType == 1){ %>
+            <td class="text-center">Đăng ký nội dung</td>
+          <% }else if(reports[i].reportType == 2){ %>
+            <td class="text-center">Đóng góp ý kiến</td>
+          <% }else{ %>
+            <td class="text-center">Giải đáp thắc mắc</td>
+          <% } %>
           <td class="text-center">
             <a class="btn btn-success" href="/weads/report/details/<%= reports[i]._id %>">Xem chi tiết</a>
           </td>
@@ -60,15 +94,20 @@
   const option = JSON.parse(optionString);
 
   document.addEventListener('DOMContentLoaded', function(){
-    let report = document.getElementById('report-select');
-    if(report){
-      report.value = option;
-    }
-
     let ward = document.getElementById('ward-select');
     if(ward){
       ward.value = option; 
     }
+    
+    let reports = document.getElementsByClassName('report-select');
+    
+    Array.from(reports).forEach(function(report){
+      console.log(report.value);
+      if (report.value === option) {
+        report.checked = true;
+      }
+    });
+
   })
 </script>
 
@@ -82,7 +121,7 @@
       }
     })
 
-    $("#report-select").change(function () {
+    $(".report-select").change(function () {
       if ($(this).val() === 'all') {
         window.location.href = "/weads/report";
       } else {

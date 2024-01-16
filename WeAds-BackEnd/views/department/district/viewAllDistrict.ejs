@@ -31,7 +31,7 @@
                 
                             <!-- Modal edit District -->
                             <div class="modal fade" id="editDistrictModal<%= i %>" tabindex="-1" aria-labelledby="editDistrictModalLabel<%= i %>" aria-hidden="true">
-                                <form action="/weads/department/places/editDistrict/<%= districts[i]._id %>/" method="post">
+                                <form action="/weads/department/places/editDistrict/<%= districts[i]._id %>/" method="post" onsubmit="return validateEditDistrictForm()">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
@@ -47,7 +47,7 @@
                                                 <div class="form-group">
                                                     <label for="name">Nhập tên quận mới (vd: Quận 1, Quận Bình Thạnh): </label>
                                                     <br>
-                                                    <input type="text" class="form-control" id="name" name="name" required>
+                                                    <input type="text" class="form-control" id="edit-name" name="name" required>
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
@@ -87,7 +87,7 @@
     
   <!-- Modal add District -->
   <div class="modal fade" id="addDistrictModal" tabindex="-1" aria-labelledby="addDistrictModalLabel" aria-hidden="true">
-    <form action="/weads/department/places/addDistrict" method="post">
+    <form action="/weads/department/places/addDistrict" method="post" onsubmit="return validateAddDistrictForm()">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -96,9 +96,9 @@
         </div>
         <div class="modal-body">
             <div class="form-group">
-                <label for="name">Tên quận (vd: Quận 1, Quận Bình Thạnh): </label>
+                <label for="new-name">Tên quận (vd: Quận 1, Quận Bình Thạnh): </label>
                 <br>
-                <input type="text" class="form-control" id="name" name="name" required>
+                <input type="text" class="form-control" id="new-name" name="name" required>
             </div>
         </div>
         <div class="modal-footer">
@@ -167,6 +167,34 @@
                     window.location.href = '/weads/department/places/deleteDistrict/' + districtId;
                 }
             });
+        }
+
+        function validateAddDistrictForm() {
+            var districtName = document.getElementById('new-name').value;
+            if (!districtName.startsWith('Quận')) {
+                Swal.fire({
+                    text: 'Tên quận phải bắt đầu bằng "Quận"',
+                    icon: 'error',
+                    showCancelButton: false,
+                    timer: 1500
+                })
+                return false;
+            }
+            return true;
+        }
+
+        function validateEditDistrictForm() {
+            var districtName = document.getElementById('edit-name').value;
+            if (!districtName.startsWith('Quận')) {
+                Swal.fire({
+                    text: 'Tên quận phải bắt đầu bằng "Quận"',
+                    icon: 'error',
+                    showCancelButton: false,
+                    timer: 1500
+                })
+                return false;
+            }
+            return true;
         }
     </script>
 
