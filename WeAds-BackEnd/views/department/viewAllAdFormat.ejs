@@ -1,0 +1,168 @@
+<%- include('./partials/header') %>
+
+<div class="container mt-5">
+    <h1>Danh sách các hình thức quảng cáo</h1>
+
+    <% if (types.length > 0) { %>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>Tên</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for (let i = 0; i < types.length; i++) { %>
+                    <tr>
+                        <td><%= i + 1 %></td>
+                        <td><%= types[i].name %></td>
+                        <td class="d-flex justify-content-center align-items-center">
+                            <button type="button" class="btn btn-primary mx-2" data-bs-toggle="modal" data-bs-target="#editTypeModal<%= i %>">
+                                <i class="bi bi-pencil-square"></i>
+                            </button>
+                
+                            <!-- Modal edit adFormat -->
+                            <div class="modal fade" id="editTypeModal<%= i %>" tabindex="-1" aria-labelledby="editTypeModalLabel<%= i %>" aria-hidden="true">
+                                <form action="/weads/department/adFormat/editType/<%= types[i]._id %>" method="post">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel<%= i %>">ĐỔI TÊN HÌNH THỨC QUẢNG CÁO</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="form-group">
+                                                    <label for="ex-name<%= i %>">Tên hình thức cũ: </label>
+                                                    <br>
+                                                    <input type="text" class="form-control" id="ex-name<%= i %>" name="ex-name" value="<%= types[i].name %>" readonly>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="name">Nhập tên hình thức mới (vd: Cổ động chính trị, Quảng cáo thương mại,...): </label>
+                                                    <br>
+                                                    <input type="text" class="form-control" id="name" name="name" required>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="submit" class="btn btn-primary">Cập nhật</button>
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <button class="btn btn-danger" onclick="showDeleteConfirmation('<%= types[i]._id %>')">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                
+                        </td>
+                    </tr>
+                <% } %>
+                
+            </tbody>
+        </table>
+    <% } else { %>
+        <p>Không có hình thức quảng nào trong danh sách.</p>
+    <% } %>
+
+    <a href="/weads/home">
+        <button class="btn btn-secondary">
+            <i class="bi bi-arrow-left-circle-fill"></i>
+            Trở về
+        </button>
+    </a>
+
+    <!-- Button add Type -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addTypeModal">
+        Thêm hình thức
+    </button>
+    
+  <!-- Modal add adFormat -->
+  <div class="modal fade" id="addTypeModal" tabindex="-1" aria-labelledby="addTypeModalLabel" aria-hidden="true">
+    <form action="/weads/department/adFormat/addType" method="post">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">THÊM  HÌNH THỨC QUẢNG CÁO</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label for="name">Tên hình thức (vd: Cổ động chính trị, Quảng cáo thương mại,...): </label>
+                <br>
+                <input type="text" class="form-control" id="name" name="name" required>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Thêm</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+        </div>
+      </div>
+    </div>
+    </form>
+  </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <% if (announce === 'delete') { %>
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Xóa thành công',
+                showCancelButton: false,
+                timer: 1500
+            });
+        </script>
+    <% } else if (announce === 'create') { %>
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Thêm hình thức quảng cáo thành công',
+                showCancelButton: false,
+                timer: 1500
+            });
+        </script>
+    <% } else if (announce === 'edit') { %>
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Đổi tên thành công',
+                showCancelButton: false,
+                timer: 1500
+            });
+        </script>
+    <% } else if (announce === 'exist') { %>
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Hình thức đã tồn tại',
+                showCancelButton: false,
+                timer: 1500
+            });
+        </script>
+    <% } %>
+    
+    
+    <script>
+        function showDeleteConfirmation(typeId) {
+            Swal.fire({
+                title: 'Xác nhận xóa',
+                text: 'Bạn có chắc muốn xóa hình thức quảng cáo này?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Xóa',
+                cancelButtonText: 'Hủy'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '/weads/department/adFormat/deleteType/' + typeId;
+                }
+            });
+        }
+    </script>
+
+</div>
+
+<%- include('./partials/footer') %>
