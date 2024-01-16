@@ -82,18 +82,18 @@ function warnAlert(name, address, role, coordinates, ward, district) {
   
 }
 
-function popUp(address, type, planned) {
+function popUp(adFormat ,address, type, planned) {
   return `
   <div style="width: 200px">
     <h6 style="font-weight:bold" class="m-0 p-0">
-      Co dong chinh tri
+      ${adFormat}
     </h6>
     <div style="margin-bottom:2px;">${type}</div>
     <div style="margin:0;">${address}</div>
     ${
       planned === 1
-        ? '<h6 style="font-style: italic;font-weight:bold">Đã quy hoạch</h6'
-        : '<h6 style="font-style: italic;font-weight:bold">Chưa quy hoạch</h6'
+        ? '<h6 style="font-style: italic;font-weight:bold;margin-bottom:0;">Đã quy hoạch</h6'
+        : '<h6 style="font-style: italic;font-weight:bold;margin-bottom:0;">Chưa quy hoạch</h6'
     }
     >
   </div>

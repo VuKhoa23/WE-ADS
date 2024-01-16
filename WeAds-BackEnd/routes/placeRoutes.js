@@ -38,6 +38,7 @@ router.get("/geojson", async (req, res)=>{
       },
       properties:{
         ads: [],
+        adType: place.adType,
         ward: place.ward,
         locationType: place.locationType,
         district: place.district,
