@@ -12,11 +12,14 @@ router.get("/report/:placeId", async function (req, res, next) {
     // const response = await fetch(process.env.API + "/weads/place/details/" + req.params.placeId)
     // const result = await response.json()
     // const coordinates = result.place.coordinates
+    const response = await fetch('http://localhost:3000/weads/report/reportTypes');
+    const list = await response.json();
     res.render("report", {
       // coordinates: coordinates,
       // ward: result.place.ward,
       // district: result.place.district,
       placeId: req.params.placeId,
+      reportTypes: list.reportTypeList,
       API_KEY: process.env.MAP_KEY,
       reportCode: 0,
       coordinates: null,
@@ -31,7 +34,6 @@ router.get("/report/:placeId", async function (req, res, next) {
 router.get("/report/:placeId/:adId", async function (req, res, next) {
   const response = await fetch('http://localhost:3000/weads/report/reportTypes');
   const list = await response.json();
-  console.log(list);
   res.render("report", {
     placeId: req.params.placeId,
     reportTypes: list.reportTypeList,
@@ -49,8 +51,11 @@ router.get("/report", async function (req, res, next) {
   let coordinates = []
   coordinates.push(req.query.lng)
   coordinates.push(req.query.lat)
+  const response = await fetch('http://localhost:3000/weads/report/reportTypes');
+  const list = await response.json();
   res.render("report", {
     coordinates: coordinates,
+    reportTypes: list.reportTypeList,
     ward: req.query.ward,
     district: req.query.district,
     placeId: null,
