@@ -445,13 +445,13 @@
       inner.innerHTML = "";
       inner.innerHTML += `
       <div class="carousel-item active">
-        <img src="${place.adImages[0].url}" alt="..." class="m-auto d-block w-75">
+        <img src="http://localhost:3000${place.adImages[0].url}" alt="..." class="m-auto d-block w-75">
       </div>
       `
       for (i = 0; i < place.adImages.length - 1; i++) {
         inner.innerHTML += `
       <div class="carousel-item">
-        <img src="${place.adImages[i + 1].url}" alt="..." class="m-auto d-block w-75">
+        <img src="http://localhost:3000${place.adImages[i + 1].url}" alt="..." class="m-auto d-block w-75">
       </div>
       `
       }
