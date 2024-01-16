@@ -12,7 +12,7 @@ router.get("/report/:placeId", async function (req, res, next) {
     // const response = await fetch(process.env.API + "/weads/place/details/" + req.params.placeId)
     // const result = await response.json()
     // const coordinates = result.place.coordinates
-    const response = await fetch('http://localhost:3000/weads/report/reportTypes');
+    const response = await fetch('https://weads-backend.vercel.app/weads/report/reportTypes');
     const list = await response.json();
     res.render("report", {
       // coordinates: coordinates,
@@ -32,7 +32,7 @@ router.get("/report/:placeId", async function (req, res, next) {
 });
 
 router.get("/report/:placeId/:adId", async function (req, res, next) {
-  const response = await fetch('http://localhost:3000/weads/report/reportTypes');
+  const response = await fetch('https://weads-backend.vercel.app/weads/report/reportTypes');
   const list = await response.json();
   res.render("report", {
     placeId: req.params.placeId,
@@ -51,7 +51,7 @@ router.get("/report", async function (req, res, next) {
   let coordinates = []
   coordinates.push(req.query.lng)
   coordinates.push(req.query.lat)
-  const response = await fetch('http://localhost:3000/weads/report/reportTypes');
+  const response = await fetch('https://weads-backend.vercel.app/weads/report/reportTypes');
   const list = await response.json();
   res.render("report", {
     coordinates: coordinates,
