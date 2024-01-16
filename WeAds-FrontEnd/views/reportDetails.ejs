@@ -186,16 +186,7 @@
       $("#email").html(result.name)
       $("#phone").html(result.phone)
       const reportType = result.reportType
-      if (reportType == 0) {
-        $("#reportType").html("Tố giác sai phạm")
-      } else if (reportType == 1) {
-        $("#reportType").html("Đăng kí nội dung")
-      } else if (reportType == 2) {
-        $("#reportType").html("Đóng góp nội dung")
-      } else {
-        $("#reportType").html("Giải đáp thắc mắc")
-      }
-
+      $("#reportType").html(reportType)
 
       $("#address").html(result.address)
 
