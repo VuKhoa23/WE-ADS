@@ -45,6 +45,12 @@
           <% } else { %>
             <h3 style="font-weight: normal;" class="row-name centered-row">Không có hình ảnh</h3>
           <% } %>
+          <div class="mt-2 mb-3 form-group row">
+            <label for="image" class="form-label col-3">Thêm ảnh</label>
+            <div class="col-9">
+              <input type="file" multiple data-browse-on-zone-click="true" accept="image/*" id="newAdImages" name="newAdImages" />
+            </div>
+          </div>
         </div>
         <span class="seperate"></span>
         <h3 class="row-name centered-row">Thông tin công ty</h3>
@@ -129,6 +135,8 @@
 <% } %>
 
   <script>
+    $("#newAdImages").fileinput({ 'showUpload': true, 'previewFileType': 'image', 'allowedPreviewTypes': ["image"] });
+
     function removeElement(button) {
       var parentElement = button.parentNode;
       parentElement =parentElement.parentNode;
@@ -155,6 +163,7 @@
 
   $("#edit-ad-form").on("submit", async function (event) {
     event.preventDefault();
+    $("#edit-ad-submit").prop("disabled", true);
     const adName = $("#adName").val();
     const adType = $("#adType").val();
     const width = $("#width").val();
@@ -166,44 +175,35 @@
     const endDate = $("#endDate").val();
     const reason = $("#reason-input").val();
 
-    // const formData = new FormData();
-    // formData.append('adName', adName);
-    // formData.append('adType', adType);
-    // formData.append('width', width);
-    // formData.append('height', height);
-    // formData.append('companyName', companyName);
-    // formData.append('companyPhone', companyPhone);
-    // formData.append('companyEmail', companyEmail);
-    // formData.append('startDate', startDate);
-    // formData.append('endDate', endDate);
-    // formData.append('reason', reason);
+    const formData = new FormData();
+    formData.append('adName', adName);
+    formData.append('adType', adType);
+    formData.append('width', width);
+    formData.append('height', height);
+    formData.append('companyName', companyName);
+    formData.append('companyPhone', companyPhone);
+    formData.append('companyEmail', companyEmail);
+    formData.append('startDate', startDate);
+    formData.append('endDate', endDate);
+    formData.append('reason', reason);
 
     let images = $(".ads-image");
-    const imageArray = [];
+    // const imageArray = [];
 
     images.each(function() {
-      imageArray.push($(this).attr('src'));
+      formData.append('adImages', $(this).attr('src'));
     }); 
-    // formData.append('imageArray', imageArray);
+    
+    // handle add image
+    var input = document.getElementById('newAdImages')
 
+    for (const file of input.files) {
+      formData.append('theAdImages', file, file.name)
+    }
+    
     const response = await fetch(window.location.pathname, {
       method: 'POST',
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        adName,
-        adType,
-        width,
-        height,
-        companyName,
-        companyPhone,
-        companyEmail,
-        startDate,
-        endDate,
-        adImages: imageArray,
-        reason,
-      })
+      body: formData
     })
       .then(function (result) {
         return result.json();
@@ -211,8 +211,10 @@
       
     if (response.success)
       showSuccessModal();
-    else 
+    else {
+      $("#edit-ad-submit").prop("disabled", true);
       showErrorModal();
+    }
   });
   </script>
 <%- include('./partials/footer') %>
