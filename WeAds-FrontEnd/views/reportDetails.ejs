@@ -131,7 +131,7 @@
 <body>
   <div class="card">
     <div class="card-header d-flex justify-content-center align-item-center">
-      <a class="back-btn btn btn-outline-success" href="/weads/report"><i class="bi bi-chevron-left"></i>Trở lại</a>
+      <a class="back-btn btn btn-outline-success" href="/weads/home"><i class="bi bi-chevron-left"></i>Trở lại</a>
       <i class="bi bi-file-earmark-richtext title-icon"></i>
       <h3 class="title">Chi tiết báo cáo</h3>
     </div>
@@ -185,7 +185,18 @@
       $("#name").html(result.name)
       $("#email").html(result.name)
       $("#phone").html(result.phone)
-      $("#reportType").html(result.reportType)
+      const reportType = result.reportType
+      if (reportType == 0) {
+        $("#reportType").html("Tố giác sai phạm")
+      } else if (reportType == 1) {
+        $("#reportType").html("Đăng kí nội dung")
+      } else if (reportType == 2) {
+        $("#reportType").html("Đóng góp nội dung")
+      } else {
+        $("#reportType").html("Giải đáp thắc mắc")
+      }
+
+
       $("#address").html(result.address)
 
       $("#waiting").css("display", "none")
