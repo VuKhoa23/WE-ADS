@@ -81,17 +81,19 @@ Router.post('/create/:id', uploadAds.fields([
   const data = req.files;
   const images = Object.values(data)[0]
   let adImages = []
-  for(let image of images){
-    const fileName = Date.now() + image.originalname.replace(/ /g, "")
-    adImages.push("https://weads.s3.ap-southeast-2.amazonaws.com/" + fileName)
-    const params = {
-      Bucket: bucket_name,
-      Key: fileName,
-      Body: image.buffer,
-      ContentType: image.mimetype
+  if (images) {
+    for(let image of images){
+      const fileName = Date.now() + image.originalname.replace(/ /g, "")
+      adImages.push("https://weads.s3.ap-southeast-2.amazonaws.com/" + fileName)
+      const params = {
+        Bucket: bucket_name,
+        Key: fileName,
+        Body: image.buffer,
+        ContentType: image.mimetype
+      }
+      const command = new PutObjectCommand(params)
+      await s3.send(command)
     }
-    const command = new PutObjectCommand(params)
-    await s3.send(command)
   }
 
   let officerId = null;
