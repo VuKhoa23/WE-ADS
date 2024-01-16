@@ -240,11 +240,14 @@
       </div>
       <% } %>
     </div>
-
     <label id="place-image-label" class="form-label">Hình ảnh điểm đặt:</label>
-    <div class="ad-image-wrapper">
-      <img class="ads-image" src="<%- request.placeImage %>" alt="hình ảnh điểm đặt">
-    </div>
+    <% if (request.placeImage != undefined) { %>
+      <div class="ad-image-wrapper">
+        <img class="ads-image" src="<%- request.placeImage %>" alt="hình ảnh điểm đặt">
+      </div>
+    <% } else { %>
+      <p style="text-align: center;">Không có hình ảnh</p>
+    <% } %>
 
     <div class="mb-3 form-group">
       <label for="reason" class="form-label">Ngày tạo:</label>
