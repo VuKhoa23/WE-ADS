@@ -82,15 +82,18 @@ function unpersistedAlert(name, address, id){
   `;
 }
 
-function popUp(address, type, planned) {
+function popUp(adFormat ,address, type, planned) {
   return `
-  <div style="width: 15vw">
-  <br>
-    <p>${address}</p>
+  <div style="width: 200px">
+    <h6 style="font-weight:bold" class="m-0 p-0">
+      ${adFormat}
+    </h6>
+    <div style="margin-bottom:2px;">${type}</div>
+    <div style="margin:0;">${address}</div>
     ${
       planned === 1
-        ? '<h6 style="font-style: italic;">Đã quy hoạch</h6'
-        : '<h6 style="font-style: italic;">Chưa quy hoạch</h6'
+        ? '<h6 style="font-style: italic;font-weight:bold;margin-bottom:0;">Đã quy hoạch</h6'
+        : '<h6 style="font-style: italic;font-weight:bold;margin-bottom:0;">Chưa quy hoạch</h6'
     }
     >
   </div>
