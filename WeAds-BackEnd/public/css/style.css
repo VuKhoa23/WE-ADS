@@ -23,6 +23,7 @@
   height: 95%;
   position: absolute;
   overflow-y: auto;
+  padding-right: 2px;
 }
 
 #notification-container::-webkit-scrollbar {

@@ -122,7 +122,7 @@
           el.addEventListener("click", (e) => {
             e.stopPropagation();
             const div = document.createElement("div")
-            div.innerHTML = infoAlert(name, address, index, place.properties.placeId, '<%- role %>')
+            div.innerHTML = infoAlert(name, address, index, place.properties.placeId, '<%- role %>',place.properties.placeImage)
             notiContainer.prepend(div);
           }, false);
           // make a marker for each feature and add to the map
