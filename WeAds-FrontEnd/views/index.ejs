@@ -183,16 +183,26 @@
         }, false);
         // make a marker for each feature and add to the map
 
+        if (place.properties.adId === null && place.properties.placeId === null) {
+          const marker = new mapboxgl.Marker(el)
+            .setLngLat(place.geometry.coordinates)
+            .setPopup(new mapboxgl.Popup().setHTML(popUp("Điểm chưa được đăng ký", address, "", -1)))
+            .addTo(map)
+          const markerDiv = marker.getElement();
+          markerDiv.addEventListener("mouseenter", () => marker.togglePopup());
+          markerDiv.addEventListener("mouseleave", () => marker.togglePopup());
+        } else {
+          const marker = new mapboxgl.Marker(el)
+            .setLngLat(place.geometry.coordinates)
+            .setPopup(new mapboxgl.Popup().setHTML(popUp(place.properties.adType, address, place.properties.locationType.join('/'), place.properties.adPlanned)))
+            .addTo(map)
+          const markerDiv = marker.getElement();
+          markerDiv.addEventListener("mouseenter", () => marker.togglePopup());
+          markerDiv.addEventListener("mouseleave", () => marker.togglePopup());
+        }
 
-        const marker = new mapboxgl.Marker(el)
-          .setLngLat(place.geometry.coordinates)
-          .setPopup(new mapboxgl.Popup().setHTML(popUp(place.properties.adType, address, place.properties.locationType.join('/'), place.properties.adPlanned)))
-          .addTo(map)
 
-        const markerDiv = marker.getElement();
 
-        markerDiv.addEventListener("mouseenter", () => marker.togglePopup());
-        markerDiv.addEventListener("mouseleave", () => marker.togglePopup());
       });
 
       // locate the user
