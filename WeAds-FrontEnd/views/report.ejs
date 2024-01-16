@@ -144,19 +144,29 @@
     const reports = JSON.parse(window.localStorage.getItem('reports'))
     const accessToken = "<%= API_KEY %>";
     $(document).ready(async function () {
-      let coordinates = '<%- coordinates %>'
-      coordinates = coordinates.split(",")
+      let coordinates = null
+      if ('<%- reportCode %>' === 2) {
+        coordinates = '<%- coordinates %>'
+        coordinates = coordinates.split(",")
+      } else {
+        const placeRes = await fetch("http://localhost:3000/weads/place/details/" + '<%- placeId %>')
+        const placeResult = await placeRes.json()
+        coordinates = placeResult.place.coordinates
+      }
       let ward = null
       let district = null
       let adId = null
 
-      if ('<%- reportCode %>' !== '2') {
+      if ('<%- reportCode %>' !== 2) {
         const placeRes = await fetch("http://localhost:3000/weads/place/details/" + '<%- placeId %>')
         const placeResult = await placeRes.json()
         ward = placeResult.place.ward
         district = placeResult.place.district
+      } else {
+        ward = '<%- ward %>'
+        district = '<%- district %>'
       }
-      if ('<%- reportCode %>' == '1') {
+      if ('<%- reportCode %>' == 1) {
         const adRes = await fetch("http://localhost:3000/weads/ad/details/" + '<%- adId %>')
         const adResult = await adRes.json()
         adId = adResult.ad._id

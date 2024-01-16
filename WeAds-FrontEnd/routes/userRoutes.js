@@ -18,7 +18,11 @@ router.get("/report/:placeId", async function (req, res, next) {
       // district: result.place.district,
       placeId: req.params.placeId,
       API_KEY: process.env.MAP_KEY,
-      reportCode: 0
+      reportCode: 0,
+      coordinates: null,
+      ward: null,
+      district: null,
+      adId: null
     });
 
  
@@ -29,7 +33,10 @@ router.get("/report/:placeId/:adId", async function (req, res, next) {
     placeId: req.params.placeId,
     API_KEY: process.env.MAP_KEY,
     reportCode: 1,
-    adId : req.params.adId
+    adId : req.params.adId,
+    coordinates: null,
+    ward: null,
+    district: null
   });
 });
 
@@ -38,7 +45,6 @@ router.get("/report", async function (req, res, next) {
   let coordinates = []
   coordinates.push(req.query.lng)
   coordinates.push(req.query.lat)
-
   res.render("report", {
     coordinates: coordinates,
     ward: req.query.ward,
