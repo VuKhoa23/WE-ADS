@@ -63,7 +63,11 @@
             <label for="adType" class="form-label">Hình thức quảng cáo:</label>
             <select class="place-adType-select" id="adType" name="adType" required>
                 <% adTypes.forEach(function(type) { %>
-                <option value="<%= type.name %>"><%= type.name %></option>
+                    <% if (adPlacement.adType == type.name) { %>
+                        <option selected value="<%= type.name %>"><%= type.name %></option>
+                    <% } else { %>
+                        <option value="<%= type.name %>"><%= type.name %></option>
+                    <% } %>
                 <% }); %>
             </select>
         </div>

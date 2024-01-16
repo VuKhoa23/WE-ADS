@@ -8,6 +8,7 @@ const UpdateRequest = require("../model/updateRequest");
 const { ObjectId } = require('mongodb');
 const AdType = require("../model/advertisement");
 const LocationType = require("../model/locationType");
+const AdFormat = require("../model/adFormat");
 // router.get('/create-demo', async (req, res) => {
 //   const place = await Place.findOne({district: "Quận Bình Thạnh"})
 //   await Ad.create({
@@ -153,7 +154,7 @@ router.get('/allAdPlacement', async function(req, res) {
 
 router.get('/addAdPlacementForm', async function(req, res) {
 
-  const adTypes = await AdType.find({});
+  const adTypes = await AdFormat.find({});
   const locationTypes = await LocationType.find({});
   res.render("department/createAdPlacement", {
     lat: req.query.lat,
@@ -222,7 +223,7 @@ router.get('/deleteAdPlacement/:_id', async function(req, res) {
 
 router.get('/editAdPlacementForm/:_id', async function(req, res) {
   const adPlacement = await Place.findOne({_id: req.params._id});
-  const adTypes = await AdTypes.find({});
+  const adTypes = await AdFormat.find({});
   const LocationTypes = await LocationType.find({});
 
   res.render("department/editAdPlacementForm", {
