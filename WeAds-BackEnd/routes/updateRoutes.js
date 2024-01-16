@@ -8,7 +8,7 @@ const { ObjectId } = require('mongodb');
 const sendMailController = require('../controller/sendEmail');
 
 // router.get("/:placeId", async function (req, res, next) {
-//   const placeRes = await fetch("http://localhost:3000/weads/place/details/" + req.params.placeId)
+//   const placeRes = await fetch("https://weads-backend.vercel.app/weads/place/details/" + req.params.placeId)
 //   const placeResult = await placeRes.json()
 //   const coordinates = placeResult.place.coordinates
 
