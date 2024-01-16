@@ -1,3 +1,7 @@
+.no-display {
+  display: none !important;
+}
+
 .license-form {
   width: 100%;
   padding: 10px;

@@ -49,11 +49,11 @@
                 <% for (var i = 0; i < locationTypes.length; i++) { %>
                 <div class="form-check form-check-inline">
                     <% if (adPlacement.locationType.includes(locationTypes[i].name)) { %>
-                    <input checked class="form-check-input location-type-checkbox" type="checkbox" id="locationType<%= i %>" name="locationType" value="<%= locationTypes[i].name %>">
+                    <input checked class="form-check-input location-type-checkbox" type="checkbox" id="location-checkbox" name="locationType" value="<%= locationTypes[i].name %>">
                     <% } else { %>
-                    <input class="form-check-input location-type-checkbox" type="checkbox" id="locationType<%= i %>" name="locationType" value="<%= locationTypes[i].name %>">
+                    <input class="form-check-input location-type-checkbox" type="checkbox" id="location-checkbox" name="locationType" value="<%= locationTypes[i].name %>">
                     <% } %>
-                    <label class="form-check-label" for="locationType<%= i %>"><%= locationTypes[i].name %></label>
+                    <label class="form-check-label"><%= locationTypes[i].name %></label>
                 </div>
                 <% } %>
             </div>
@@ -77,6 +77,33 @@
             <input type="number" min="0" max="1" class="form-control" id="adPlanned" name="adPlanned" required>
         </div>
 
+        <div class="mb-3 form-group">
+            <% if (adPlacement.placeImage != undefined && adPlacement.placeImage != 'undefined') { %>
+                <label id="place-image-label" class="form-label">Hình ảnh điểm đặt:</label>
+                <div class="ad-image-wrapper">
+                    <img class="ads-image" src="<%- adPlacement.placeImage %>" alt="hình ảnh điểm đặt">
+                    <div class="delete-img-overlay">
+                      <button onclick="removeElement(this)" class="delete-img-button btn btn-danger">Xóa</button>
+                    </div>
+                </div>
+                <span id="place-add-image" class="no-display">
+                    <label class="form-label">Thêm hình ảnh cho điểm đặt:</label>
+                    <div class="mb-3 form-group row d-flex flex-column">
+                        <div style="align-self: center;" class="col-9">
+                            <input type="file" data-browse-on-zone-click="true" accept="image/*" id="adImages" name="adImages"/>
+                        </div>
+                    </div>    
+                </span>
+            <% } else { %>
+                <label class="form-label">Thêm hình ảnh cho điểm đặt:</label>
+                <div class="mb-3 form-group row d-flex flex-column">
+                    <div style="align-self: center;" class="col-9">
+                        <input type="file" data-browse-on-zone-click="true" accept="image/*" id="adImages" name="adImages" required/>
+                    </div>
+                </div>    
+            <% } %>
+        </div>
+
         <% if (role != 'Department') { %>
         <div class="mb-3 form-group">
             <label for="reason" class="form-label">Lý do chỉnh sửa:</label>
@@ -88,9 +115,9 @@
 
         <span class="d-flex justify-content-center">
             <% if (role == 'Department') { %>
-            <button type="submit" class="btn btn-primary">Cập nhật Điểm đặt</button>
+                <button id="edit-place-submit-btn" type="submit" class="btn btn-primary">Cập nhật Điểm đặt</button>
             <% } else { %>
-            <button type="submit" class="btn btn-primary">Tạo yêu cầu</button>
+                <button id="edit-place-submit-btn" type="submit" class="btn btn-primary">Tạo yêu cầu</button>
             <% } %>
         </span>
     </form>
@@ -153,37 +180,80 @@
     });
 </script>
 <script>
-    $('#edit-place-submit').on('submit', async function (event) {
+    $("#adImages").fileinput({ 'showUpload': true, 'previewFileType': 'image', 'allowedPreviewTypes': ["image"] });
+
+    function removeElement(button) {
+        var parentElement = button.parentNode;
+        parentElement =parentElement.parentNode;
+        var container = parentElement.parentNode;
+        parentElement.parentNode.removeChild(parentElement);
+        const label = $("#place-image-label");
+        label.remove();
+
+        $("#place-add-image").removeClass("no-display");
+        $("#adImages").prop('required', true);
+    }
+
+    function showLimitModal() {
+        Swal.fire({
+        icon: 'info',
+        title: 'Số ảnh minh họa tối đa của mỗi điểm đặt là một',
+        showCancelButton: false,
+        timer: null
+        });
+    }
+    
+
+    $("#edit-place-submit").on('submit', async function(event) {
         event.preventDefault();
-        let locationTypes = $(".location-type-checkbox:checked");
-        const adType = $('#adType').find(":selected").val();
-        const adPlanned = $('#adPlanned').val();
-        const reason = $('#reason').val();
+        $("#edit-place-submit-btn").prop('disabled', true);
+        const district = $("#district").val();
+        const ward = $("#ward").val();
+        const adType = $("#adType").val();
+        const adPlanned = $("#adPlanned").val();
+        const coordinates = $("#coordinates").val();
+        const reason = $("#reason").val();
+        
+        const formData = new FormData();
+        formData.append('district', district);
+        formData.append('ward', ward);
+        formData.append('adType', adType);
+        formData.append('reason', reason);
+        formData.append('adPlanned', adPlanned);
+        formData.append('coordinates', coordinates);
+        formData.append('oldPlaceImage', $(".ads-image").attr('src'));
+        if ($(".ads-image").attr('src') == undefined) {
+            var input = document.getElementById('adImages');
+            
+            if (input.files.length > 1) {
+                showLimitModal();
+                $("#edit-place-submit-btn").prop('disabled', false);
+                return;
+            }
+    
+    
+            for (const file of input.files) {
+                formData.append('thePlaceImages', file, file.name)
+            }
+        }
 
-        const locationType = [];
-
-        locationTypes.each(function () {
-            locationType.push($(this).val());
+        $('#location-checkbox:checked').map(function() {
+            formData.append('locationType', $(this).val());
         });
 
         const response = await fetch(window.location.pathname, {
             method: 'POST',
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                locationType,
-                adType,
-                adPlanned,
-                reason,
-            })
+            body: formData
         })
-        const result = await response.json()
-        console.log(result);
-        if (result.success)
+        .then(function (result) {
+            return result.json();
+        })
+        if (response.success)
             showSuccessModal();
-        else
+        else {
+            $("#edit-place-submit-btn").prop('disabled', false);
             showErrorModal();
+        }
     });
 </script>
 <%- include('./partials/footer') %>

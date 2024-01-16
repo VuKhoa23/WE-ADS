@@ -203,7 +203,7 @@ router.post('/view/:id/accept', async function (req, res, next) {
       next();
     }
     else {
-      await Place.updateOne({_id: new ObjectId(request.targetId) }, { adType: request.adType, locationType: request.locationType, adPlanned: request.adPlanned });
+      await Place.updateOne({_id: new ObjectId(request.targetId) }, { placeImage: request.placeImage, adType: request.adType, locationType: request.locationType, adPlanned: request.adPlanned });
       request.state = '1';
       await request.save();
       req.receiver = request.createBy.email;

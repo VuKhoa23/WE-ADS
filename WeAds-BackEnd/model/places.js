@@ -23,7 +23,10 @@ const place = new Schema({
     },
     adPlanned:{
       type: Number
-    }
+    },
+    placeImage:{
+      type: String
+    },
 })
 
 const Place = mongoose.model('place', place);
