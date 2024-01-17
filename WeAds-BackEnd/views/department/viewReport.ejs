@@ -1,30 +1,5 @@
 <%- include('./partials/header') %>
 <div class="row justify-content-center">
-
-  <% if(role === 'District'){ %>
-    <div class="d-flex justify-content-center fw-bold fs-5">
-      Chọn phường muốn xem
-    </div>
-  <select id="ward-select" class="form-control w-25 bg-primary text-center m-3" name="ward-select">
-    <option value="all">Chọn tất cả</option>
-    <% wards.forEach(function(ward){ %>
-      <option value="<%= ward.name %>"><%= ward.name %></option>
-    <% }); %>
-  </select>
-  <% } %>
-  <!-- <% if(role === 'Department'){ %>
-    <div class="d-flex justify-content-center fw-bold fs-5">
-      Chọn báo cáo muốn xem
-    </div>
-    <select id="report-select" class="form-control w-25 bg-primary text-center m-3" name="report-select">
-      <option value="all">Chọn tất cả</option>
-      <option value="0">Chưa xử lý</option>
-      <option value="1">Đang xử lý</option>
-      <option value="2">Đã xử lý</option>
-    </select>
-    <% } %> -->
-
-    <% if(role === 'Department'){ %>
       <div class="form-group form-inline text-center m-3">
         <label class="mr-2">Chọn loại báo cáo:</label>
         <div class="form-check form-check-inline">
@@ -47,8 +22,39 @@
           <strong>Số lượng: <%= reports.length %></strong>
         </div>
       </div>
-    <% } %>
 
+    <span class="d-flex align-items-center justify-content-center">
+      <% if (role == 'Department') { %>
+          <div class="dropdown d-flex align-items-center mb-2 mx-2">
+              <h3 class="request-dropdown-label">Quận: </h3>
+              <button style="border:1px solid #000;min-width: 100px;" type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown">
+                  <%- currentDistrict %>
+              </button>
+              <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="/weads/report?option=<%- option %>">Tất cả</a></li>
+                  <% for (var i = 0; i < districtList.length; i++) { %>
+                      <li><a class="dropdown-item" href="/weads/report?district=<%- districtList[i].name %>&option=<%- option %>"><%- districtList[i].name %></a></li>
+                  <% } %>
+              </ul>
+          </div>
+      <% } %>
+      <% if (role == 'Department' || role == 'District') { %>
+          <% if (currentDistrict != 'Tất cả') { %>
+              <div class="dropdown d-flex align-items-center mb-2">
+                  <h3 class="request-dropdown-label">Phường: </h3>
+                  <button style="border:1px solid #000;min-width: 100px;" type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown">
+                      <%- currentWard %>
+                  </button>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="/weads/report?district=<%- currentDistrict %>&option=<%- option %>">Tất cả</a></li>
+                  <% for (var i = 0; i < wardList.length; i++) { %>
+                      <li><a class="dropdown-item" href="/weads/report?district=<%- currentDistrict %>&ward=<%- wardList[i].name %>&option=<%- option %>"><%- wardList[i].name %></a></li>
+                  <% } %>
+                </ul>
+              </div>
+          <% } %>
+      <% } %>
+    </span>
   <div class="col-12 col-md-11 col-lg-10">
     <table style="border-right: 1px solid #dee2e6; border-left: 1px solid #dee2e6;" class="table table-hover">
       <thead>
@@ -65,15 +71,7 @@
         <tr>
           <td class="text-center"><%= reports[i].name %></td>
           <td class="text-center"><%= reports[i].address %></td>
-          <% if(reports[i].reportType == 0){ %>
-            <td class="text-center">Tố giác sai phạm</td>
-          <% }else if(reports[i].reportType == 1){ %>
-            <td class="text-center">Đăng ký nội dung</td>
-          <% }else if(reports[i].reportType == 2){ %>
-            <td class="text-center">Đóng góp ý kiến</td>
-          <% }else{ %>
-            <td class="text-center">Giải đáp thắc mắc</td>
-          <% } %>
+          <td class="text-center"><%= reports[i].reportType %></td>
           <td class="text-center">
             <a class="btn btn-success" href="/weads/report/details/<%= reports[i]._id %>">Xem chi tiết</a>
           </td>
@@ -102,8 +100,7 @@
     let reports = document.getElementsByClassName('report-select');
     
     Array.from(reports).forEach(function(report){
-      console.log(report.value);
-      if (report.value === option) {
+      if (report.value == "<%- option%>") {
         report.checked = true;
       }
     });
@@ -113,20 +110,12 @@
 
 <script>
   $(document).ready(async function () {
-    $("#ward-select").change(function () {
-      if ($(this).val() === 'all') {
-        window.location.href = "/weads/report"
-      } else {
-        window.location.href = "/weads/report/ward/" + $(this).val()
-      }
-    })
 
     $(".report-select").change(function () {
-      if ($(this).val() === 'all') {
-        window.location.href = "/weads/report";
-      } else {
-        window.location.href = "/weads/report/department/" + $(this).val();
-      }
+      if (window.location.pathname.includes('?'))
+        window.location.href = window.location.pathname.split('?')[0] + '?district=<%- currentDistrict %>&ward=<%- currentWard %>&option=' + $(this).val();
+      else 
+        window.location.href = window.location.pathname.split('?')[0] + '?district=<%- currentDistrict %>&ward=<%- currentWard %>&option=' + $(this).val();
     });
   })
 </script>

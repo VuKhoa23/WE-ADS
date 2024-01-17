@@ -149,7 +149,7 @@
               <textarea placeholder="Nhập cách thức xử lí cho vấn đề này" class="solution" disabled><%- report.information %></textarea>
             <% } %>
             <% if (report.state == 'Processing') { %>
-              <textarea placeholder="Nhập cách thức xử lí cho vấn đề này" class="solution"></textarea>
+              <textarea placeholder="Nhập cách thức xử lí cho vấn đề này" class="solution" required></textarea>
             <% } %>
         </div>
       <% } %>
@@ -157,7 +157,7 @@
     <div style="min-height: 50px;" class="card-footer">
       <form class="d-flex justify-content-center" id="resolve-form">
         <% if (report.state == 'Processing') { %>
-        <button type="submit" class="resolve-submit btn btn-success">Đã gải quyết <i class="bi bi-check2"></i></button>
+        <button type="submit" class="resolve-submit btn btn-success">Đã giải quyết <i class="bi bi-check2"></i></button>
         <% } %>
         <% if (report.state == 'Waiting') { %>
           <button type="submit" id="change-state-btn" class="btn btn-primary">Đang giải quyết <i class="bi bi-arrow-clockwise"></i></button>
