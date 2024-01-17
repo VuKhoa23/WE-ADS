@@ -6,6 +6,8 @@ const Officer = require("../model/officer");
 const UpdateRequest = require("../model/updateRequest");
 const { ObjectId } = require('mongodb');
 const LocationType = require("../model/locationType");
+const District = require("../model/district");
+const Ward = require("../model/ward");
 const AdFormat = require("../model/adFormat");
 const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
 const { uploadAds } = require("../middlewares/fileUploadMiddleware");
@@ -145,9 +147,35 @@ router.get("/view-by-ward", async (req, res)=>{
 
 
 router.get('/allAdPlacement', async function(req, res) {
-  const adPlacements = await Place.find({});
+  let currentDistrict = res.locals.user.district || req.query.district;
+  let currentWard = res.locals.user.ward || req.query.ward;
+  let adPlacements = [];
+  if (currentDistrict && currentWard) {
+    adPlacements = await Place.find({ district: currentDistrict, ward: currentWard });
+  }
+  else if (currentDistrict && !currentWard) {
+    adPlacements = await Place.find({ district: currentDistrict });
+  }
+  else  {
+    adPlacements = await Place.find({});
+  }
+
+  let wardList = [];
+  const districtList = await District.find({});
+
+  if (currentDistrict) {
+    wardList = await Ward.find().populate('district');
+    wardList = wardList.filter(ward => {
+      return ward.district.name == currentDistrict;
+    });
+  }
+
   res.render("department/adPlacement", {
     announce: null,
+    currentDistrict: currentDistrict? currentDistrict : 'Tất cả',
+    districtList,
+    wardList,
+    currentWard: currentWard? currentWard : 'Tất cả',
     adPlacements: adPlacements,
     username: res.locals.user ? res.locals.user.username : null,
     role: res.locals.user ? res.locals.user.role : null,

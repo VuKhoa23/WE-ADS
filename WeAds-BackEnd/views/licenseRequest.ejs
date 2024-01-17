@@ -3,7 +3,7 @@
   <div class="row justify-content-center col-12 col-sm-11 col-md-10 col-lg-8">
     <form class="license-form">
       <div class="license-form-header">
-        <a href="/weads/place/view-all" class="btn btn-outline-success back-btn">Trở lại</a>
+        <a href="/weads/place/allAdPlacement" class="btn btn-outline-success back-btn">Trở lại</a>
         <h3 class="license-form-title">Cấp phép quảng cáo</h3>
       </div>
       <div class="license-form-row">
@@ -100,7 +100,7 @@
       timer: null
     }).then((result) => {
       if (result.isConfirmed) {
-        window.location.href = '/weads/place/view-all';
+        window.location.href = '/weads/place/allAdPlacement';
       }
     });
   }
