@@ -7,13 +7,19 @@ const Advertisement = require("../model/advertisement")
 const AdFormat = require("../model/adFormat");
 const ReportType = require("../model/reportType")
 
-router.get('/department/create', (req, res) => {
+router.get('/department/create', async (req, res) => {
+  const districts = await District.find({},null,{lean:true});
+  for(let district of districts){
+    const wards = await Ward.find({district: district._id},null,{lean:true});
+    district.wards = wards;
+  }
   res.render("department/create-account", {
     username: res.locals.user.username,
     role: res.locals.user.role,
     emailMessage: null,
     usernameMessage: null,
-    body: null
+    body: null,
+    districts: districts
   })
 });
 
@@ -31,10 +37,22 @@ router.post('/department/create', async (req, res) => {
   }
 
   if(usernameMessage === null && emailMessage === null){
+    if (req.body.role == 'Department') {
+      req.body.district = undefined;
+      req.body.ward = undefined;
+    }
+    else if (req.body.role == 'District') {
+      req.body.ward = undefined;
+    }
     const officer = await Officer.create(req.body)
     console.log(req.body.role)
     res.redirect("/weads/home?createSuccess=true")
     return
+  }
+  const districts = await District.find({},null,{lean:true});
+  for(let district of districts){
+    const wards = await Ward.find({district: district._id},null,{lean:true});
+    district.wards = wards
   }
 
   res.render("department/create-account", {
@@ -43,6 +61,7 @@ router.post('/department/create', async (req, res) => {
     body: req.body,
     username: res.locals.user.username,
     role: res.locals.user.role,
+    districts: districts
   })
 })
 
@@ -297,10 +316,14 @@ router.post('/department/assignment/:_id', async function(req, res){
   const id = req.params._id;
   const district = req.body.district;
   const ward = req.body.ward;
+  const role = req.body.role
 
   console.log(req.body);
-
-  const officer = await Officer.findByIdAndUpdate(id, {district: district, ward: ward});
+  if(role === "district"){
+    const officer = await Officer.findByIdAndUpdate(id, {district: district});
+  }else{
+    const officer = await Officer.findByIdAndUpdate(id, {district: district, ward: ward});
+  }
   res.redirect('/weads/department/assignment');
 })
 
