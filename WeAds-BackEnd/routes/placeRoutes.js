@@ -6,6 +6,8 @@ const Officer = require("../model/officer");
 const UpdateRequest = require("../model/updateRequest");
 const { ObjectId } = require('mongodb');
 const LocationType = require("../model/locationType");
+const District = require("../model/district");
+const Ward = require("../model/ward");
 const AdFormat = require("../model/adFormat");
 const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
 const { uploadAds } = require("../middlewares/fileUploadMiddleware");
@@ -81,39 +83,39 @@ router.get("/details/:placeId", async (req, res)=>{
   res.json(result)
 })
 
-router.get("/view-all", async (req, res)=>{
-  let id = null;
-  if(res.locals.user){
-    id = res.locals.user._id;
-  }
-  if (!id) {
-    res.redirect('/weads/home');
-    return;
-  }
-  try {
-    const officer = await Officer.findById(id);
-    let places = null;
-    if (officer.role == 'Ward') {
-      places = await Place.find({ ward: officer.ward, district: officer.district });
-    }
-    else if (officer.role == 'District') {
-      places = await Place.find({ district: officer.district });
-    }
-    else {
-      places = await Place.find({});
-    }
-    res.render("department/adPlacement", {
-      announce: null,
-      adPlacements: places,
-      username: res.locals.user ? res.locals.user.username : null,
-      role: res.locals.user ? res.locals.user.role : null,
-    })
-  }
-  catch (err) {
-    console.log(err.message);
-    res.status(400).send("Some error occurred");
-  }
-});
+// router.get("/view-all", async (req, res)=>{
+//   let id = null;
+//   if(res.locals.user){
+//     id = res.locals.user._id;
+//   }
+//   if (!id) {
+//     res.redirect('/weads/home');
+//     return;
+//   }
+//   try {
+//     const officer = await Officer.findById(id);
+//     let places = null;
+//     if (officer.role == 'Ward') {
+//       places = await Place.find({ ward: officer.ward, district: officer.district });
+//     }
+//     else if (officer.role == 'District') {
+//       places = await Place.find({ district: officer.district });
+//     }
+//     else {
+//       places = await Place.find({});
+//     }
+//     res.render("department/adPlacement", {
+//       announce: null,
+//       adPlacements: places,
+//       username: res.locals.user ? res.locals.user.username : null,
+//       role: res.locals.user ? res.locals.user.role : null,
+//     })
+//   }
+//   catch (err) {
+//     console.log(err.message);
+//     res.status(400).send("Some error occurred");
+//   }
+// });
 
 router.get("/view-by-ward", async (req, res)=>{
   const places = await Place.find({ward: res.locals.user.ward})
@@ -145,9 +147,43 @@ router.get("/view-by-ward", async (req, res)=>{
 
 
 router.get('/allAdPlacement', async function(req, res) {
-  const adPlacements = await Place.find({});
+  let currentDistrict = res.locals.user.district || req.query.district;
+  let currentWard = res.locals.user.ward || req.query.ward;
+  let adPlacements = [];
+  if (currentDistrict && currentWard) {
+    adPlacements = await Place.find({ district: currentDistrict, ward: currentWard });
+  }
+  else if (currentDistrict && !currentWard) {
+    adPlacements = await Place.find({ district: currentDistrict });
+  }
+  else  {
+    adPlacements = await Place.find({});
+  }
+
+  let wardList = [];
+  const districtList = await District.find({});
+
+  if (currentDistrict) {
+    if (currentWard) {
+      wardList = await Ward.find({ name: currentWard });
+      if (wardList.length == 0) {
+        wardList = await Ward.find({ name: 'Quận' + currentWard.trim() });
+      }
+    }
+    else {
+      wardList = await Ward.find().populate('district');
+      wardList = wardList.filter(ward => {
+        return ward.district.name == currentDistrict;
+      });
+    }
+  }
+
   res.render("department/adPlacement", {
     announce: null,
+    currentDistrict: currentDistrict? currentDistrict : 'Tất cả',
+    districtList,
+    wardList,
+    currentWard: currentWard? currentWard : 'Tất cả',
     adPlacements: adPlacements,
     username: res.locals.user ? res.locals.user.username : null,
     role: res.locals.user ? res.locals.user.role : null,

@@ -2,7 +2,38 @@
 
 <div class="container mt-5">
     <h1>Danh sách các Điểm đặt quảng cáo</h1>
-
+    <span class="d-flex align-items-center">
+        <% if (role == 'Department') { %>
+            <div class="dropdown d-flex align-items-center mb-2 mx-2">
+                <h3 class="request-dropdown-label">Quận: </h3>
+                <button style="border:1px solid #000;min-width: 100px;" type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown">
+                    <%- currentDistrict %>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="/weads/place/allAdPlacement">Tất cả</a></li>
+                    <% for (var i = 0; i < districtList.length; i++) { %>
+                        <li><a class="dropdown-item" href="/weads/place/allAdPlacement?district=<%- districtList[i].name %>"><%- districtList[i].name %></a></li>
+                    <% } %>
+                </ul>
+            </div>
+        <% } %>
+        <% if (role == 'Department' || role == 'District') { %>
+            <% if (currentDistrict != 'Tất cả') { %>
+                <div class="dropdown d-flex align-items-center mb-2">
+                    <h3 class="request-dropdown-label">Phường: </h3>
+                    <button style="border:1px solid #000;min-width: 100px;" type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown">
+                        <%- currentWard %>
+                    </button>
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="/weads/place/allAdPlacement?district=<%- currentDistrict %>">Tất cả</a></li>
+                    <% for (var i = 0; i < wardList.length; i++) { %>
+                        <li><a class="dropdown-item" href="/weads/place/allAdPlacement?district=<%- currentDistrict %>&ward=<%- wardList[i].name %>"><%- wardList[i].name %></a></li>
+                    <% } %>
+                  </ul>
+                </div>
+            <% } %>
+        <% } %>
+    </span>
     <% if (adPlacements.length > 0) { %>
         <table class="table table-bordered">
             <thead>
