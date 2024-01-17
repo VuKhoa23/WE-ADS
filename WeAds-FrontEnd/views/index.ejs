@@ -30,16 +30,23 @@
       bottom: 0;
       width: 70%;
     }
+
+    #typeFilter {
+      margin-left: 100px;
+      margin-top: 20px;
+    }
   </style>
 </head>
 
 <body>
 
-  <select class="form-select m-3 w-25 " id="typeFilter">
+  <label for="typeFilter" class="position-absolute" style="left: 3%; top: 25px">Lọc: </label>
+  <select class="form-select w-25 " id="typeFilter">
     <option value="-1" selected>Tất cả</option>
     <option value="0">Chưa quy hoạch</option>
     <option value="1">Đã quy hoạch</option>
     <option value="2">Các điểm đã báo cáo</option>
+    <option value="3">Các điểm không có quảng cáo</option>
   </select>
   <div id="map">
     <div id="geocoder" class="geocoder"></div>
@@ -63,7 +70,6 @@
       }))
     }
     const reports = JSON.parse(window.localStorage.getItem('reports'))
-    console.log(reports)
     let geojson = null
     async function getData() {
       const response = await fetch("https://weads-backend.vercel.app/weads/place/geojson")
@@ -248,9 +254,13 @@
             const newGeoJSON = { ...geojson };
             newGeoJSON.features = geojson.features.filter(feature => feature.properties.adPlanned == pubType);
             map.getSource('data').setData(newGeoJSON);
-          } else {
+          } else if (pubType == 2) {
             const newGeoJSON = { ...geojson };
             newGeoJSON.features = geojson.features.filter(feature => feature.properties.isReport == 1);
+            map.getSource('data').setData(newGeoJSON);
+          } else if (pubType == 3) {
+            const newGeoJSON = { ...geojson };
+            newGeoJSON.features = geojson.features.filter(feature => feature.properties.noAds == 1);
             map.getSource('data').setData(newGeoJSON);
           }
         };
