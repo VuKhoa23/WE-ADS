@@ -1,4 +1,4 @@
-function infoAlert(name, address, index, id, isReported, reportId, placeImage) {
+function infoAlert(name, address, index, id, isReported, reportId, placeImage, ward, district) {
   if(!isReported){
     return `
     <div style="padding-right: 1rem" class="alert alert-success alert-dismissible fade show m-auto mb-2 mt-1 row" role="alert" style="font-size: 13px; width: 90%">
@@ -8,7 +8,9 @@ function infoAlert(name, address, index, id, isReported, reportId, placeImage) {
           <p class="text-center">Thông tin địa điểm</p>
           <hr>
           <strong>${name}</strong> <br>
-          Địa chỉ: ${address}
+          Địa chỉ: ${address}<br>
+          Phường: ${ward}<br>
+          Quận: ${district}
         </div>
       </span>
       <button type="button" class="btn-close m-2" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -31,7 +33,9 @@ function infoAlert(name, address, index, id, isReported, reportId, placeImage) {
           <p class="text-center">Thông tin địa điểm</p>
           <hr>
           <strong>${name}</strong> <br>
-          Địa chỉ: ${address}
+          Địa chỉ: ${address}<br>
+          Phường: ${ward}<br>
+          Quận: ${district}
         </div>
       </span>
       <button type="button" class="btn-close m-2" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -49,7 +53,7 @@ function infoAlert(name, address, index, id, isReported, reportId, placeImage) {
   
 }
 
-function warnAlert(name, address, ward, district, coordinates) {
+function warnAlert(name, address, ward, district, coordinates, ward, district) {
   return `
     <div style="padding-right: 1rem" class="alert alert-success alert-dismissible fade show m-auto mb-2 mt-1 row" role="alert" style="font-size: 13px; width: 90%">
       <i style="font-size:17px;margin-top: 10px" class="fa-solid fa-check"></i>
@@ -58,7 +62,9 @@ function warnAlert(name, address, ward, district, coordinates) {
           <p class="text-center">Thông tin địa điểm</p>
           <hr>
           <strong>${name}</strong> <br>
-          Địa chỉ: ${address}
+          Địa chỉ: ${address}<br>
+          Phường: ${ward}<br>
+          Quận: ${district}
         </div>
       </span>
       <button type="button" class="btn-close m-2" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -78,7 +84,9 @@ function unpersistedAlert(name, address, id){
         Thông tin địa điểm
         <hr>
         <strong>${name}</strong> <br>
-        ${address}
+        ${address}<br>
+        Phường: ${ward}<br>
+        Quận: ${district}
       </div>
       <button type="button" class="btn-close m-2" data-bs-dismiss="alert" aria-label="Close"></button>
       <br>
