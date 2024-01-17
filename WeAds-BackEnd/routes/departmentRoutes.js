@@ -11,7 +11,7 @@ router.get('/department/create', async (req, res) => {
   const districts = await District.find({},null,{lean:true});
   for(let district of districts){
     const wards = await Ward.find({district: district._id},null,{lean:true});
-    district.wards = wards
+    district.wards = wards;
   }
   res.render("department/create-account", {
     username: res.locals.user.username,
@@ -37,6 +37,13 @@ router.post('/department/create', async (req, res) => {
   }
 
   if(usernameMessage === null && emailMessage === null){
+    if (req.body.role == 'Department') {
+      req.body.district = undefined;
+      req.body.ward = undefined;
+    }
+    else if (req.body.role == 'District') {
+      req.body.ward = undefined;
+    }
     const officer = await Officer.create(req.body)
     console.log(req.body.role)
     res.redirect("/weads/home?createSuccess=true")
