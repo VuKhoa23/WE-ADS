@@ -36,33 +36,54 @@ router.get("/details/:id", async (req, res) => {
 });
 
 router.get("/", async (req, res) => {
-  let reports = null
-  if(res.locals.user.role === 'District'){
-    reports = await Report.find({district: res.locals.user.district})
+  let option = req.query.option || "all";
+  let currentDistrict = res.locals.user.district || req.query.district;
+  let currentWard = res.locals.user.ward || req.query.ward;
+  if (currentDistrict == 'Tất cả')
+    currentDistrict = undefined;
+  if (currentWard == 'Tất cả')
+    currentWard = undefined;
+  let reports = [];
+
+  let state = "";
+  if (parseInt(option) == 0)
+    state = 'Waiting';
+  else if (parseInt(option) == 1)
+    state = 'Processing';
+  else 
+    state = 'Done';
+
+  if (currentDistrict && currentWard) {
+    reports = await Report.find({ district: currentDistrict, ward: currentWard });
   }
-  else if(res.locals.user.role === 'Ward'){
-    reports = await Report.find({ward: res.locals.user.ward})
+  else if (currentDistrict && !currentWard) {
+    reports = await Report.find({ district: currentDistrict });
   }
-  else {
-    reports = await Report.find({})
-    res.render("department/viewReport", { 
-      reports: reports, 
-      wards: undefined, 
-      option: 'all',
-      role: res.locals.user.role,
-      username: res.locals.user.username
-    });
-    return;
+  else  {
+    reports = await Report.find({});
   }
 
-  const district = await District.findOne({name: res.locals.user.district});
-  console.log(district);
-  const wards = await Ward.find({district: district._id});
-  console.log(wards);
+  console.log(state);
+  if (option != "all") {
+    reports = reports.filter(report => report.state == state);
+  }
+
+  let wardList = [];
+  const districtList = await District.find({});
+
+  if (currentDistrict) {
+    wardList = await Ward.find().populate('district');
+    wardList = wardList.filter(ward => {
+      return ward.district.name == currentDistrict;
+    });
+  }
   res.render("department/viewReport", { 
-    reports: reports, 
-    wards: wards,
-    option: 'all',
+    reports: reports,
+    currentDistrict: currentDistrict? currentDistrict : 'Tất cả',
+    districtList,
+    wardList,
+    option,
+    currentWard: currentWard? currentWard : 'Tất cả', 
     role: res.locals.user.role,
     username: res.locals.user.username
   });
@@ -90,22 +111,43 @@ router.get("/ward/:val", async (req, res) => {
 
 router.get("/department/:option", async (req, res) => {
   const option = req.params.option;
-  console.log('option ', option)
-  let reports = null;
-  if(parseInt(option) === 0){
-    reports = await Report.find({state: 'Waiting'});
-  }
-  if(parseInt(option) === 1){
-    reports = await Report.find({state: 'Processing'});
-  }
-  if(parseInt(option) === 2){
-    reports = await Report.find({state: 'Done'});
-  }
-  console.log(reports);
+  let state = "";
+  if (parseInt(option) == 0)
+    state = 'Waiting';
+  else if (parseInt(option) == 1)
+    state = 'Processing';
+  else 
+    state = 'Done';
+  let currentDistrict = res.locals.user.district || req.query.district;
+  let currentWard = res.locals.user.ward || req.query.ward;
+  let reports = [];
 
+  if (currentDistrict && currentWard) {
+    reports = await Report.find({ state, district: currentDistrict, ward: currentWard });
+  }
+  else if (currentDistrict && !currentWard) {
+    reports = await Report.find({ state, district: currentDistrict });
+  }
+  else  {
+    reports = await Report.find({state});
+  }
+
+  let wardList = [];
+  const districtList = await District.find({});
+
+  if (currentDistrict) {
+    wardList = await Ward.find().populate('district');
+    wardList = wardList.filter(ward => {
+      return ward.district.name == currentDistrict;
+    });
+  }
   res.render("department/viewReport", { 
-    reports: reports, 
-    option: option,
+    reports: reports,
+    currentDistrict: currentDistrict? currentDistrict : 'Tất cả',
+    districtList,
+    wardList,
+    currentWard: currentWard? currentWard : 'Tất cả', 
+    option: 'all',
     role: res.locals.user.role,
     username: res.locals.user.username
   });

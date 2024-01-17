@@ -110,6 +110,8 @@
           const name = result.features[0].text;
           let address = result.features[0].place_name;
           address = address.replace(name + ", ", "")
+          const ward = result.features[0].context[0].text
+          const district = result.features[0].context[2].text
 
           const el = document.createElement("div");
           if (place.properties.adPlanned === true) {
@@ -122,7 +124,7 @@
           el.addEventListener("click", (e) => {
             e.stopPropagation();
             const div = document.createElement("div")
-            div.innerHTML = infoAlert(name, address, index, place.properties.placeId, '<%- role %>',place.properties.placeImage)
+            div.innerHTML = infoAlert(name, address, index, place.properties.placeId, '<%- role %>',place.properties.placeImage, ward, district);
             notiContainer.prepend(div);
           }, false);
           // make a marker for each feature and add to the map

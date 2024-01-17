@@ -28,13 +28,13 @@ Router.get('/create/:id', async (req, res) => {
   const id = req.params.id;
   const adTypes = await AdTypes.find({});
   if (!id) {
-    res.redirect('/weads/place/view-all');
+    res.redirect('/weads/place/allAdPlacement');
     return;
   }
   try {
     const ad = await Ad.findById(id).populate('place');
     if (!ad) {
-      res.redirect('/weads/place/view-all');
+      res.redirect('/weads/place/allAdPlacement');
       return;
     }
 
@@ -64,7 +64,7 @@ Router.get('/create/:id', async (req, res) => {
   }
   catch (err) {
     console.log(err.message);
-    res.redirect('/weads/place/view-all');
+    res.redirect('/weads/place/allAdPlacement');
     return;
   }
 });

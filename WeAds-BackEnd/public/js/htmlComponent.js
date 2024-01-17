@@ -1,4 +1,4 @@
-function infoAlert(name, address, index, placeId, role, placeImage) {
+function infoAlert(name, address, index, placeId, role, placeImage, ward, district) {
   if(role === "Department"){
     return `
     <div style="padding-right: 1rem" class="alert alert-success alert-dismissible fade show m-auto mb-2 mt-1 row" role="alert" style="font-size: 13px; width: 90%">
@@ -8,7 +8,9 @@ function infoAlert(name, address, index, placeId, role, placeImage) {
           <p class="text-center">Thông tin địa điểm</p>
           <hr>
           <strong>${name}</strong> <br>
-          Địa chỉ: ${address}
+          Địa chỉ: ${address}<br>
+          Phường: ${ward}<br>
+          Quận: ${district}
         </div>
       </span>
       <button type="button" class="btn-close m-2" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -32,7 +34,9 @@ function infoAlert(name, address, index, placeId, role, placeImage) {
           <p class="text-center">Thông tin địa điểm</p>
           <hr>
           <strong>${name}</strong> <br>
-          Địa chỉ: ${address}
+          Địa chỉ: ${address}<br>
+          Phường: ${ward}<br>
+          Quận: ${district}
         </div>
       </span>
       <button type="button" class="btn-close m-2" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -60,7 +64,9 @@ function warnAlert(name, address, role, coordinates, ward, district) {
           <p class="text-center">Thông tin địa điểm</p>
           <hr>
           <strong>${name}</strong> <br>
-          Địa chỉ: ${address}
+          Địa chỉ: ${address}<br>
+          Phường: ${ward}<br>
+          Quận: ${district}
         </div>
       </span>
       <button type="button" class="btn-close m-2" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -79,7 +85,9 @@ function warnAlert(name, address, role, coordinates, ward, district) {
           <p class="text-center">Thông tin địa điểm</p>
           <hr>
           <strong>${name}</strong> <br>
-          Địa chỉ: ${address}
+          Địa chỉ: ${address}<br>
+          Phường: ${ward}<br>
+          Quận: ${district}
         </div>
       </span>
       <button type="button" class="btn-close m-2" data-bs-dismiss="alert" aria-label="Close"></button>

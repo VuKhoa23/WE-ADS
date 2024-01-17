@@ -150,6 +150,9 @@
         let address = result.features[0].place_name;
         address = address.replace(name + ", ", "")
 
+        const ward = result.features[0].context[0].text
+        const district = result.features[0].context[2].text
+
         const el = document.createElement("div");
         if (place.properties.adPlanned === true) {
           el.className = "planned-marker";
@@ -162,7 +165,7 @@
           e.stopPropagation();
           const div = document.createElement("div")
           if (place.properties.adId === null && place.properties.placeId === null) {
-            div.innerHTML = unpersistedAlert(name, address, place.properties.reportId)
+            div.innerHTML = unpersistedAlert(name, address, place.properties.reportId, ward, district)
             notiContainer.prepend(div);
           }
           else {
@@ -177,7 +180,7 @@
                 }
               }
             }
-            div.innerHTML = infoAlert(name, address, index, place.properties.placeId, isReported, reportId, place.properties.placeImage)
+            div.innerHTML = infoAlert(name, address, index, place.properties.placeId, isReported, reportId, place.properties.placeImage, ward, district)
             notiContainer.prepend(div);
           }
         }, false);
@@ -397,7 +400,7 @@
           const district = result.features[0].context[2].text
 
           const div = document.createElement("div")
-          div.innerHTML = warnAlert(name, address, ward, district, coordinates)
+          div.innerHTML = warnAlert(name, address, ward, district, coordinates, ward, district)
           notiContainer.prepend(div);
         });
 
