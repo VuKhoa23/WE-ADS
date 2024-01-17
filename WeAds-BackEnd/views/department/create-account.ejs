@@ -40,6 +40,13 @@
       </div>
     </div>
 
+    <div class="mb-3 form-group row">
+      <label for="phone" class="form-label col-3 col-lg-2 create-account-label">Số điện thoại:</label>
+      <div class="col-9">
+        <input type="text" class="form-control create-account-input" id="phone" name="phone" <%if(body){%> value="<%- body.phone %>" <% } %> required>
+      </div>
+    </div>
+
 
     <div class="mb-3 form-group row">
       <label for="role" class="form-label col-3 col-lg-2 create-account-label">Cấp cán bộ:</label>
@@ -53,39 +60,67 @@
     </div>
 
 
-    <div class="mb-3 form-group row">
+    <div id="district-select-parent" class="mb-3 form-group row">
       <label for="district" class="form-label col-3 col-lg-2 create-account-label">Quận:</label>
       <div class="col-9">
-        <input id="district-input" type="text" class="form-control create-account-input" id="district" name="district" <%if(body){%> value="<%- body.district %>" <% } %> required>
+        <select id="district-select" style="border:1px solid #ccc; border-radius: 5px;width:100%;padding: 6px;outline: none;text-align: center;" name="district" id="district">
+          <% for (var i = 0; i < districts.length; i++) { %>
+            <option style="width: 100%;"><%- districts[i].name %></option>
+          <% } %>
+        </select>
       </div>
     </div>
 
-    <div class="mb-3 form-group row">
+    <div id="ward-select-parent" class="mb-3 form-group row">
       <label for="ward" class="form-label col-3 col-lg-2 create-account-label">Phường:</label>
       <div class="col-9">
-        <input id="ward-input" type="text" class="form-control create-account-input" id="ward" name="ward" <%if(body){%> value="<%- body.ward %>" <% } %> required>
+        <select class="ward-select" style="border:1px solid #ccc; border-radius: 5px;width:100%;padding: 6px;outline: none;text-align: center;" district="<%- districts[0].name %>" name="ward">
+          <% for (var i = 0; i < districts[0].wards.length; i++) { %>
+            <option style="width: 100%;"><%- districts[0].wards[i].name %></option>
+          <% } %>
+        </select>
+        <% for (var i = 1; i < districts.length; i++) { %>
+          <select class="no-display ward-select" style="border:1px solid #ccc; border-radius: 5px;width:100%;padding: 6px;outline: none;text-align: center;" district="<%- districts[i].name %>"  name="other">
+          <% for (var j = 0; j < districts[i].wards.length; j++) { %>
+            <option style="width: 100%;"><%- districts[i].wards[j].name %></option>
+          <% } %>
+          </select>
+        <% } %>
       </div>
-
-      <div class="text-center ">
-        <button type="submit" class="btn btn-success create-account-submit">Tạo tài khoản</button>
-      </div>
-
+    </div>
+    <div class="text-center ">
+      <button type="submit" class="btn btn-success create-account-submit">Tạo tài khoản</button>
     </div>
 </form>
-
 <script>
+  $("#district-select").on('change', function() {
+    const districtName = $(this).val();
+    const wardSelects = $(".ward-select");
+    $(".ward-select").each(function(index,element) {
+      if ($(element).attr('district') == districtName) {
+        $(element).prop('name', 'ward');
+        $(element).removeClass('no-display');
+      }
+      else {
+        $(element).removeProp('name');
+        $(element).prop('name', 'other');
+        $(element).addClass('no-display');
+      }
+    });
+  });
   $('.create-account-select').on('change', function() {
     const selected = $(this).find(":selected").val();
     if (selected == 'Department') {
-      $("#district-input").prop('disabled', true);
-      $("#ward-input").prop('disabled', true);
+      $("#district-select-parent").addClass('no-display');
+      $("#ward-select-parent").addClass('no-display');
     }
     else if (selected == 'District') {
-      $("#ward-input").prop('disabled', true);
+      $("#ward-select-parent").addClass('no-display');
+      $("#district-select-parent").removeClass('no-display');
     }
     else {
-      $("#district-input").prop('disabled', false);
-      $("#ward-input").prop('disabled', false);
+      $("#district-select-parent").removeClass('no-display');
+      $("#ward-select-parent").removeClass('no-display');
     }
   });
 </script>
