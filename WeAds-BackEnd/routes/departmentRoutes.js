@@ -7,13 +7,19 @@ const Advertisement = require("../model/advertisement")
 const AdFormat = require("../model/adFormat");
 const ReportType = require("../model/reportType")
 
-router.get('/department/create', (req, res) => {
+router.get('/department/create', async (req, res) => {
+  const districts = await District.find({},null,{lean:true});
+  for(let district of districts){
+    const wards = await Ward.find({district: district._id},null,{lean:true});
+    district.wards = wards
+  }
   res.render("department/create-account", {
     username: res.locals.user.username,
     role: res.locals.user.role,
     emailMessage: null,
     usernameMessage: null,
-    body: null
+    body: null,
+    districts: districts
   })
 });
 
@@ -36,6 +42,11 @@ router.post('/department/create', async (req, res) => {
     res.redirect("/weads/home?createSuccess=true")
     return
   }
+  const districts = await District.find({},null,{lean:true});
+  for(let district of districts){
+    const wards = await Ward.find({district: district._id},null,{lean:true});
+    district.wards = wards
+  }
 
   res.render("department/create-account", {
     emailMessage: emailMessage,
@@ -43,6 +54,7 @@ router.post('/department/create', async (req, res) => {
     body: req.body,
     username: res.locals.user.username,
     role: res.locals.user.role,
+    districts: districts
   })
 })
 
