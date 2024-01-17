@@ -24,7 +24,7 @@
 
                             <!-- Modal edit Ward -->
                             <div class="modal fade" id="editWardModal<%= i %>" tabindex="-1" aria-labelledby="editWardModalLabel<%= i %>" aria-hidden="true">
-                                <form action="/weads/department/places/editWard/<%= wards[i]._id %>" method="post" onsubmit="return validateEditWardForm()">
+                                <form action="/weads/department/places/editWard/<%= wards[i]._id %>" method="post">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
@@ -79,7 +79,7 @@
     
   <!-- Modal add Ward -->
   <div class="modal fade" id="addWardModal" tabindex="-1" aria-labelledby="addWardModalLabel" aria-hidden="true">
-    <form action="/weads/department/places/addWard/<%= district_id %>" method="post" onsubmit="return validateAddWardForm()">
+    <form action="/weads/department/places/addWard/<%= district_id %>" method="post">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -160,34 +160,6 @@
               }
           });
       }
-
-      function validateAddWardForm() {
-            var districtName = document.getElementById('new-name').value;
-            if (!districtName.startsWith('Phường')) {
-                Swal.fire({
-                    text: 'Tên phường phải bắt đầu bằng "Phường"',
-                    icon: 'error',
-                    showCancelButton: false,
-                    timer: 1500
-                })
-                return false;
-            }
-            return true;
-        }
-
-        function validateEditWardForm() {
-            var districtName = document.getElementById('edit-name').value;
-            if (!districtName.startsWith('Phường')) {
-                Swal.fire({
-                    text: 'Tên phường phải bắt đầu bằng "Phường"',
-                    icon: 'error',
-                    showCancelButton: false,
-                    timer: 1500
-                })
-                return false;
-            }
-            return true;
-        }
   </script>
 
 </div>
