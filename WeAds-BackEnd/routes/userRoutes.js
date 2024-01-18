@@ -32,6 +32,8 @@ router.get("/home", function (req, res, next) {
 });
 
 router.get('/user/edit-profile', async (req, res) => {
+  const officerDistrict = res.locals.user.district;
+  const officerWard = res.locals.user.ward;
   let officerId = null;
   if(res.locals.user){
     officerId = res.locals.user._id;
@@ -54,34 +56,9 @@ router.get('/user/edit-profile', async (req, res) => {
   res.render('editProfile', {
     user,
     username,
-    role
-  })
-});
-
-router.get('/user/edit-profile', async (req, res) => {
-  let officerId = null;
-  if(res.locals.user){
-    officerId = res.locals.user._id;
-  }
-  if (!officerId) {
-    res.redirect('/weads/home');
-    return;
-  }
-  
-  let username = null
-  if(res.locals.user){
-    username = res.locals.user.username
-  }
-
-  let role = null
-  if(res.locals.user){
-    role = res.locals.user.role
-  }
-  const user = await Officer.findOne({ _id: new ObjectId(officerId)});
-  res.render('editProfile', {
-    user,
-    username,
-    role
+    role,
+    officerDistrict,
+    officerWard,
   })
 });
 
