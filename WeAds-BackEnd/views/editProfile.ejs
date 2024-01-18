@@ -7,6 +7,40 @@
     </div>
 
     <div class="mb-3 form-group row">
+      <label for="email" class="form-label col-3 col-lg-2 create-account-label">Cấp cán bộ:</label>
+      <div class="col-9">
+        <p style="margin: 0;">
+          <% if (officerWard != undefined ) { %>
+            Phường
+          <% } else { %>
+            <% if (officerDistrict != undefined ) { %>
+              Quận
+            <% } else { %>
+              Sở
+            <% } %>
+          <% } %>
+        </p>
+      </div>
+    </div>
+
+    <div class="mb-3 form-group row">
+      <label for="email" class="form-label col-3 col-lg-2 create-account-label">Địa chỉ công tác:</label>
+      <div class="col-9">
+        <p style="margin: 0;">
+          <% if (officerWard != undefined ) { %>
+            <%- officerWard %>, 
+          <% } %>
+          <% if (officerDistrict != undefined ) { %>
+            <%- officerDistrict %>
+          <% } %>
+          <% if (officerWard == undefined && officerDistrict == undefined ) { %>
+            Sở VH-TT
+          <% } %>
+        </p>
+      </div>
+    </div>
+    
+    <div class="mb-3 form-group row">
       <label for="email" class="form-label col-3 col-lg-2 create-account-label">Google Email:</label>
       <div class="col-9">
         <input type="email" class="form-control create-account-input" id="email" name="email"  value="<%- user.email %>" required>
