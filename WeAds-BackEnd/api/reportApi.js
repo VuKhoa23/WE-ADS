@@ -13,4 +13,19 @@ router.get("/place/:placeId", async (req, res)=>{
   res.json(reports)
 })
 
+router.get("/officer/:district", async (req, res)=>{
+  const district = req.params.district
+  console.log(district)
+  const reports = await Report.find({district: district, reportCode: 2})
+  res.json(reports)
+})
+
+router.get("/officer/:district/:ward", async (req, res)=>{
+  const district = req.params.district
+  const ward = req.params.ward
+  console.log(district, ward)
+  const reports = await Report.find({district: district, ward: ward, reportCode: 2})
+  res.json(reports)
+})
+
 module.exports = router;

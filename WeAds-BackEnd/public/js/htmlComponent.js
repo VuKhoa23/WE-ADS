@@ -21,7 +21,7 @@ function infoAlert(name, address, index, placeId, role, placeImage, ward, distri
         </button>
         <a href="/weads/place/editAdPlacementForm/${placeId}" class="link-secondary w-50" target="_blank"><button class="btn btn-primary" style="font-size: 12px">Chỉnh sửa</button></a>
       </div>
-      ${placeImage != undefined? `<img style="border:1px solid #000;padding:0;" src="${placeImage}" alt="" />` : `<span></span>`}
+      ${placeImage != null? `<img style="border:1px solid #000;padding:0;" src="${placeImage}" alt="" />` : `<span></span>`}
     </div>
   `;
   }
@@ -52,6 +52,51 @@ function infoAlert(name, address, index, placeId, role, placeImage, ward, distri
   `;
   }
   
+}
+
+function unpersistedAlert(name, address, id, ward, district, isManaged) {
+  if(isManaged){
+    return `
+    <div style="padding-right: 1rem" class="alert alert-success alert-dismissible fade show m-auto mb-2 mt-1 row" role="alert" style="font-size: 13px; width: 90%">
+      <i style="font-size:17px;margin-top: 10px" class="fa-solid fa-check"></i>
+      <span class="d-flex justify-content-center">
+        <div class="col-9">
+          <p class="text-center">Thông tin địa điểm</p>
+          <hr>
+          <strong>${name}</strong> <br>
+          Địa chỉ: ${address}<br>
+          Phường: ${ward}<br>
+          Quận: ${district}
+        </div>
+      </span>
+      <button type="button" class="btn-close m-2" data-bs-dismiss="alert" aria-label="Close"></button>
+      <br>
+      <div class="d-flex justify-content-center align-items-center my-3">
+        <a class="link-secondary w-50" target="_blank" href="/weads/report/details/${id}"><button class="btn btn-primary" style="font-size: 12px">Xem báo cáo tại điểm này</button></a>
+      </div>
+    </div>
+  `;
+  }
+  return `
+    <div style="padding-right: 1rem" class="alert alert-success alert-dismissible fade show m-auto mb-2 mt-1 row" role="alert" style="font-size: 13px; width: 90%">
+      <i style="font-size:17px;margin-top: 10px" class="fa-solid fa-check"></i>
+      <span class="d-flex justify-content-center">
+        <div class="col-9">
+          <p class="text-center">Thông tin địa điểm</p>
+          <hr>
+          <strong>${name}</strong> <br>
+          Địa chỉ: ${address}<br>
+          Phường: ${ward}<br>
+          Quận: ${district}
+        </div>
+      </span>
+      <button type="button" class="btn-close m-2" data-bs-dismiss="alert" aria-label="Close"></button>
+      <br>
+      <div class="d-flex justify-content-center align-items-center my-3">
+        <a class="link-secondary w-50"><button class="btn btn-primary" style="font-size: 12px">Không thuộc phạm vi quản lí</button></a>
+      </div>
+    </div>
+  `;
 }
 
 function warnAlert(name, address, role, coordinates, ward, district) {

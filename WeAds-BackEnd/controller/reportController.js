@@ -17,6 +17,9 @@ module.exports.createReport = async (req, res, next) => {
   if(placeId === ""){
     placeId = null
   }
+  if(!coordinates){
+    coordinates = null
+  }
   try {
     const report = await Report.create({
       name,
@@ -30,7 +33,8 @@ module.exports.createReport = async (req, res, next) => {
       district,
       placeId,
       adId,
-      reportCode
+      reportCode,
+      coordinates
     });
     res.status(201).json({reportId: report._id, placeId: report.placeId, adId: report.adId, coordinates: coordinates });
   } catch (err) {

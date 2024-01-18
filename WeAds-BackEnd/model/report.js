@@ -45,7 +45,10 @@ const reportSchema = mongoose.Schema(
     },
     district: {
       type: String
-    }
+    },
+    coordinates:[{
+      type: Number
+    }]
   },
   { timestamps: true }
 );
