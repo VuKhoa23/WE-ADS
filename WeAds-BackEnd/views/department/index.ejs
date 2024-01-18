@@ -44,8 +44,11 @@
     <option value="1">Đã quy hoạch</option>
     <% if(role === "Ward"){%>
     <option value="2">Phường đang công tác</option>
-    <%} else { %>
+    <%} else if(role === "District") { %>
     <option value="3">Quận đang công tác</option>
+    <% } %>
+    <%if(role === "Ward" || role === "District"){ %>
+    <option value="4">Điểm bất kỳ bị báo cáo </option>
     <% } %>
   </select>
   <div id="map">
@@ -79,6 +82,42 @@
           place.properties.noAds = 0;
         }
       }
+      const ward = '<%- ward %>'
+      const district = '<%- district %>'
+      const role = '<%- role %>'
+      let reports = null
+      if (role == "District") {
+        const reportsRes = await fetch("http://localhost:3000/api/weads-admin/report/officer/" + district);
+        reports = await reportsRes.json()
+      } else if (role == "Ward") {
+        const reportsRes = await fetch("http://localhost:3000/api/weads-admin/report/officer/" + district + "/" + ward);
+        reports = await reportsRes.json()
+      }
+      console.log(reports)
+      for (let report of reports) {
+        const thePlace = {
+          type: "Feature",
+          geometry: {
+            type: "Point",
+            coordinates: report.coordinates,
+          },
+          properties: {
+            ads: [],
+            adType: "Điểm chưa được đăng ký",
+            placeImage: null,
+            ward: report.ward,
+            locationType: "Điểm chưa được đăng ký",
+            district: report.district,
+            adPlanned: 0,
+            placeId: null,
+            isReport: 1,
+            isPersisted: 0,
+            noAds: 1,
+            reportId: report._id
+          }
+        }
+        geojson.features.push(thePlace)
+      }
     }
 
 
@@ -108,7 +147,6 @@
           `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?country=vn&access_token=${mapboxgl.accessToken}`
         );
         const result = await response.json();
-        console.log(result)
         const name = result.features[0].text;
         let address = result.features[0].place_name;
         address = address.replace(name + ", ", "")
@@ -126,21 +164,53 @@
         el.addEventListener("click", (e) => {
           e.stopPropagation();
           const div = document.createElement("div")
-          div.innerHTML = infoAlert(name, address, index, place.properties.placeId, '<%- role %>', place.properties.placeImage, ward, district);
-          notiContainer.prepend(div);
+          if (place.properties.placeId != null) {
+            div.innerHTML = infoAlert(name, address, index, place.properties.placeId, '<%- role %>', place.properties.placeImage, ward, district);
+            notiContainer.prepend(div);
+          }
+          else {
+            let isManaged = 0
+            const theWard = '<%- ward %>'
+            const theDistrict = '<%- district %>'
+            const theRole = '<%- role %>'
+            if (theRole == "District") {
+              if (theDistrict == district) {
+                isManaged = 1
+              }
+            } else if (theRole == "Ward") {
+              if (theDistrict == district && theWard == ward) {
+                isManaged = 1
+              }
+            }
+            div.innerHTML = unpersistedAlert(name, address, place.properties.reportId, ward, district, isManaged);
+            notiContainer.prepend(div);
+          }
         }, false);
         // make a marker for each feature and add to the map
 
+        if (place.properties.placeId != null) {
+          const marker = new mapboxgl.Marker(el)
+            .setLngLat(place.geometry.coordinates)
+            .setPopup(new mapboxgl.Popup().setHTML(popUp(place.properties.adType, address, place.properties.locationType.join('/'), place.properties.adPlanned)))
+            .addTo(map)
 
-        const marker = new mapboxgl.Marker(el)
-          .setLngLat(place.geometry.coordinates)
-          .setPopup(new mapboxgl.Popup().setHTML(popUp(place.properties.adType, address, place.properties.locationType.join('/'), place.properties.adPlanned)))
-          .addTo(map)
+          const markerDiv = marker.getElement();
 
-        const markerDiv = marker.getElement();
+          markerDiv.addEventListener("mouseenter", () => marker.togglePopup());
+          markerDiv.addEventListener("mouseleave", () => marker.togglePopup());
+        } else {
+          const marker = new mapboxgl.Marker(el)
+            .setLngLat(place.geometry.coordinates)
+            .setPopup(new mapboxgl.Popup().setHTML(popUp("Điểm chưa được đăng ký", address, "", 0)))
+            .addTo(map)
 
-        markerDiv.addEventListener("mouseenter", () => marker.togglePopup());
-        markerDiv.addEventListener("mouseleave", () => marker.togglePopup());
+          const markerDiv = marker.getElement();
+
+          markerDiv.addEventListener("mouseenter", () => marker.togglePopup());
+          markerDiv.addEventListener("mouseleave", () => marker.togglePopup());
+        }
+
+
       });
 
       // locate the user
@@ -185,9 +255,13 @@
             const newGeoJSON = { ...geojson };
             newGeoJSON.features = geojson.features.filter(feature => (feature.properties.ward === '<%- ward %>' && feature.properties.district === '<%- district %>'));
             map.getSource('data').setData(newGeoJSON);
-          } else {
+          } else if (pubType == 3) {
             const newGeoJSON = { ...geojson };
             newGeoJSON.features = geojson.features.filter(feature => (feature.properties.district === '<%- district %>'));
+            map.getSource('data').setData(newGeoJSON);
+          } else {
+            const newGeoJSON = { ...geojson };
+            newGeoJSON.features = geojson.features.filter(feature => (feature.properties.isReport == 1));
             map.getSource('data').setData(newGeoJSON);
           }
         };
@@ -462,7 +536,6 @@
 
       const placeReportsRes = await fetch("http://localhost:3000/api/weads-admin/report/place/" + geojson.features[index].properties.placeId)
       const placeReports = await placeReportsRes.json()
-      console.log(placeReports)
       if (geojson.features[index].properties.ads.length == 0) {
         $("#pills-tabContent").html("Không có bảng quảng cáo nào")
       }
@@ -479,7 +552,6 @@
       } else {
         $("#next-ad-btn").css("display", "none")
       }
-      console.log(geojson.features[index].properties.placeId)
       populateDataToModal(geojson.features[index].properties.ads[adNum], address, index, adNum, geojson.features[index].properties.adPlanned, size, placeReports, geojson.features[index].properties)
       $("#ads-modal").modal("show");
     }

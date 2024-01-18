@@ -25,7 +25,8 @@ const place = new Schema({
       type: Number
     },
     placeImage:{
-      type: String
+      type: String,
+      default: null
     },
     address: {
       type: String
