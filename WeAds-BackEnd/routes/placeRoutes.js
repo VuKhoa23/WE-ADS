@@ -61,7 +61,11 @@ router.get("/geojson", async (req, res)=>{
         adScale: ad.adScale,
         adName: ad.adName,
         adImages: [],
-        adId: ad._id
+        adId: ad._id,
+        endDate: ad.endDate.toLocaleDateString("vi-VN"),
+        companyName: ad.companyName,
+        companyEmail: ad.companyEmail,
+        companyPhone: ad.companyPhone
       }
       ad.adImages.forEach(img=>{
         theAd.adImages.push({url: img})
