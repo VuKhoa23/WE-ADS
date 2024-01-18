@@ -369,6 +369,7 @@
     let notiContainer = document.getElementById("notification-container");
 
     function populateDataToModal(ad, address, index, adNum, planned, size, placeReports, place) {
+      let noads = 0
       if (size > 0) {
         let indicator = document.getElementById("carousel-indicators-id");
         indicator.innerHTML = "";
@@ -391,6 +392,10 @@
           `
         }
 
+        $(".modal-body").css("display", "block")
+        $(".modal-footer").css("display", "block")
+        $("#message").html("")
+
         $("#modal-header").html(ad.adName + " - QC số " + (adNum + 1))
         $("#modal-address").html("Địa chỉ: " + address)
         $("#modal-scale").html("Kích thước: " + ad.adScale)
@@ -409,6 +414,10 @@
           $("#modal-companyPhone").html("")
           $("#modal-date").html("")
         }
+      } else {
+        $(".modal-body").css("display", "none")
+        $("#message").html("Không có bảng quảng cáo nào")
+        $("#next-ad-btn").css("display", "none")
       }
       const role = '<%- role %>'
       if (role == "Ward" && (place.ward != '<%- ward %>' || place.district != '<%- district%>')) {
@@ -421,13 +430,16 @@
         $("#profile-tab-pane").html("Không có báo cáo nào ở điểm này")
       } else {
         for (let report of placeReports) {
+          let container = document.getElementById("profile-tab-pane");
+          container.innerHTML = ""
           let html = `
               <button class="btn btn-primary m-3">Báo cáo ${report.adId == null ? "địa điểm" : "bảng quảng cáo"} được gửi bởi ${report.email}</button>
             `
           let link = document.createElement("a")
           link.setAttribute("href", "/weads/report/details/" + report._id)
+          link.setAttribute("target", "_blank")
+          link.setAttribute("class", "d-block")
           link.innerHTML = html;
-          let container = document.getElementById("profile-tab-pane");
           container.prepend(link)
         }
       }
