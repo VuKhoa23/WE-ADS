@@ -4,65 +4,65 @@
     <h1>Danh sách Phường thuộc <%= district_name %></h1>
 
     <% if (wards.length > 0) { %>
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>STT</th>
-                    <th>Tên</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <% for (let i = 0; i < wards.length; i++) { %>
-                    <tr>
-                        <td><%= i + 1 %></td>
-                        <td><%= wards[i].name %></td>
-                        <td>
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editWardModal<%= i %>">
-                                <i class="bi bi-pencil-square"></i>
-                            </button>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>STT</th>
+                <th>Tên</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <% for (let i = 0; i < wards.length; i++) { %>
+            <tr>
+                <td><%= i + 1 %></td>
+                <td>Phường <%= wards[i].name %></td>
+                <td>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editWardModal<%= i %>">
+                        <i class="bi bi-pencil-square"></i>
+                    </button>
 
-                            <!-- Modal edit Ward -->
-                            <div class="modal fade" id="editWardModal<%= i %>" tabindex="-1" aria-labelledby="editWardModalLabel<%= i %>" aria-hidden="true">
-                                <form action="/weads/department/places/editWard/<%= wards[i]._id %>" method="post">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLabel<%= i %>">ĐỔI TÊN PHƯỜNG</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div class="form-group">
-                                                    <label for="ex-name<%= i %>">Tên phường cũ: </label>
-                                                    <br>
-                                                    <input type="text" class="form-control" id="ex-name<%= i %>" name="ex-name" value="<%= wards[i].name %>" readonly>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="name">Nhập tên phường mới (vd: Phường 1, Phường Nguyễn Cư Trinh): </label>
-                                                    <br>
-                                                    <input type="text" class="form-control" id="edit-name" name="name" required>
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="submit" class="btn btn-primary">Cập nhật</button>
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                                            </div>
+                    <!-- Modal edit Ward -->
+                    <div class="modal fade" id="editWardModal<%= i %>" tabindex="-1" aria-labelledby="editWardModalLabel<%= i %>" aria-hidden="true">
+                        <form action="/weads/department/places/editWard/<%= wards[i]._id %>" method="post">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel<%= i %>">ĐỔI TÊN PHƯỜNG</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <label for="ex-name<%= i %>">Tên phường cũ: </label>
+                                            <br>
+                                            <input type="text" class="form-control" id="ex-name<%= i %>" name="ex-name" value="<%= wards[i].name %>" readonly>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="name">Nhập tên phường mới (vd: 1, Nguyễn Cư Trinh): </label>
+                                            <br>
+                                            <input type="text" class="form-control" id="edit-name" name="name" required>
                                         </div>
                                     </div>
-                                </form>
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-primary">Cập nhật</button>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                    </div>
+                                </div>
                             </div>
-                
-                                <button class="btn btn-danger" onclick="showDeleteConfirmation('<%= wards[i]._id %>')">
-                                    <i class="bi bi-trash"></i>
-                                </button>
+                        </form>
+                    </div>
 
-                        </td>
-                    </tr>
-                <% } %>
-            </tbody>
-        </table>
+                    <button class="btn btn-danger" onclick="showDeleteConfirmation('<%= wards[i]._id %>')">
+                        <i class="bi bi-trash"></i>
+                    </button>
+
+                </td>
+            </tr>
+            <% } %>
+        </tbody>
+    </table>
     <% } else { %>
-        <p>Không có phường nào trong danh sách.</p>
+    <p>Không có phường nào trong danh sách.</p>
     <% } %>
 
     <a href="/weads/department/places/allDistrict">
@@ -76,62 +76,62 @@
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addWardModal">
         Thêm Phường
     </button>
-    
-  <!-- Modal add Ward -->
-  <div class="modal fade" id="addWardModal" tabindex="-1" aria-labelledby="addWardModalLabel" aria-hidden="true">
-    <form action="/weads/department/places/addWard/<%= district_id %>" method="post">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">THÊM PHƯỜNG</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <div class="form-group">
-                <label for="new-name">Tên phường (vd: Phường 1, Phường Nguyễn Cư Trinh): </label>
-                <br>
-                <input type="text" class="form-control" id="new-name" name="name" required>
+
+    <!-- Modal add Ward -->
+    <div class="modal fade" id="addWardModal" tabindex="-1" aria-labelledby="addWardModalLabel" aria-hidden="true">
+        <form action="/weads/department/places/addWard/<%= district_id %>" method="post">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">THÊM PHƯỜNG</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="new-name">Tên phường (vd: Phường 1, Phường Nguyễn Cư Trinh): </label>
+                            <br>
+                            <input type="text" class="form-control" id="new-name" name="name" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Thêm</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="modal-footer">
-            <button type="submit" class="btn btn-primary">Thêm</button>
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-        </div>
-      </div>
+        </form>
     </div>
-    </form>
-  </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-  <% if (announce === 'delete') { %>
-      <script>
-          Swal.fire({
-              icon: 'success',
-              title: 'Xóa thành công',
-              showCancelButton: false,
-              timer: 1500
-          });
-      </script>
-  <% } else if (announce === 'create') { %>
-      <script>
-          Swal.fire({
-              icon: 'success',
-              title: 'Thêm phường thành công',
-              showCancelButton: false,
-              timer: 1500
-          });
-      </script>
-  <% } else if (announce === 'edit') { %>
-      <script>
-          Swal.fire({
-              icon: 'success',
-              title: 'Đổi tên thành công',
-              showCancelButton: false,
-              timer: 1500
-          });
-      </script>
-  <% } else if (announce === 'exist') { %>
+    <% if (announce === 'delete') { %>
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Xóa thành công',
+            showCancelButton: false,
+            timer: 1500
+        });
+    </script>
+    <% } else if (announce === 'create') { %>
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Thêm phường thành công',
+            showCancelButton: false,
+            timer: 1500
+        });
+    </script>
+    <% } else if (announce === 'edit') { %>
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Đổi tên thành công',
+            showCancelButton: false,
+            timer: 1500
+        });
+    </script>
+    <% } else if (announce === 'exist') { %>
     <script>
         Swal.fire({
             icon: 'error',
@@ -140,27 +140,27 @@
             timer: 1500
         });
     </script>
-<% } %>
-  
-  
-  <script>
-      function showDeleteConfirmation(wardId) {
-          Swal.fire({
-              title: 'Xác nhận xóa',
-              text: 'Bạn có chắc muốn xóa phường này?',
-              icon: 'warning',
-              showCancelButton: true,
-              confirmButtonColor: '#d33',
-              cancelButtonColor: '#3085d6',
-              confirmButtonText: 'Xóa',
-              cancelButtonText: 'Hủy'
-          }).then((result) => {
-              if (result.isConfirmed) {
-                  window.location.href = '/weads/department/places/deleteWard/' + wardId;
-              }
-          });
-      }
-  </script>
+    <% } %>
+
+
+    <script>
+        function showDeleteConfirmation(wardId) {
+            Swal.fire({
+                title: 'Xác nhận xóa',
+                text: 'Bạn có chắc muốn xóa phường này?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Xóa',
+                cancelButtonText: 'Hủy'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '/weads/department/places/deleteWard/' + wardId;
+                }
+            });
+        }
+    </script>
 
 </div>
 
