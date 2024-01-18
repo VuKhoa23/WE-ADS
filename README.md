@@ -17,4 +17,4 @@
 - Search for localhost:PORT/weads/home on browser
 - Backend URLS
   - Views: /weads/home, /weads/report
-  - Apis: /api/weads-admin/
+  - Apis: /api/weads-admin
