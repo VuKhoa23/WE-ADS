@@ -253,6 +253,29 @@ router.post('/addAdPlacement', uploadAds.fields([
 
 
 router.get('/deleteAdPlacement/:_id', async function(req, res) {
+  let currentDistrict = res.locals.user.district || req.query.district;
+  let currentWard = res.locals.user.ward || req.query.ward;
+  let adPlacements = [];
+  if (currentDistrict && currentWard) {
+    adPlacements = await Place.find({ district: currentDistrict, ward: currentWard });
+  }
+  else if (currentDistrict && !currentWard) {
+    adPlacements = await Place.find({ district: currentDistrict });
+  }
+  else  {
+    adPlacements = await Place.find({});
+  }
+
+  let wardList = [];
+  const districtList = await District.find({});
+
+  if (currentDistrict) {
+    wardList = await Ward.find().populate('district');
+    wardList = wardList.filter(ward => {
+      return ward.district.name == currentDistrict;
+    });
+  }
+  
   try {
     await Place.findByIdAndDelete({_id: req.params._id});
     const adPlacements = await Place.find({});
@@ -261,6 +284,12 @@ router.get('/deleteAdPlacement/:_id', async function(req, res) {
       adPlacements: adPlacements,
       username: res.locals.user ? res.locals.user.username : null,
       role: res.locals.user ? res.locals.user.role : null,
+      currentDistrict,
+      currentWard,
+      districtList,
+      wardList,
+      currentWard: currentWard? currentWard : 'Tất cả',
+      currentDistrict: currentDistrict? currentDistrict : 'Tất cả',
     });
   } catch (error) {
     res.status(500).json({message: error.message})
