@@ -11,7 +11,7 @@
 </head>
 
 <style>
-  .form-control{
+  .form-control {
     border: none
   }
 </style>
@@ -26,7 +26,7 @@
             <p class="card-text text-danger text-center"><%- error %></p>
             <form class="d-flex-column align-items-center" action="/weads/process-login" method="post">
               <div class="mb-3 form-input">
-                <label for="usernameInput" class="form-label">Tên tài khoản</label>
+                <label for="usernameInput" class="form-label">Email</label>
                 <div class="d-flex align-items-center justify-content-between">
                   <i class="bi bi-person-fill"></i>
                   <input type="email" class="form-control" id="usernameInput" name="email" required>
@@ -47,7 +47,7 @@
               <div class="mb-3 d-flex flex-column align-items-center">
                 <button type="submit" class="form-button">Đăng nhập</button>
                 <a class="btn google-button" href="/auth/google">
-                  <img class=" google-icon" src="/images/google_icon.png"/>
+                  <img class=" google-icon" src="/images/google_icon.png" />
                   Đăng nhập với google
                 </a>
               </div>

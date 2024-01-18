@@ -77,26 +77,43 @@
 </form>
 <script>
   function showSuccessModal() {
-    Swal.fire({
-      icon: 'success',
-      title: 'Đã cập nhật thông tin',
-      showCancelButton: false,
-      timer: null
-    }).then((result) => {
-      if (result.isConfirmed) {
-        window.location.href = '/weads/home';
-      }
-    });
-  }
-  function showErrorModal() {
-    Swal.fire({
-      icon: 'error',
-      title: 'Có lỗi xảy ra, vui lòng thử lại',
-      showCancelButton: false,
-      timer: null
-    });
-  }
-  $("#edit-account-form").on('submit', async function (event) {
+      Swal.fire({
+          icon: 'success',
+          title: 'Đã cập nhật thông tin',
+          showCancelButton: false,
+          timer: null
+      }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.href = '/weads/home';
+          }
+      });
+    }
+    function showEmailModal() {
+      Swal.fire({
+          icon: 'error',
+          title: 'Email đã được sử dụng bởi cán bộ khác',
+          showCancelButton: false,
+          timer: null
+      });
+    }
+    function showUsernameModal() {
+      Swal.fire({
+          icon: 'error',
+          title: 'Tên tài khoản đã tồn tại',
+          showCancelButton: false,
+          timer: null
+      });
+    }
+    function showErrorModal() {
+      Swal.fire({
+          icon: 'error',
+          title: 'Có lỗi xảy ra, vui lòng thử lại',
+          showCancelButton: false,
+          timer: null
+      });
+    }
+  $("#edit-account-form").on('submit', async function(event) {
+
     event.preventDefault();
     const email = $("#email").val();
     const name = $("#name").val();
@@ -119,11 +136,25 @@
       .then(function (result) {
         return result.json();
       })
-    if (response.success)
+      console.log(response);
+    if (response.success) {
       showSuccessModal();
+      return;
+    }
+    if (response.emailExist) {
+      console.log('email ton tai');
+      showEmailModal();
+      return;
+    }
+    else if (response.usernameExist) {
+      console.log('aaabbbccc')
+      showUsernameModal();
+      return;
+    }
     else {
       showErrorModal();
-    }
+      return;
+    } 
   })
 </script>
 <%- include('./department/partials/footer') %>
