@@ -485,12 +485,17 @@
       $("#modal-type").html("Loại: " + place.adType)
       if (planned == 1) {
         $("#modal-planned").html("Đã quy hoạch")
+        $("#modal-companyName").html("Tên công ti: " + place.companyName)
+        $("#modal-companyEmail").html("Email công ti: " + place.companyEmail)
+        $("#modal-companyPhone").html("Số điện thoại công ti: " + place.companyPhone)
         $("#modal-date").html("Ngày hết hạn: " + place.endDate)
       }
       else {
         $("#modal-planned").html("Chưa quy hoạch")
+        $("#modal-companyName").html("")
+        $("#modal-companyEmail").html("")
+        $("#modal-companyPhone").html("")
         $("#modal-date").html("")
-
       }
     }
 
