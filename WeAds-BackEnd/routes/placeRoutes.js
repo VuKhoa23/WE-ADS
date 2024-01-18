@@ -74,7 +74,6 @@ router.get("/geojson", async (req, res)=>{
     })
 
     geojson.features.push(thePlace)
-    console.log(geojson)
   }
   res.json(geojson)
 })
@@ -331,7 +330,6 @@ router.post('/editAdPlacementForm/:_id', uploadAds.fields([
   const adPlacement = await Place.findOne({_id: new ObjectId(req.params._id)});
   const { adType, adPlanned, reason } = req.body;
   const locationType = Array.isArray(req.body.locationType) ? req.body.locationType : [req.body.locationType];
-  console.log(locationType);
   const oldPlaceImage = req.body.oldPlaceImage;
   
   const role = res.locals.user ? res.locals.user.role : null;

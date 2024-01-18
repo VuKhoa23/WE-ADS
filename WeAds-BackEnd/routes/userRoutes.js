@@ -90,7 +90,6 @@ router.post('/user/edit-profile', async (req, res) => {
   const oldPhone = user.phone;
   const oldName = user.name;
   const oldUsername = user.username;
-  console.log(user);
   await Officer.updateOne({ _id: new ObjectId(officerId)}, {
     email,
     name, 
@@ -98,7 +97,6 @@ router.post('/user/edit-profile', async (req, res) => {
     username: user_name
   });
 
-  console.log(user);
   const emailExist = await Officer.find({ email });
   if (emailExist.length > 1) {
     await Officer.updateOne({ _id: new ObjectId(officerId)}, {
