@@ -5,45 +5,56 @@
         <h5 class="modal-title">Chi tiết điểm QC</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
-        <div style="margin: auto" class="row">
-          <div id="carouselExampleIndicators" class="carousel slide col-6">
-            <div class="carousel-indicators" id="carousel-indicators-id"></div>
-            <div class="carousel-inner" id="carousel-inner-id"></div>
-            <button class="carousel-control-prev bg-black " type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-              <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next bg-black " type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-              <span class="carousel-control-next-icon" aria-hidden="true"></span>
-              <span class="visually-hidden">Next</span>
-            </button>
+      <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Các bảng quảng cáo</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">Các báo cáo tại điểm này</button>
+        </li>
+      </ul>
+      <div class="tab-content" id="myTabContent">
+        <di class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+          <div class="modal-body">
+            <div style="margin: auto" class="row">
+              <div id="carouselExampleIndicators" class="carousel slide col-6">
+                <div class="carousel-indicators" id="carousel-indicators-id"></div>
+                <div class="carousel-inner" id="carousel-inner-id"></div>
+                <button class="carousel-control-prev bg-black " type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next bg-black " type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Next</span>
+                </button>
+              </div>
+              <div class="col-6">
+                <h2 id="modal-header"></h2>
+                <h4 id="modal-address"></h4>
+                <h4 id="modal-type"></h4>
+                <h4 id="modal-scale"></h4>
+                <h4 id="modal-planned"></h4>
+                <h4 id="modal-companyName"></h4>
+                <h4 id="modal-companyEmail"></h4>
+                <h4 id="modal-companyPhone"></h4>
+                <h4 id="modal-date"></h4>
+              </div>
+            </div>
           </div>
-          <div class="col-6">
-            <h2 id="modal-header"></h2>
-            <h4 id="modal-address"></h4>
-            <h4 id="modal-type"></h4>
-            <h4 id="modal-scale"></h4>
-            <h4 id="modal-planned"></h4>
-            <h4 id="modal-companyName"></h4>
-            <h4 id="modal-companyEmail"></h4>
-            <h4 id="modal-companyPhone"></h4>
-            <h4 id="modal-date"></h4>
-            <a id="update-link" target="_blank">
-              <button class="btn btn-primary ">Yêu cầu chỉnh sửa</button>
-            </a>
+          <div class="modal-footer d-flex justify-content-between ">
+            <div></div>
+            <div>
+              <button class="btn btn-primary " id="next-ad-btn">Next</button>
+            </div>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
           </div>
-        </div>
       </div>
-      <div class="modal-footer d-flex justify-content-between ">
-        <div></div>
-        <div>
-          <button class="btn btn-primary " id="next-ad-btn">Xem biển quảng cáo khác</button>
-        </div>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+      <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
       </div>
     </div>
   </div>
+</div>
 </div>
 
 <div class="modal" tabindex="-1" id="no-ads-modal">
