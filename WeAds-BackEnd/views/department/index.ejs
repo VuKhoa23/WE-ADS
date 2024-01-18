@@ -87,10 +87,10 @@
       const role = '<%- role %>'
       let reports = null
       if (role == "District") {
-        const reportsRes = await fetch("http://localhost:3000/api/weads-admin/report/officer/" + district);
+        const reportsRes = await fetch("https://weads-backend.vercel.app//api/weads-admin/report/officer/" + district);
         reports = await reportsRes.json()
       } else if (role == "Ward") {
-        const reportsRes = await fetch("http://localhost:3000/api/weads-admin/report/officer/" + district + "/" + ward);
+        const reportsRes = await fetch("https://weads-backend.vercel.app//api/weads-admin/report/officer/" + district + "/" + ward);
         reports = await reportsRes.json()
       }
       for (let report of reports) {
