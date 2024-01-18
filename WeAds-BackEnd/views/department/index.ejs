@@ -93,29 +93,31 @@
         const reportsRes = await fetch("http://localhost:3000/api/weads-admin/report/officer/" + district + "/" + ward);
         reports = await reportsRes.json()
       }
-      for (let report of reports) {
-        const thePlace = {
-          type: "Feature",
-          geometry: {
-            type: "Point",
-            coordinates: report.coordinates,
-          },
-          properties: {
-            ads: [],
-            adType: "Điểm chưa được đăng ký",
-            placeImage: null,
-            ward: report.ward,
-            locationType: "Điểm chưa được đăng ký",
-            district: report.district,
-            adPlanned: 0,
-            placeId: null,
-            isReport: 1,
-            isPersisted: 0,
-            noAds: 1,
-            reportId: report._id
+      if (reports) {
+        for (let report of reports) {
+          const thePlace = {
+            type: "Feature",
+            geometry: {
+              type: "Point",
+              coordinates: report.coordinates,
+            },
+            properties: {
+              ads: [],
+              adType: "Điểm chưa được đăng ký",
+              placeImage: null,
+              ward: report.ward,
+              locationType: "Điểm chưa được đăng ký",
+              district: report.district,
+              adPlanned: 0,
+              placeId: null,
+              isReport: 1,
+              isPersisted: 0,
+              noAds: 1,
+              reportId: report._id
+            }
           }
+          geojson.features.push(thePlace)
         }
-        geojson.features.push(thePlace)
       }
     }
 
