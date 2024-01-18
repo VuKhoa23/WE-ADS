@@ -27,6 +27,9 @@ const place = new Schema({
     placeImage:{
       type: String
     },
+    address: {
+      type: String
+    }
 })
 
 const Place = mongoose.model('place', place);

@@ -240,8 +240,14 @@ router.post('/addAdPlacement', uploadAds.fields([
             }
           }
           
-        await Place.create({ type, adType, adPlanned, ward, district, coordinates: coordinatesArray, placeImage, locationType: locationTypes });
-
+        const thePlace = await Place.create({ type, adType, adPlanned, ward, district, coordinates: coordinatesArray, placeImage, locationType: locationTypes });
+        const response = await fetch(
+          `https://api.mapbox.com/geocoding/v5/mapbox.places/${thePlace.coordinates[0]},${thePlace.coordinates[1]}.json?country=vn&access_token=${process.env.MAP_KEY}`
+        );
+        const result = await response.json()
+        let address = result.features[0].place_name;
+        thePlace.address = address;
+        await thePlace.save()
         const adPlacements = await Place.find({});
         res.status(201).json({ success: true });
       }
