@@ -396,9 +396,12 @@
         $("#modal-type").html("Loại: " + place.adType)
         if (planned == 1) {
           $("#modal-planned").html("Đã quy hoạch")
+          $("#modal-date").html("Ngày hết hạn: " + place.endDate)
         }
         else {
           $("#modal-planned").html("Chưa quy hoạch")
+          $("#modal-date").html("")
+
         }
 
       }
