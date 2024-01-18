@@ -45,7 +45,6 @@ router.post('/department/create', async (req, res) => {
       req.body.ward = undefined;
     }
     const officer = await Officer.create(req.body)
-    console.log(req.body.role)
     res.redirect("/weads/home?createSuccess=true")
     return
   }
@@ -318,7 +317,6 @@ router.post('/department/assignment/:_id', async function(req, res){
   const ward = req.body.ward;
   const role = req.body.role
 
-  console.log(req.body);
   if(role === "district"){
     const officer = await Officer.findByIdAndUpdate(id, {district: district});
   }else{

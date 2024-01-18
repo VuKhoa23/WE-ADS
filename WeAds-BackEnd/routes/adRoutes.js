@@ -101,7 +101,6 @@ router.post('/editAdForm/:id', uploadAds.fields([
   }
 ]), async function(req, res) {
   const id = req.params.id;
-  console.log(req.body);
   let { adType, width, height, adName, adImages, companyName, companyPhone, companyEmail, startDate, endDate, reason } = req.body;
   const adScale = width + "m x " + height + "m";
   const role = res.locals.user ? res.locals.user.role : null;
