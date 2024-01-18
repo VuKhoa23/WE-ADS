@@ -4,99 +4,98 @@
     <h1>Danh sách các Điểm đặt quảng cáo</h1>
     <span class="d-flex align-items-center">
         <% if (role == 'Department') { %>
-            <div class="dropdown d-flex align-items-center mb-2 mx-2">
-                <h3 class="request-dropdown-label">Quận: </h3>
-                <button style="border:1px solid #000;min-width: 100px;" type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown">
-                    <%- currentDistrict %>
-                </button>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="/weads/place/allAdPlacement">Tất cả</a></li>
-                    <% for (var i = 0; i < districtList.length; i++) { %>
-                        <li><a class="dropdown-item" href="/weads/place/allAdPlacement?district=<%- districtList[i].name %>"><%- districtList[i].name %></a></li>
-                    <% } %>
-                </ul>
-            </div>
+        <div class="dropdown d-flex align-items-center mb-2 mx-2">
+            <h3 class="request-dropdown-label">Quận: </h3>
+            <button style="border:1px solid #000;min-width: 100px;" type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown">
+                <%- currentDistrict %>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="/weads/place/allAdPlacement">Tất cả</a></li>
+                <% for (var i = 0; i < districtList.length; i++) { %>
+                <li><a class="dropdown-item" href="/weads/place/allAdPlacement?district=<%- districtList[i].name %>"><%- districtList[i].name %></a></li>
+                <% } %>
+            </ul>
+        </div>
         <% } %>
         <% if (role == 'Department' || role == 'District') { %>
-            <% if (currentDistrict != 'Tất cả') { %>
-                <div class="dropdown d-flex align-items-center mb-2">
-                    <h3 class="request-dropdown-label">Phường: </h3>
-                    <button style="border:1px solid #000;min-width: 100px;" type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown">
-                        <%- currentWard %>
-                    </button>
-                  <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="/weads/place/allAdPlacement?district=<%- currentDistrict %>">Tất cả</a></li>
-                    <% for (var i = 0; i < wardList.length; i++) { %>
-                        <li><a class="dropdown-item" href="/weads/place/allAdPlacement?district=<%- currentDistrict %>&ward=<%- wardList[i].name %>"><%- wardList[i].name %></a></li>
-                    <% } %>
-                  </ul>
-                </div>
-            <% } %>
+        <% if (currentDistrict != 'Tất cả') { %>
+        <div class="dropdown d-flex align-items-center mb-2">
+            <h3 class="request-dropdown-label">Phường: </h3>
+            <button style="border:1px solid #000;min-width: 100px;" type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown">
+                <%- currentWard %>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="/weads/place/allAdPlacement?district=<%- currentDistrict %>">Tất cả</a></li>
+                <% for (var i = 0; i < wardList.length; i++) { %>
+                <li><a class="dropdown-item" href="/weads/place/allAdPlacement?district=<%- currentDistrict %>&ward=<%- wardList[i].name %>"><%- wardList[i].name %></a></li>
+                <% } %>
+            </ul>
+        </div>
+        <% } %>
         <% } %>
     </span>
     <% if (adPlacements.length > 0) { %>
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>STT</th>
-                    <th>Tọa độ</th>
-                    <th>Quận</th>
-                    <th>Phường</th>
-                    <th>Loại vị trí</th>
-                    <th>Hình thức quảng cáo</th>
-                    <th>Quy hoạch</th>
-                    <th>Danh sách bảng quảng cáo</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <% for (let i = 0; i < adPlacements.length; i++) { %>
-                    <tr>
-                        <td><%= i + 1 %></td>
-                        <td>
-                            <%= adPlacements[i].coordinates[0] %> <br>
-                            <%= adPlacements[i].coordinates[1] %>
-                        </td>
-                        <td><%= adPlacements[i].district %></td>
-                        <td><%= adPlacements[i].ward %></td>
-                        <td><%= adPlacements[i].locationType.join('/ ') %></td>
-                        <td><%= adPlacements[i].adType %></td>
-                        <td>
-                            <% if (adPlacements[i].adPlanned === 1) { %>
-                                Đã quy hoạch
-                            <% } else { %>
-                                Chưa quy hoạch
-                            <% } %>
-                        </td>
-                        <td>
-                            <a href="/weads/ad/allAds/<%= adPlacements[i]._id %>">
-                                <i class="bi bi-arrow-right-circle-fill"></i>
-                                Xem danh sách bảng quảng cáo
-                            </a>
-                        </td>
-                        <td class="d-flex justify-content-center align-items-center">
-                            
-                            <% if (role == 'Department') { %>
-                                <a href="/weads/place/editAdPlacementForm/<%= adPlacements[i]._id %>">
-                                    <button type="button" class="btn btn-primary mx-2" onclick="">
-                                        <i class="bi bi-pencil-square"></i>
-                                    </button>
-                                </a>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>STT</th>
+                <th>Địa chỉ</th>
+                <th>Quận</th>
+                <th>Phường</th>
+                <th>Loại vị trí</th>
+                <th>Hình thức quảng cáo</th>
+                <th>Quy hoạch</th>
+                <th>Danh sách bảng quảng cáo</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <% for (let i = 0; i < adPlacements.length; i++) { %>
+            <tr>
+                <td><%= i + 1 %></td>
+                <td>
+                    <%= adPlacements[i].address %> <br>
+                </td>
+                <td><%= adPlacements[i].district %></td>
+                <td><%= adPlacements[i].ward %></td>
+                <td><%= adPlacements[i].locationType.join('/ ') %></td>
+                <td><%= adPlacements[i].adType %></td>
+                <td>
+                    <% if (adPlacements[i].adPlanned === 1) { %>
+                    Đã quy hoạch
+                    <% } else { %>
+                    Chưa quy hoạch
+                    <% } %>
+                </td>
+                <td>
+                    <a href="/weads/ad/allAds/<%= adPlacements[i]._id %>">
+                        <i class="bi bi-arrow-right-circle-fill"></i>
+                        Xem danh sách bảng quảng cáo
+                    </a>
+                </td>
+                <td class="d-flex justify-content-center align-items-center">
 
-                                <button class="btn btn-danger" onclick="showDeleteConfirmation('<%= adPlacements[i]._id %>')">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            <% } else { %>
-                                <a class="btn btn-success" href="/weads/place/editAdPlacementForm/<%= adPlacements[i]._id %>">Yêu cầu chỉnh sửa</a>
-                            <% } %>
-                        </td>
-                    </tr>
-                <% } %>
-                
-            </tbody>
-        </table>
+                    <% if (role == 'Department') { %>
+                    <a href="/weads/place/editAdPlacementForm/<%= adPlacements[i]._id %>">
+                        <button type="button" class="btn btn-primary mx-2" onclick="">
+                            <i class="bi bi-pencil-square"></i>
+                        </button>
+                    </a>
+
+                    <button class="btn btn-danger" onclick="showDeleteConfirmation('<%= adPlacements[i]._id %>')">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                    <% } else { %>
+                    <a class="btn btn-success" href="/weads/place/editAdPlacementForm/<%= adPlacements[i]._id %>">Yêu cầu chỉnh sửa</a>
+                    <% } %>
+                </td>
+            </tr>
+            <% } %>
+
+        </tbody>
+    </table>
     <% } else { %>
-        <p>Không có điểm đặt quảng cáo nào trong danh sách.</p>
+    <p>Không có điểm đặt quảng cáo nào trong danh sách.</p>
     <% } %>
 
     <a href="/weads/home">
@@ -108,54 +107,54 @@
 
     <!-- Button add AdPlacement -->
     <% if (role == 'Department') { %>
-        <button class="btn btn-primary" onclick="showInstructionCreateAdPlacement()">
-            <i class="bi bi-plus-circle-fill"></i>
-            Thêm Điểm đặt
-        </button>
+    <button class="btn btn-primary" onclick="showInstructionCreateAdPlacement()">
+        <i class="bi bi-plus-circle-fill"></i>
+        Thêm Điểm đặt
+    </button>
     <% } %>
 
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <% if (announce === 'delete') { %>
-        <script>
-            Swal.fire({
-                icon: 'success',
-                title: 'Xóa thành công',
-                showCancelButton: false,
-                timer: 1500
-            });
-        </script>
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Xóa thành công',
+            showCancelButton: false,
+            timer: 1500
+        });
+    </script>
     <% } else if (announce === 'create') { %>
-        <script>
-            Swal.fire({
-                icon: 'success',
-                title: 'Thêm điểm đặt mới thành công',
-                showCancelButton: false,
-                timer: 1500
-            });
-        </script>
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Thêm điểm đặt mới thành công',
+            showCancelButton: false,
+            timer: 1500
+        });
+    </script>
     <% } else if (announce === 'edit') { %>
-        <script>
-            Swal.fire({
-                icon: 'success',
-                title: 'cập nhật điểm đặt thành công',
-                showCancelButton: false,
-                timer: 1500
-            });
-        </script>
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'cập nhật điểm đặt thành công',
+            showCancelButton: false,
+            timer: 1500
+        });
+    </script>
     <% } else if (announce === 'exist') { %>
-        <script>
-            Swal.fire({
-                icon: 'error',
-                title: 'Điểm đặt đã tồn tại',
-                showCancelButton: false,
-                timer: 1500
-            });
-        </script>
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Điểm đặt đã tồn tại',
+            showCancelButton: false,
+            timer: 1500
+        });
+    </script>
     <% } %>
-    
-    
+
+
     <script>
         function showDeleteConfirmation(adPlacementId) {
             Swal.fire({
@@ -174,7 +173,7 @@
             });
         }
 
-        function showInstructionCreateAdPlacement(){
+        function showInstructionCreateAdPlacement() {
             Swal.fire({
                 title: 'Tạo điểm đặt mới',
                 text: 'Chọn vào 1 điểm trên bản đồ để tạo điểm đặt mới',

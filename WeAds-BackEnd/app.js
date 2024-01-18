@@ -65,6 +65,7 @@ const reportApi = require("./api/reportApi");
 const placeRoutes = require("./routes/placeRoutes");
 const adRoutes = require("./routes/adRoutes");
 const licenseRoutes = require('./routes/licenseRoutes');
+const Place = require("./model/places.js");
 
 
 app.use(express.static(path.join(__dirname, "public")));
