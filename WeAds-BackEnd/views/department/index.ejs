@@ -71,7 +71,7 @@
   <script>
     let geojson = null
     async function getData() {
-      const response = await fetch("https://weads-backend.vercel.app/weads/place/geojson")
+      const response = await fetch("https://weads-backend.vercel.appweads/place/geojson")
       geojson = await response.json()
       for (place of geojson.features) {
         place.properties.isReport = 0
@@ -87,35 +87,37 @@
       const role = '<%- role %>'
       let reports = null
       if (role == "District") {
-        const reportsRes = await fetch("https://weads-backend.vercel.app//api/weads-admin/report/officer/" + district);
+        const reportsRes = await fetch("https://weads-backend.vercel.app/api/weads-admin/report/officer/" + district);
         reports = await reportsRes.json()
       } else if (role == "Ward") {
-        const reportsRes = await fetch("https://weads-backend.vercel.app//api/weads-admin/report/officer/" + district + "/" + ward);
+        const reportsRes = await fetch("https://weads-backend.vercel.app/api/weads-admin/report/officer/" + district + "/" + ward);
         reports = await reportsRes.json()
       }
-      for (let report of reports) {
-        const thePlace = {
-          type: "Feature",
-          geometry: {
-            type: "Point",
-            coordinates: report.coordinates,
-          },
-          properties: {
-            ads: [],
-            adType: "Điểm chưa được đăng ký",
-            placeImage: null,
-            ward: report.ward,
-            locationType: "Điểm chưa được đăng ký",
-            district: report.district,
-            adPlanned: 0,
-            placeId: null,
-            isReport: 1,
-            isPersisted: 0,
-            noAds: 1,
-            reportId: report._id
+      if (reports) {
+        for (let report of reports) {
+          const thePlace = {
+            type: "Feature",
+            geometry: {
+              type: "Point",
+              coordinates: report.coordinates,
+            },
+            properties: {
+              ads: [],
+              adType: "Điểm chưa được đăng ký",
+              placeImage: null,
+              ward: report.ward,
+              locationType: "Điểm chưa được đăng ký",
+              district: report.district,
+              adPlanned: 0,
+              placeId: null,
+              isReport: 1,
+              isPersisted: 0,
+              noAds: 1,
+              reportId: report._id
+            }
           }
+          geojson.features.push(thePlace)
         }
-        geojson.features.push(thePlace)
       }
     }
 
@@ -533,7 +535,7 @@
       address = address.replace(name + ", ", "")
       let size = geojson.features[index].properties.ads.length
 
-      const placeReportsRes = await fetch("https://weads-backend.vercel.app/api/weads-admin/report/place/" + geojson.features[index].properties.placeId)
+      const placeReportsRes = await fetch("https://weads-backend.vercel.appapi/weads-admin/report/place/" + geojson.features[index].properties.placeId)
       const placeReports = await placeReportsRes.json()
       if (geojson.features[index].properties.ads.length == 0) {
         $("#pills-tabContent").html("Không có bảng quảng cáo nào")

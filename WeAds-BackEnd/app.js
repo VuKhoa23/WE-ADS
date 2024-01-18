@@ -29,7 +29,7 @@ app.use(cookieParser())
 passport.use(new GoogleStrategy({
   clientID: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-  callbackURL: "https://weads-backend.vercel.app//googleRedirect"
+  callbackURL: "https://weads-backend.vercel.appgoogleRedirect"
 },
 function(accessToken, refreshToken, profile, done) {
     //console.log(accessToken, refreshToken, profile)
