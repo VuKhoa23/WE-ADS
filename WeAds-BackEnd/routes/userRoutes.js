@@ -84,13 +84,45 @@ router.post('/user/edit-profile', async (req, res) => {
   if(res.locals.user){
     role = res.locals.user.role
   }
+
+  const user = await Officer.findOne({ _id: new ObjectId(officerId)});
+  const oldEmail = user.email;
+  const oldPhone = user.phone;
+  const oldName = user.name;
+  const oldUsername = user.username;
+  console.log(user);
   await Officer.updateOne({ _id: new ObjectId(officerId)}, {
     email,
     name, 
     phone,
     username: user_name
   });
-  res.status(200).json({ success: true })
+
+  console.log(user);
+  const emailExist = await Officer.find({ email });
+  if (emailExist.length > 1) {
+    await Officer.updateOne({ _id: new ObjectId(officerId)}, {
+      email: oldEmail,
+      name: oldName,
+      phone: oldPhone,
+      username: oldUsername
+    })
+    res.status(400).json({ emailExist: true });
+    return;
+  }
+
+  const usernameExist = await Officer.find({ username: user_name });
+  if (usernameExist.length > 1) {
+    await Officer.updateOne({ _id: new ObjectId(officerId)}, {
+      email: oldEmail,
+      name: oldName,
+      phone: oldPhone,
+      username: oldUsername
+    })
+    res.status(400).json({ usernameExist: true });
+    return;
+  }
+  res.status(200).json({ success: true });
 });
 
 module.exports = router;

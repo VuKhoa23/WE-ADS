@@ -88,6 +88,22 @@
           }
       });
     }
+    function showEmailModal() {
+      Swal.fire({
+          icon: 'error',
+          title: 'Email đã được sử dụng bởi cán bộ khác',
+          showCancelButton: false,
+          timer: null
+      });
+    }
+    function showUsernameModal() {
+      Swal.fire({
+          icon: 'error',
+          title: 'Tên tài khoản đã tồn tại',
+          showCancelButton: false,
+          timer: null
+      });
+    }
     function showErrorModal() {
       Swal.fire({
           icon: 'error',
@@ -119,11 +135,25 @@
       .then(function (result) {
         return result.json();
       })
-    if (response.success)
+      console.log(response);
+    if (response.success) {
       showSuccessModal();
+      return;
+    }
+    if (response.emailExist) {
+      console.log('email ton tai');
+      showEmailModal();
+      return;
+    }
+    else if (response.usernameExist) {
+      console.log('aaabbbccc')
+      showUsernameModal();
+      return;
+    }
     else {
       showErrorModal();
-    }
+      return;
+    } 
   })
 </script>
 <%- include('./department/partials/footer') %>
